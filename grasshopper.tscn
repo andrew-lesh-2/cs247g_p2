@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://l7l0t5wrcpp7"]
+
+[ext_resource type="Texture2D" uid="uid://bsltygpr8b7c0" path="res://assets/sprites/grasshopper-Sheet.png" id="1_c3nxl"]
+[ext_resource type="Script" path="res://grasshopper.gd" id="1_cngbe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryfn1"]
+atlas = ExtResource("1_c3nxl")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rbisa"]
+atlas = ExtResource("1_c3nxl")
+region = Rect2(64, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snnji"]
+atlas = ExtResource("1_c3nxl")
+region = Rect2(128, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpfp2"]
+atlas = ExtResource("1_c3nxl")
+region = Rect2(192, 0, 64, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_41lah"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryfn1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rbisa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_snnji")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpfp2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="CharacterBody2D"]
+script = ExtResource("1_cngbe")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_41lah")
+animation = &"idle"
+frame = 2
+frame_progress = 0.122055
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

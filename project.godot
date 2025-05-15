@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="CS247G_escaperoom"
+run/main_scene="res://test_sidescroll.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+PlatformManager="res://PlatformManager.gd"
+DialogManager="res://dialog_manager.tscn"
+DialogSystem="*res://DialogSystem.gd"
+DialogTracker="*res://dialog_tracker.gd"
+SceneTransition="*res://scene_transition.gd"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
