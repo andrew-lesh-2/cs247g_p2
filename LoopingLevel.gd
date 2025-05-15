@@ -33,27 +33,25 @@ func _ready():
 		add_child(seg)
 		segments.append(seg)
 
-
-func _physics_process(delta):
-	# 1) world-space X of the player
-	var ply = get_node_or_null(player_path)
-	if ply == null:
+func _physics_process(_delta):
+	# 1) get the active Camera2D
+	var cam = get_viewport().get_camera_2d()
+	if cam == null:
 		return
-	var px = ply.global_position.x
 
-	# 2) compute screen-bounds in world units
-	var cam   = ply.get_node_or_null("Camera2D") as Camera2D
-	var vw    = get_viewport_rect().size.x
-	var half_w = vw * 0.5
-	if cam:
-		half_w *= cam.zoom.x
-	var left_b  = px - half_w
-	var right_b = px + half_w
+	# 2) compute world-space left/right edges
+	var cx      = cam.global_position.x
+	var vw      = get_viewport_rect().size.x
+	var half_w  = (vw * 0.5) / cam.zoom.x
+	var left_b  = cx - half_w
+	var right_b = cx + half_w
 
-	# 3) recycle any segment fully off-screen
+	# 3) now wrap segments that fully leave view
 	for seg in segments:
-		var sx = seg.global_position.x
-		if sx + segment_width < left_b:
+		var seg_left  = seg.global_position.x
+		var seg_right = seg_left + segment_width
+
+		if seg_right < left_b:
 			seg.global_position.x += wrap_dist
-		elif sx > right_b:
+		elif seg_left > right_b:
 			seg.global_position.x -= wrap_dist

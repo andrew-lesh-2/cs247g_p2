@@ -10,7 +10,8 @@ script = ExtResource("1_itwnx")
 [node name="LevelLayout" parent="." instance=ExtResource("2_3ng4s")]
 
 [node name="Player" parent="." instance=ExtResource("2_kvgra")]
-position = Vector2(72, -52)
+position = Vector2(245, -50)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(1, 0)
 zoom = Vector2(12, 12)
