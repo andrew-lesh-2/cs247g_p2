@@ -1,37 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1g6jorvou8yf"]
+[gd_scene load_steps=4 format=3 uid="uid://b1g6jorvou8yf"]
 
-[ext_resource type="Texture2D" uid="uid://bv0lwe58yfkk5" path="res://assets/backgrounds/tiles_room.png" id="1_a5r3d"]
+[ext_resource type="Script" path="res://LoopingLevel.gd" id="1_itwnx"]
+[ext_resource type="PackedScene" uid="uid://3pnssvs420da" path="res://test_scroll_level_layout.tscn" id="2_3ng4s"]
 [ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://player.tscn" id="2_kvgra"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mrhav"]
-texture = ExtResource("1_a5r3d")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:0/0 = 0
-3:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
+[node name="LoopingLevel" type="Node2D"]
+script = ExtResource("1_itwnx")
 
-[sub_resource type="TileSet" id="TileSet_ax5ri"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_mrhav")
+[node name="LevelLayout" parent="." instance=ExtResource("2_3ng4s")]
 
-[node name="Node2D" type="Node2D"]
-
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource("TileSet_ax5ri")
-rendering_quadrant_size = 32
-format = 2
-layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, -131068, 65536, 0, -131067, 65536, 0, -262137, 65536, 0, -262136, 65536, 0, -393206, 65536, 0, -393205, 65536, 0, -196595, 65536, 0, -65526, 65536, 0, -65536, 65536, 0, -65534, 65536, 0, -65535, 65536, 0, -131061, 65536, 0, -327672, 65536, 0, -196603, 65536, 0)
-
-[node name="Player" parent="TileMap" instance=ExtResource("2_kvgra")]
+[node name="Player" parent="." instance=ExtResource("2_kvgra")]
 position = Vector2(72, -52)
 
-[node name="Camera2D" type="Camera2D" parent="TileMap/Player"]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(12, 12)
