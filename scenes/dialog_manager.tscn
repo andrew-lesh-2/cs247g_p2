@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cr33k3ugpm53c"]
 
-[ext_resource type="Script" uid="uid://da244gsfikdis" path="res://DialogSystem.gd" id="1_j2f0l"]
+[ext_resource type="Script" uid="uid://da244gsfikdis" path="res://scripts/DialogSystem.gd" id="1_j2f0l"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_j2f0l")

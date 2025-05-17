@@ -1,7 +1,7 @@
 extends Node2D
 
 # — assign this in the Inspector, or preload it directly below —
-@export var level_layout_scene : PackedScene = preload("res://test_scroll_level_layout.tscn")
+@export var level_layout_scene : PackedScene = preload("res://scenes/test_scroll_level_layout.tscn")
 @export var player_path         : NodePath    = "Player"
 @export var num_segments        : int         = 3  # must be odd
 

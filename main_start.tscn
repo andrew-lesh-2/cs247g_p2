@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dav2071n5h5jd"]
-
-[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://grasshopper.tscn" id="1_mfbkr"]
-
-[node name="Node2D" type="Node2D"]
-
-[node name="Node2D" parent="." instance=ExtResource("1_mfbkr")]

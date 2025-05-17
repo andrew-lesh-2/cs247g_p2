@@ -1,10 +1,10 @@
 [gd_scene load_steps=5 format=3 uid="uid://3pnssvs420da"]
 
-[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://grasshopper.tscn" id="1_ulmuw"]
-[ext_resource type="Texture2D" uid="uid://bv0lwe58yfkk5" path="res://assets/backgrounds/tiles_room.png" id="2_4lfdn"]
+[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/grasshopper.tscn" id="1_e8oae"]
+[ext_resource type="Texture2D" uid="uid://bv0lwe58yfkk5" path="res://assets/backgrounds/tiles_room.png" id="2_8wd04"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mrhav"]
-texture = ExtResource("2_4lfdn")
+texture = ExtResource("2_8wd04")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
@@ -24,7 +24,7 @@ sources/0 = SubResource("TileSetAtlasSource_mrhav")
 
 [node name="LevelLayout" type="Node2D"]
 
-[node name="Node2D" parent="." instance=ExtResource("1_ulmuw")]
+[node name="Node2D" parent="." instance=ExtResource("1_e8oae")]
 position = Vector2(247, -10)
 
 [node name="TileMap" type="TileMap" parent="."]

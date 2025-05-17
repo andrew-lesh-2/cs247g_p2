@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://l7l0t5wrcpp7"]
 
 [ext_resource type="Texture2D" uid="uid://bsltygpr8b7c0" path="res://assets/sprites/grasshopper-Sheet.png" id="1_c3nxl"]
-[ext_resource type="Script" uid="uid://dp8e2w8dvx6ke" path="res://grasshopper.gd" id="1_cngbe"]
+[ext_resource type="Script" uid="uid://dp8e2w8dvx6ke" path="res://scripts/grasshopper.gd" id="1_cngbe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ryfn1"]
 atlas = ExtResource("1_c3nxl")

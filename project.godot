@@ -11,17 +11,17 @@ config_version=5
 [application]
 
 config/name="CS247G_P2"
-run/main_scene="res://test_sidescroll.tscn"
+run/main_scene="res://scenes/test_sidescroll.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-PlatformManager="res://PlatformManager.gd"
-DialogManager="res://dialog_manager.tscn"
-DialogSystem="*res://DialogSystem.gd"
-DialogTracker="*res://dialog_tracker.gd"
-SceneTransition="*res://scene_transition.gd"
+PlatformManager="res://scripts/PlatformManager.gd"
+DialogManager="res://scenes/dialog_manager.tscn"
+DialogSystem="*res://scripts/DialogSystem.gd"
+DialogTracker="*res://scripts/dialog_tracker.gd"
+SceneTransition="*res://scripts/scene_transition.gd"
 
 [rendering]
 
