@@ -1,5 +1,5 @@
-extends Sprite2D
-
+extends Sprite2D   
+  
 @onready var area = $Area2D
 @export var fade_frames: int = 10
 @export var keep_hidden: bool = false

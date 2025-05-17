@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnfgr2v6tshub"]
+
+[ext_resource type="Script" uid="uid://bvqsp81btee4a" path="res://scenes/levels/LoopingLevel2.gd" id="1_g4h7w"]
+[ext_resource type="PackedScene" uid="uid://cpqbahf0yr3cy" path="res://scenes/levels/box.tscn" id="2_g4h7w"]
+[ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://scenes/characters/player.tscn" id="3_y4hwr"]
+
+[node name="LoopingLevel" type="Node2D"]
+script = ExtResource("1_g4h7w")
+
+[node name="Box" parent="." instance=ExtResource("2_g4h7w")]
+
+[node name="Player" parent="." instance=ExtResource("3_y4hwr")]
+position = Vector2(88, -58)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(1, 0)
+zoom = Vector2(12, 12)
