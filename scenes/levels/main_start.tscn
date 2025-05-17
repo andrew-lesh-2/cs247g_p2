@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dav2071n5h5jd"]
 
-[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/grasshopper.tscn" id="1_6x7uk"]
+[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/characters/grasshopper.tscn" id="1_6x7uk"]
 
 [node name="Node2D" type="Node2D"]
 

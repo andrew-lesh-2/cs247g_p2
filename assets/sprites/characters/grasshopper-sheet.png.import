@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cm7w84wkg5p63"
-path="res://.godot/imported/Ladybug-Sheet.png-a9412d6018376b57fae1c2fe3f1eaee2.ctex"
+uid="uid://bsltygpr8b7c0"
+path="res://.godot/imported/grasshopper-sheet.png-7e625039d68372ec7ac66aae137244ed.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Ladybug-Sheet.png"
-dest_files=["res://.godot/imported/Ladybug-Sheet.png-a9412d6018376b57fae1c2fe3f1eaee2.ctex"]
+source_file="res://assets/sprites/characters/grasshopper-sheet.png"
+dest_files=["res://.godot/imported/grasshopper-sheet.png-7e625039d68372ec7ac66aae137244ed.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cg430suosu8wk"
-path="res://.godot/imported/ladybug_small.png-aa66758018711ffddbdb8a05f8ca483e.ctex"
+uid="uid://cm7w84wkg5p63"
+path="res://.godot/imported/ladybug-sheet.png-20ad17c5d7c7c6c52da5ff5fd7ce3e15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ladybug_small.png"
-dest_files=["res://.godot/imported/ladybug_small.png-aa66758018711ffddbdb8a05f8ca483e.ctex"]
+source_file="res://assets/sprites/characters/ladybug-sheet.png"
+dest_files=["res://.godot/imported/ladybug-sheet.png-20ad17c5d7c7c6c52da5ff5fd7ce3e15.ctex"]
 
 [params]
 

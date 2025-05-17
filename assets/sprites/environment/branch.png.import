@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bo11iy78mrwmw"
-path="res://.godot/imported/dust-mite-Sheet.png-ec7d281adeaf2120aa3d5009c96aeded.ctex"
+uid="uid://v5685oxdi14u"
+path="res://.godot/imported/branch.png-65418f579053c4578881d17eb1c6a405.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/dust-mite-Sheet.png"
-dest_files=["res://.godot/imported/dust-mite-Sheet.png-ec7d281adeaf2120aa3d5009c96aeded.ctex"]
+source_file="res://assets/sprites/environment/branch.png"
+dest_files=["res://.godot/imported/branch.png-65418f579053c4578881d17eb1c6a405.ctex"]
 
 [params]
 
