@@ -16,7 +16,7 @@ size = Vector2(494, 52.5)
 size = Vector2(7, 76.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2q7q8"]
-size = Vector2(140, 78)
+size = Vector2(140, 94)
 
 [node name="Box" type="Node2D"]
 
@@ -78,5 +78,5 @@ script = ExtResource("8_wmkn3")
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="box-front/Area2D"]
-position = Vector2(1, 23)
+position = Vector2(1, 15)
 shape = SubResource("RectangleShape2D_2q7q8")
