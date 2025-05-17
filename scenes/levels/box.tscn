@@ -1,49 +1,59 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpqbahf0yr3cy"]
+[gd_scene load_steps=9 format=3 uid="uid://cpqbahf0yr3cy"]
 
 [ext_resource type="Script" uid="uid://csx5nlm835yk7" path="res://scripts/box.gd" id="1_47f08"]
-[ext_resource type="Texture2D" uid="uid://i6tvg137buv7" path="res://assets/backgrounds/wall_box.png" id="1_dey64"]
 [ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://scenes/characters/player.tscn" id="2_gcbv1"]
+[ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_woaog"]
 [ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/characters/grasshopper.tscn" id="3_a6dqf"]
+[ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="4_2wj2o"]
+[ext_resource type="PackedScene" uid="uid://bamvxtdsqbrp5" path="res://scenes/leaf.tscn" id="5_qx8bj"]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
+size = Vector2(141, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ersg3"]
+size = Vector2(7, 76.5)
+
+[node name="Box" type="Node2D"]
 script = ExtResource("1_47f08")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1_dey64")
-
-[node name="StaticBody2D (Floor)" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D (Floor)"]
-polygon = PackedVector2Array(0, 13, 0, 123, 128, 123, 128, 13, 138, 13, 138, 143, -8, 143, -9, 12)
-
-[node name="StaticBody2D (leaf1)" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D (leaf1)"]
-polygon = PackedVector2Array(11, 110, 34, 110, 39, 114, 27, 117, 18, 115)
-
-[node name="StaticBody2D (leaf2)" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D (leaf2)"]
-polygon = PackedVector2Array(59, 86, 67, 83, 83, 83, 96, 87, 83, 96, 72, 96)
-
-[node name="StaticBody2D (leaf3)" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D (leaf3)"]
-polygon = PackedVector2Array(81, 55, 63, 46, 47, 46, 43, 48, 53, 55, 61, 59, 70, 60, 80, 58)
-
-[node name="StaticBody2D (leaf4)" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D (leaf4)"]
-polygon = PackedVector2Array(98, 27, 104, 22, 113, 22, 118, 24, 114, 29, 102, 29)
-
 [node name="Player" parent="." instance=ExtResource("2_gcbv1")]
-position = Vector2(23, 101)
+position = Vector2(-45, 33)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(64, 64)
-zoom = Vector2(12, 12)
+zoom = Vector2(10, 10)
+
+[node name="box back" type="Sprite2D" parent="."]
+z_index = -10
+texture = ExtResource("2_woaog")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="box back"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="box back/StaticBody2D"]
+position = Vector2(2, 48)
+shape = SubResource("RectangleShape2D_woaog")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="box back/StaticBody2D"]
+position = Vector2(-64, 9.25)
+shape = SubResource("RectangleShape2D_ersg3")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="box back/StaticBody2D"]
+position = Vector2(71, 9)
+shape = SubResource("RectangleShape2D_ersg3")
+
+[node name="branch" type="Sprite2D" parent="."]
+texture = ExtResource("4_2wj2o")
+
+[node name="Leaf" parent="." instance=ExtResource("5_qx8bj")]
+z_index = -1
+position = Vector2(-22, 14)
+
+[node name="Leaf2" parent="." instance=ExtResource("5_qx8bj")]
+z_index = -1
+position = Vector2(9, -16)
+
+[node name="Leaf3" parent="." instance=ExtResource("5_qx8bj")]
+z_index = -1
+position = Vector2(24, -54)
 
 [node name="Node2D" parent="." instance=ExtResource("3_a6dqf")]
-position = Vector2(106, 114)
+position = Vector2(42, 34)
