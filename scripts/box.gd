@@ -48,6 +48,7 @@ func _ready():
 
 func _process(delta):
 	# Debug drawing
+	return
 	if debug_draw:
 		queue_redraw()
 	
