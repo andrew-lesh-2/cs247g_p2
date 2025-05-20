@@ -11,6 +11,11 @@ const WALL_SLIDE_SPEED    = 30.0
 const WALL_JUMP_H_SPEED   = 200.0
 const WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
 
+# — WALL‐SLIDE DURATION —  
+@export var wall_slide_duration : float = 0.3  # how long to slide before normal gravity
+var wall_slide_timer : float = 0.0
+var was_on_wall      : bool  = false
+
 # — GRAVITY —  
 var gravity           = ProjectSettings.get_setting("physics/2d/default_gravity")
 var default_gravity   = gravity
@@ -72,8 +77,8 @@ func _physics_process(delta):
 	# — floor vs air & coyote‐time —
 	var on_floor = is_on_floor()
 	if on_floor:
-		has_double_jumped = false
-		coyote_timer = 0.0
+		has_double_jumped  = false
+		coyote_timer       = 0.0
 	else:
 		coyote_timer += delta
 
@@ -83,40 +88,51 @@ func _physics_process(delta):
 	if not on_floor:
 		for i in range(get_slide_collision_count()):
 			var col = get_slide_collision(i)
-			var nx = col.get_normal().x
+			var nx  = col.get_normal().x
 			if abs(nx) > 0.7:
 				on_wall  = true
 				wall_dir = nx
 				break
 
-	# — apply gravity or wall‐slide —
+	# — reset or advance wall-slide timer —
+	if on_wall:
+		# just began touching?
+		if not was_on_wall:
+			wall_slide_timer = 0.0
+		was_on_wall = true
+	else:
+		was_on_wall      = false
+		wall_slide_timer = 0.0
+
+	# — apply gravity, wall‐slide (limited time), or slow-fall —
 	if not on_floor:
-		if on_wall and velocity.y > 0:
+		# if we still have remaining slide‐time and are sliding down
+		if on_wall and velocity.y > 0 and wall_slide_timer < wall_slide_duration:
 			velocity.y = min(velocity.y + gravity * delta, WALL_SLIDE_SPEED)
+			wall_slide_timer += delta
 			# reset jump so you can wall‐jump again
 			has_double_jumped = false
-			coyote_timer = coyote_time
+			coyote_timer      = coyote_time
 		elif velocity.y > 0 and _is_jump_pressed():
+			# slow‐fall if holding jump
 			velocity.y += slow_fall_gravity * delta
 		else:
+			# normal gravity
 			velocity.y += default_gravity * delta
 
 	# — handle jumping / wall‐jump / double‐jump —
 	if _is_jump_just_pressed():
 		if on_floor or coyote_timer < coyote_time:
-			# normal jump
-			velocity.y = JUMP_VELOCITY
-			coyote_timer = coyote_time
+			velocity.y       = JUMP_VELOCITY
+			coyote_timer     = coyote_time
 			play_jump_sound(false)
 		elif on_wall:
-			# wall‐jump: blast off the wall
-			velocity.y = JUMP_VELOCITY
-			velocity.x = wall_dir * WALL_JUMP_H_SPEED
+			velocity.y          = JUMP_VELOCITY
+			velocity.x          = wall_dir * WALL_JUMP_H_SPEED
 			wall_jump_lock_timer = WALL_JUMP_LOCK_TIME
 			play_jump_sound(false)
 		elif not has_double_jumped:
-			# double jump
-			velocity.y = JUMP_VELOCITY * 0.8
+			velocity.y        = JUMP_VELOCITY * 0.8
 			has_double_jumped = true
 			play_jump_sound(true)
 
@@ -124,7 +140,7 @@ func _physics_process(delta):
 	if wall_jump_lock_timer <= 0.0:
 		var dir = Input.get_axis("ui_left", "ui_right")
 		if dir != 0:
-			velocity.x = dir * SPEED
+			velocity.x             = dir * SPEED
 			$AnimatedSprite2D.flip_h = dir < 0
 			if on_floor:
 				$AnimatedSprite2D.play("walk")
@@ -152,7 +168,7 @@ func _is_jump_just_pressed() -> bool:
 
 func _on_dialog_started(_npc_id):
 	can_move = false
-	velocity = Vector2.ZERO
+	velocity  = Vector2.ZERO
 
 func _on_dialog_finished(_npc_id):
 	can_move = true
