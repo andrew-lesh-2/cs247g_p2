@@ -1,0 +1,132 @@
+[gd_scene load_steps=9 format=3 uid="uid://djj3wbqwehg5f"]
+
+[ext_resource type="Script" uid="uid://c46whcwob7sg5" path="res://main_menu.gd" id="1_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://77ca32h3ge7t" path="res://background.png" id="2_jix8l"]
+[ext_resource type="FontFile" uid="uid://blqffmdbrunho" path="res://customFont.ttf" id="3_glbon"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nlkkf"]
+texture = ExtResource("2_jix8l")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe12f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qtwp"]
+bg_color = Color(0.245463, 0.00355132, 0.0203539, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dy7ct"]
+bg_color = Color(0.212402, 0.00268945, 0.0153898, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o4t1"]
+bg_color = Color(0.37331, 0.00825303, 0.0471682, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fu7sn")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -577.0
+offset_top = -322.0
+offset_right = 576.0
+offset_bottom = 326.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_nlkkf")
+
+[node name="button controller" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.5
+offset_top = -64.0
+offset_right = 220.5
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.993652, 1)
+theme_override_constants/separation = 12
+
+[node name="start" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_glbon")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "Start Game"
+
+[node name="about" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_glbon")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "About"
+
+[node name="exit" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_glbon")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "Exit Game"
+
+[node name="game name" type="Label" parent="."]
+layout_mode = 2
+offset_left = -280.0
+offset_top = -179.0
+offset_right = 317.0
+offset_bottom = -116.0
+scale = Vector2(0.987331, 1.06209)
+theme_override_fonts/font = ExtResource("3_glbon")
+theme_override_font_sizes/font_size = 50
+text = "Don't Let the Bedbugs Bite"
+
+[connection signal="pressed" from="button controller/start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="button controller/about" to="." method="_on_about_pressed"]
+[connection signal="pressed" from="button controller/exit" to="." method="_on_exit_pressed"]
