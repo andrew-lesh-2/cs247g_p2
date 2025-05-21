@@ -5,11 +5,11 @@ extends CharacterBody2D
 @export var interact_action : String = "interact"
 
 # — MOVEMENT TUNING —  
-const SPEED               = 50.0
-const JUMP_VELOCITY       = -250.0
-const WALL_SLIDE_SPEED    = 30.0
-const WALL_JUMP_H_SPEED   = 200.0
-const WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
+@export var SPEED               = 50.0
+@export var JUMP_VELOCITY       = -250.0
+@export var WALL_SLIDE_SPEED    = 30.0
+@export var WALL_JUMP_H_SPEED   = 200.0
+@export var WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
 
 # — WALL‐SLIDE DURATION —  
 @export var wall_slide_duration : float = 0.3  # how long to slide before normal gravity
