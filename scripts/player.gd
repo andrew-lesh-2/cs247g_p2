@@ -1,33 +1,44 @@
 extends CharacterBody2D
 
-# — ACTION NAMES —  
+# — ACTION NAMES —
 @export var jump_action     : String = "jump"
 @export var interact_action : String = "interact"
 
-# — MOVEMENT TUNING —  
-const SPEED               = 50.0
-const JUMP_VELOCITY       = -250.0
-const WALL_SLIDE_SPEED    = 30.0
-const WALL_JUMP_H_SPEED   = 200.0
-const WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
+# — MOVEMENT TUNING —
+@export var SPEED               = 50.0
+@export var JUMP_VELOCITY       = -250.0
+@export var WALL_SLIDE_SPEED    = 30.0
+@export var WALL_JUMP_H_SPEED   = 300.0
+@export var WALL_JUMP_Y_DEBUFF = 0.85
+@export var WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
 
-# — GRAVITY —  
+# — WALL‐SLIDE DURATION —
+@export var wall_slide_duration : float = 0.3  # how long to slide before normal gravity
+var wall_slide_timer : float = 0.0
+var was_on_wall      : bool  = false
+
+# — GRAVITY —
 var gravity           = ProjectSettings.get_setting("physics/2d/default_gravity")
 var default_gravity   = gravity
 var slow_fall_gravity = default_gravity * 0.2
 
-# — DOUBLE JUMP & COYOTE TIME —  
+# — DOUBLE JUMP & COYOTE TIME —
 var has_double_jumped = false
+var is_wall_jumping = false
 var coyote_time       = 0.1
 var coyote_timer      = 0.0
 
-# — WALL‐JUMP INPUT LOCK —  
+# — WALL‐JUMP INPUT LOCK —
 var wall_jump_lock_timer = 0.0
+var last_wall_jump_dir = 0.0  # Track last wall jump direction
 
-# — DIALOG PAUSE —  
+# — SPRITE OFFSET —
+var sprite_offset_left = Vector2(4, 0)  # Adjust these values to fine-tune the offset
+var sprite_offset_right = Vector2(-2, 0)  # Adjust these values to fine-tune the offset
+
+# — DIALOG PAUSE —
 var can_move = true
-
-# — JUMP SOUND —  
+# — JUMP SOUND —
 @onready var jump_sound_player = AudioStreamPlayer.new()
 @export var jump_sound_path              : String = "res://audio/effects/bounce.wav"
 @export_range(0.0, 1.0) var jump_sound_volume  : float  = 0.5
@@ -62,6 +73,9 @@ func play_jump_sound(is_double_jump: bool = false):
 
 func _physics_process(delta):
 	# — tick down the wall‐jump input lock —
+
+	var dir = Input.get_axis("ui_left", "ui_right")
+
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
 	# — pause during dialog —
@@ -72,8 +86,10 @@ func _physics_process(delta):
 	# — floor vs air & coyote‐time —
 	var on_floor = is_on_floor()
 	if on_floor:
-		has_double_jumped = false
-		coyote_timer = 0.0
+		has_double_jumped  = false
+		is_wall_jumping = false
+		coyote_timer       = 0.0
+		last_wall_jump_dir = 0.0  # Reset last wall jump direction when touching ground
 	else:
 		coyote_timer += delta
 
@@ -83,48 +99,60 @@ func _physics_process(delta):
 	if not on_floor:
 		for i in range(get_slide_collision_count()):
 			var col = get_slide_collision(i)
-			var nx = col.get_normal().x
-			if abs(nx) > 0.7:
+			var nx  = col.get_normal().x
+			if abs(nx) > 0.7 and dir != 0:
 				on_wall  = true
-				wall_dir = nx
-				break
+				wall_dir = 1 if nx > 0 else -1
+			break
 
-	# — apply gravity or wall‐slide —
+	# — reset or advance wall-slide timer —
+	if on_wall:
+		# just began touching?
+		if not was_on_wall:
+			wall_slide_timer = 0.0
+		was_on_wall = true
+	else:
+		was_on_wall      = false
+		wall_slide_timer = 0.0
+
+	# — apply gravity, wall‐slide (limited time), or slow-fall —
 	if not on_floor:
-		if on_wall and velocity.y > 0:
+		# if we still have remaining slide‐time and are sliding down
+		if on_wall and velocity.y > 0 and wall_slide_timer < wall_slide_duration:
 			velocity.y = min(velocity.y + gravity * delta, WALL_SLIDE_SPEED)
+			wall_slide_timer += delta
 			# reset jump so you can wall‐jump again
-			has_double_jumped = false
-			coyote_timer = coyote_time
+			coyote_timer      = coyote_time
 		elif velocity.y > 0 and _is_jump_pressed():
+			# slow‐fall if holding jump
 			velocity.y += slow_fall_gravity * delta
 		else:
+			# normal gravity
 			velocity.y += default_gravity * delta
 
 	# — handle jumping / wall‐jump / double‐jump —
 	if _is_jump_just_pressed():
 		if on_floor or coyote_timer < coyote_time:
-			# normal jump
-			velocity.y = JUMP_VELOCITY
-			coyote_timer = coyote_time
+			velocity.y       = JUMP_VELOCITY
+			coyote_timer     = coyote_time
 			play_jump_sound(false)
-		elif on_wall:
-			# wall‐jump: blast off the wall
-			velocity.y = JUMP_VELOCITY
-			velocity.x = wall_dir * WALL_JUMP_H_SPEED
+		elif on_wall and (not has_double_jumped or is_wall_jumping) and wall_dir != last_wall_jump_dir:
+			is_wall_jumping = true
+			velocity.y          = WALL_JUMP_Y_DEBUFF * JUMP_VELOCITY
+			velocity.x          = wall_dir * WALL_JUMP_H_SPEED
 			wall_jump_lock_timer = WALL_JUMP_LOCK_TIME
+			last_wall_jump_dir   = wall_dir  # Store the direction of this wall jump
+			has_double_jumped = true
 			play_jump_sound(false)
 		elif not has_double_jumped:
-			# double jump
-			velocity.y = JUMP_VELOCITY * 0.8
+			velocity.y        = JUMP_VELOCITY * 0.8
 			has_double_jumped = true
 			play_jump_sound(true)
 
 	# — horizontal movement & animations —
 	if wall_jump_lock_timer <= 0.0:
-		var dir = Input.get_axis("ui_left", "ui_right")
 		if dir != 0:
-			velocity.x = dir * SPEED
+			velocity.x             = dir * SPEED
 			$AnimatedSprite2D.flip_h = dir < 0
 			if on_floor:
 				$AnimatedSprite2D.play("walk")
@@ -136,6 +164,19 @@ func _physics_process(delta):
 		# during the lock, preserve your wall‐jump burst
 		if on_floor and abs(velocity.x) < 1.0:
 			$AnimatedSprite2D.play("idle")
+
+	# Handle wall rotation and sprite position
+	if on_wall and velocity.y > 0:
+		$AnimatedSprite2D.rotation_degrees = 90 * wall_dir
+		# Offset sprite in the direction of the wall
+		if wall_dir == -1:
+			$AnimatedSprite2D.position = sprite_offset_left
+		else:
+			$AnimatedSprite2D.position = sprite_offset_right
+	else:
+		$AnimatedSprite2D.rotation_degrees = 0
+		# Reset sprite position
+		$AnimatedSprite2D.position = Vector2.ZERO
 
 	if not on_floor:
 		$AnimatedSprite2D.play("jump")
@@ -152,7 +193,7 @@ func _is_jump_just_pressed() -> bool:
 
 func _on_dialog_started(_npc_id):
 	can_move = false
-	velocity = Vector2.ZERO
+	velocity  = Vector2.ZERO
 
 func _on_dialog_finished(_npc_id):
 	can_move = true
