@@ -23,6 +23,10 @@ DialogSystem="*res://scripts/DialogSystem.gd"
 DialogTracker="*res://scripts/dialog_tracker.gd"
 SceneTransition="*res://scripts/scene_transition.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
