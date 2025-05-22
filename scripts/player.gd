@@ -1,5 +1,14 @@
 extends CharacterBody2D
 
+class_name Player
+
+@export var disable_player_input: bool = false
+
+@export var virtual_dir: Vector2 = Vector2.ZERO
+var reset_virtual_dir: bool = false
+@export var virtual_jump_pressed: bool = false
+@export var prev_virtual_jump_pressed: bool = false
+
 # — ACTION NAMES —
 @export var jump_action     : String = "jump"
 @export var interact_action : String = "interact"
@@ -74,7 +83,10 @@ func play_jump_sound(is_double_jump: bool = false):
 func _physics_process(delta):
 	# — tick down the wall‐jump input lock —
 
-	var dir = Input.get_axis("ui_left", "ui_right")
+	var input_result = _handle_input()
+	var dir = input_result[0]
+	var is_jump_pressed = input_result[1]
+	var is_jump_just_pressed = input_result[2]
 
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
@@ -123,7 +135,7 @@ func _physics_process(delta):
 			wall_slide_timer += delta
 			# reset jump so you can wall‐jump again
 			coyote_timer      = coyote_time
-		elif velocity.y > 0 and _is_jump_pressed():
+		elif velocity.y > 0 and is_jump_pressed:
 			# slow‐fall if holding jump
 			velocity.y += slow_fall_gravity * delta
 		else:
@@ -131,7 +143,7 @@ func _physics_process(delta):
 			velocity.y += default_gravity * delta
 
 	# — handle jumping / wall‐jump / double‐jump —
-	if _is_jump_just_pressed():
+	if is_jump_just_pressed:
 		if on_floor or coyote_timer < coyote_time:
 			velocity.y       = JUMP_VELOCITY
 			coyote_timer     = coyote_time
@@ -183,6 +195,34 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+func _handle_input():
+	if disable_player_input:
+		print("processing virtual input")
+		print(virtual_dir)
+		var out = [virtual_dir.x, virtual_jump_pressed, virtual_jump_pressed and not prev_virtual_jump_pressed]
+		prev_virtual_jump_pressed = virtual_jump_pressed
+		virtual_jump_pressed = false
+		if reset_virtual_dir:
+			virtual_dir = Vector2.ZERO
+			reset_virtual_dir = false
+		return out
+
+	var dir = Input.get_axis("ui_left", "ui_right")
+	var is_jump_pressed = _is_jump_pressed()
+	var is_jump_just_pressed = _is_jump_just_pressed()
+
+	return [dir, is_jump_pressed, is_jump_just_pressed]
+
+func input_virtual_dir(dir: Vector2):
+	virtual_dir = dir
+
+
+func input_virtual_dir_pulse(dir: Vector2):
+	virtual_dir = dir
+	reset_virtual_dir = true
+
+func input_virtual_jump():
+	virtual_jump_pressed = true
 # — helpers to keep ui_accept free for dialogue —
 func _is_jump_pressed() -> bool:
 	return Input.is_action_pressed(jump_action) or (can_move and Input.is_action_pressed("ui_accept"))
