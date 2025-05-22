@@ -1,0 +1,79 @@
+[gd_scene load_steps=11 format=3 uid="uid://btcs82tt5gngl"]
+
+[ext_resource type="Texture2D" uid="uid://dpioaqeup8y7u" path="res://assets/sprites/characters/ant-sheet.png" id="1_34txw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwwhq"]
+atlas = ExtResource("1_34txw")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jcoyr"]
+atlas = ExtResource("1_34txw")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v3wnn"]
+atlas = ExtResource("1_34txw")
+region = Rect2(96, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcisf"]
+atlas = ExtResource("1_34txw")
+region = Rect2(144, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gyiwa"]
+atlas = ExtResource("1_34txw")
+region = Rect2(0, 32, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yn77x"]
+atlas = ExtResource("1_34txw")
+region = Rect2(48, 32, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ywtyt"]
+atlas = ExtResource("1_34txw")
+region = Rect2(96, 32, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k33bb"]
+atlas = ExtResource("1_34txw")
+region = Rect2(144, 32, 48, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pba4p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwwhq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jcoyr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v3wnn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcisf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gyiwa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yn77x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ywtyt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k33bb")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[node name="Ant" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pba4p")
+animation = &"idle"
+autoplay = "idle"
