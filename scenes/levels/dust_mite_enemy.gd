@@ -25,6 +25,7 @@ func _physics_process(delta):
 	if is_dying:
 		return
 		
+	sprite.play("Walk")
 	velocity.x = speed * direction
 	velocity.y = 0  # Force y velocity to zero to prevent flying
 	move_and_slide()
