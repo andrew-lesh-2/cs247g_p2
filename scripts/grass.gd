@@ -3,7 +3,7 @@ extends Node2D
 @export var base_segment: int = 0
 @export var segment_count: int = 1
 
-@export var amplitude: float = 0.5
+@export var amplitude: float = 0.35
 @export var period: float = 10.0
 @export var sample_offset: float = 0.1
 
@@ -56,7 +56,7 @@ func _process(delta):
 		else:
 			if iteration == 0:
 				update_segment_positions()
-			iteration = (iteration + 1) % sample_rate
+			iteration = (iteration + 1) % 2 # sample_rate
 
 func place_grass_segments():
 	var current_y = 0

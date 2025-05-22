@@ -3,7 +3,7 @@ extends Node2D
 @onready var area = $Area2D
 var timer: Timer
 
-var npc_id = "ant_bodyguard"
+var npc_id = "ant_bodyguard_2"
 var npc_name = "Ant Bodyguard"
 var name_color = Color(1, 0.8, 0.1)
 var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
@@ -12,7 +12,6 @@ var last_exited_body: Player = null
 
 @onready var story_manager = get_parent()
 
-var in_cutscene: bool = false
 
 func _ready():
 	area.body_entered.connect(_on_body_entered)
@@ -56,10 +55,10 @@ func _ensure_dialog_connection():
 
 func _on_dialog_finished(finished_npc_id):
 	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
-	# Check if this dialog was for this NPC
 	if finished_npc_id == npc_id:
-		last_exited_body.disable_player_input = false
-		in_cutscene = false
+		story_manager.can_enter_anthill = true
+	# Check if this dialog was for this NPC
+
 
 func start_dialog():
 	print("Grasshopper: Starting dialog")
@@ -67,7 +66,7 @@ func start_dialog():
 	if has_node("/root/DialogSystem"):
 		DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": ["Hey, this way's for ants and approved guests only!", "You're not allowed to go this way.", "Go the other way for our guest check ins"],
+			"lines": ["What?!?!?", "You really made it through the collapsed tunnels?!?!?", "-- I mean the visitors center", "You must be one tough bug", "You're cool enough to hang with the Ants!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
@@ -76,19 +75,7 @@ func start_dialog():
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
-		in_cutscene = true
-		body.disable_player_input = true
-		print("disabling player input")
-		timer.start(1)
-		await timer.timeout
-		body.input_virtual_dir(Vector2.RIGHT)
+		start_dialog()
 
 func _on_body_exited(body):
-	if body is Player and in_cutscene:
-		last_exited_body = body
-		timer.start(.2)
-		await timer.timeout
-		body.input_virtual_dir_pulse(Vector2.LEFT)
-		timer.start(1.0)
-		await timer.timeout
-		start_dialog()
+	pass

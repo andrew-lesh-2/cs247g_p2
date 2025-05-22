@@ -197,8 +197,6 @@ func _physics_process(delta):
 
 func _handle_input():
 	if disable_player_input:
-		print("processing virtual input")
-		print(virtual_dir)
 		var out = [virtual_dir.x, virtual_jump_pressed, virtual_jump_pressed and not prev_virtual_jump_pressed]
 		prev_virtual_jump_pressed = virtual_jump_pressed
 		virtual_jump_pressed = false
