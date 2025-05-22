@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c1sepphx28rpf"]
+[gd_scene load_steps=13 format=3 uid="uid://c1sepphx28rpf"]
 
 [ext_resource type="Script" uid="uid://bcgqjsckhh3gm" path="res://scenes/levels/health_ui.gd" id="1_cdsv5"]
 [ext_resource type="Texture2D" uid="uid://d2rpxb7ai1ge0" path="res://assets/backgrounds/sr5za56265ca9caws3.png" id="1_lkdqo"]
@@ -8,9 +8,6 @@
 [ext_resource type="Script" uid="uid://dqxsxbat7b5lh" path="res://scenes/levels/ground_pound_ability.gd" id="6_6o65u"]
 [ext_resource type="PackedScene" uid="uid://bxnpu78qiif23" path="res://scenes/characters/dust_mite_enemy.tscn" id="6_nry8v"]
 [ext_resource type="Script" uid="uid://cp1reabx58o1q" path="res://scenes/levels/combat_manager.gd" id="14_tai2j"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o65u"]
-size = Vector2(31, 14)
 
 [sub_resource type="Animation" id="Animation_n54eq"]
 resource_name = "Idle"
@@ -53,15 +50,9 @@ max_health = 3
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(14, -102)
-zoom = Vector2(2, 2)
 
-[node name="GroundPoundAbility" type="Area2D" parent="Player"]
-collision_mask = 9
+[node name="GroundPoundAbility" type="Node" parent="Player"]
 script = ExtResource("6_6o65u")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/GroundPoundAbility"]
-position = Vector2(1.5, 15)
-shape = SubResource("RectangleShape2D_6o65u")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
