@@ -12,6 +12,7 @@ var last_exited_body: Player = null
 @onready var story_manager = get_parent()
 @onready var glow_effect  = get_node("Ant/Glow")
 @onready var ant_node  = get_node("Ant")
+@onready var interact_icon  = get_node("Ant/interact_icon")
 @onready var area = $Area2D
 @onready var interaction_area = $InteractionArea
 
@@ -34,6 +35,8 @@ func _ready():
 	timer = Timer.new()
 	timer.one_shot = true
 	add_child(timer)
+
+	interact_icon.visible = false
 
 	_ensure_dialog_connection()
 
@@ -70,14 +73,20 @@ func _on_dialog_finished(finished_npc_id):
 	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
 	# Check if this dialog was for this NPC
 	if finished_npc_id == npc_id:
-		last_exited_body.disable_player_input = false
+		if in_cutscene:
+			last_exited_body.disable_player_input = false
+			in_cutscene = false
 		is_in_dialog = false
-		in_cutscene = false
+		if player_nearby:
+			interact_icon.visible = true
+		else:
+			interact_icon.visible = false
 
 
 func start_dialog():
 	print("Grasshopper: Starting dialog")
 	is_in_dialog = true
+	interact_icon.visible = false
 	# Call the global dialog system
 	if not has_node("/root/DialogSystem"):
 		push_error("Cannot start dialog: DialogSystem not found!")
@@ -93,7 +102,7 @@ func start_dialog():
 		print("setting met_before_tunnels to true")
 		met_before_tunnels = true
 		print("met_before_tunnels is now", met_before_tunnels)
-	elif not met_before_tunnels:
+	elif not met_before_tunnels and not spoke_after_tunnels:
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": ["Hey, nice to meet you!", "I heard you made it through the collapsed tunnels?", "That makes you an honorary ant in my eyes!"],
@@ -118,7 +127,6 @@ func start_dialog():
 			["Not every day we get someone as skilled as you around here."],
 			["I’ve got to admit, I’m impressed with your efforts."],
 			["Ah, the ladybug returns. What’s the latest news from the outside world?"],
-			["The queen was right to trust you. I see that now."],
 			["It’s rare to see someone handle things so well around here."],
 			["So, how’s the journey treating you? Found any trouble?"],
 			["You’re more than just a guest now. You’re part of this place."],
@@ -146,11 +154,13 @@ func _on_interaction_area_body_entered(body):
 		player = body
 		player_nearby = true
 		glow_effect.enabled = true
+		interact_icon.visible = true
 
 func _on_interaction_area_body_exited(body):
 	if body is Player:
 		player_nearby = false
 		glow_effect.enabled = false
+		interact_icon.visible = false
 
 func _process(delta):
 	if player_nearby:
@@ -161,8 +171,8 @@ func _process(delta):
 			# Flip sprite based on player position
 			ant_node.scale.x = -1 if direction_to_player < 0 else 1
 
-	if Input.is_action_just_pressed("interact") and !is_in_dialog:
-		start_dialog()
+		if Input.is_action_just_pressed("interact") and !is_in_dialog:
+			start_dialog()
 	else:
 		# Return to default orientation
 		ant_node.scale.x = 1

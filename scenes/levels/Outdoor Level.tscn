@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=22 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://benpg6s3x5swp" path="res://assets/sprites/environment/dirt-decals.png" id="9_78ots"]
 [ext_resource type="Script" uid="uid://c6xlyehjgnha5" path="res://scripts/levels/outdoor/ant_bodyguard_2.gd" id="9_ydkw2"]
 [ext_resource type="Script" uid="uid://bi7xc2lawr6jh" path="res://scripts/utility/glow_effect.gd" id="10_ipcpv"]
+[ext_resource type="Texture2D" uid="uid://ckb6ndpmq4x" path="res://assets/sprites/environment/interact-icon.png" id="11_lsp5i"]
+[ext_resource type="Script" uid="uid://d27i1sd1l2kq2" path="res://scripts/utility/interact_icon.gd" id="12_ys8xk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_py4n2"]
 texture = ExtResource("2_l0qe0")
@@ -785,10 +787,6 @@ texture_region_size = Vector2i(48, 48)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_iix71")
 
-[sub_resource type="GDScript" id="GDScript_ydkw2"]
-script/source = "extends Node2D
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qobla"]
 size = Vector2(39, 165)
 
@@ -819,7 +817,7 @@ tile_map_data = PackedByteArray("AAAHAPv/AAAEAAMAAAAMAPv/AAADAAMAAAAIAPv/AAABAAM
 tile_set = SubResource("TileSet_qobla")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(360, 238)
+position = Vector2(556, 885)
 JUMP_VELOCITY = -350.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -3241,16 +3239,22 @@ segment_count = 6
 script = ExtResource("6_5u1bi")
 
 [node name="Ant Bodyguard" type="Node2D" parent="StoryManager"]
-modulate = Color(0.454079, 0.628234, 1, 1)
 position = Vector2(245, 248)
 script = ExtResource("7_mfhih")
 
 [node name="Ant" parent="StoryManager/Ant Bodyguard" instance=ExtResource("3_qobla")]
-script = SubResource("GDScript_ydkw2")
 
 [node name="Glow" type="Node2D" parent="StoryManager/Ant Bodyguard/Ant"]
 script = ExtResource("10_ipcpv")
+glow_intensity = 0.0
 modulate_color = Color(0.576154, 0.706424, 1, 1)
+
+[node name="interact_icon" type="Sprite2D" parent="StoryManager/Ant Bodyguard/Ant"]
+position = Vector2(0, -25)
+texture = ExtResource("11_lsp5i")
+script = ExtResource("12_ys8xk")
+frequency = 0.5
+amplitude = 1.0
 
 [node name="Area2D" type="Area2D" parent="StoryManager/Ant Bodyguard"]
 visible = false
@@ -3275,7 +3279,15 @@ position = Vector2(254, 249)
 
 [node name="Glow" type="Node2D" parent="StoryManager/Ant Bodyguard2/Ant"]
 script = ExtResource("10_ipcpv")
+glow_intensity = 0.0
 modulate_color = Color(0.586039, 0.630158, 1, 1)
+
+[node name="interact_icon" type="Sprite2D" parent="StoryManager/Ant Bodyguard2/Ant"]
+position = Vector2(0, -25)
+texture = ExtResource("11_lsp5i")
+script = ExtResource("12_ys8xk")
+frequency = 0.5
+amplitude = 1.0
 
 [node name="Area2D" type="Area2D" parent="StoryManager/Ant Bodyguard2"]
 collision_layer = 2
@@ -3283,6 +3295,13 @@ collision_layer = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Ant Bodyguard2/Area2D"]
 position = Vector2(263, 178.5)
 shape = SubResource("RectangleShape2D_qobla")
+
+[node name="InteractionArea" type="Area2D" parent="StoryManager/Ant Bodyguard2"]
+position = Vector2(259, 231)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Ant Bodyguard2/InteractionArea"]
+position = Vector2(-5, 1.75)
+shape = SubResource("RectangleShape2D_ipcpv")
 
 [node name="decals" type="Node2D" parent="."]
 z_index = -2
