@@ -1,7 +1,16 @@
-[gd_scene load_steps=18 format=3 uid="uid://sfn6ot4qssit"]
+[gd_scene load_steps=21 format=3 uid="uid://sfn6ot4qssit"]
 
 [ext_resource type="Script" uid="uid://b8nitobori1xd" path="res://scripts/player.gd" id="1_xofr2"]
 [ext_resource type="Texture2D" uid="uid://cm7w84wkg5p63" path="res://assets/sprites/characters/ladybug-sheet.png" id="2_54fnc"]
+[ext_resource type="Texture2D" uid="uid://bohuyvqm5hauw" path="res://assets/sprites/characters/ladybug-FLYING-sheet.png" id="2_76oj4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dyp2m"]
+atlas = ExtResource("2_76oj4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_atpat"]
+atlas = ExtResource("2_76oj4")
+region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b881y"]
 atlas = ExtResource("2_54fnc")
@@ -57,6 +66,17 @@ region = Rect2(224, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hcwku"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dyp2m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_atpat")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 15.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_b881y")
@@ -122,7 +142,8 @@ SPEED = 150.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hcwku")
-animation = &"walk"
+animation = &"fly"
+frame_progress = 0.100299
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -1)

@@ -88,6 +88,8 @@ func _physics_process(delta):
 	var is_jump_pressed = input_result[1]
 	var is_jump_just_pressed = input_result[2]
 
+	var slow_falling = false
+
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
 	# — pause during dialog —
@@ -138,6 +140,7 @@ func _physics_process(delta):
 		elif velocity.y > 0 and is_jump_pressed:
 			# slow‐fall if holding jump
 			velocity.y += slow_fall_gravity * delta
+			slow_falling = true
 		else:
 			# normal gravity
 			velocity.y += default_gravity * delta
@@ -191,7 +194,10 @@ func _physics_process(delta):
 		$AnimatedSprite2D.position = Vector2.ZERO
 
 	if not on_floor:
-		$AnimatedSprite2D.play("jump")
+		if slow_falling and not is_jump_just_pressed:
+			$AnimatedSprite2D.play("fly")
+		else:
+			$AnimatedSprite2D.play("jump")
 
 	move_and_slide()
 
