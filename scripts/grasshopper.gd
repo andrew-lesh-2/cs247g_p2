@@ -49,28 +49,28 @@ var glow_material = null
 func _ready():
 	# Start idle animation
 	$AnimatedSprite2D.play("idle")
-	
+
 	# Apply horizontal flip setting
 	$AnimatedSprite2D.flip_h = face_left
-	
+
 	# Create glow shader material
 	setup_glow_shader()
-	
+
 	# Find player node
 	await get_tree().process_frame
 	player_node = get_tree().get_first_node_in_group("player")
 	if player_node == null:
 		push_error("Player node not found! Make sure your player is in the 'player' group.")
-		
+
 	# Display debug info if enabled
 	if show_detection_area:
 		queue_redraw()
-		
-	
-	
+
+
+
 	# Connect to dialog system with error handling
 	_ensure_dialog_connection()
-	
+
 	# Set up input mapping if needed
 	_ensure_input_mapping()
 
@@ -79,23 +79,23 @@ func _ensure_dialog_connection():
 	if not has_node("/root/DialogSystem"):
 		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
 		return
-		
+
 	# Check if we're already connected to avoid duplicate connections
 	var connections = []
-	
+
 	if DialogSystem.has_signal("dialog_finished"):
 		connections = DialogSystem.get_signal_connection_list("dialog_finished")
 	else:
 		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
 		return
-		
+
 	var already_connected = false
-	
+
 	for connection in connections:
 		if connection.callable.get_object() == self and connection.callable.get_method() == "_on_dialog_finished":
 			already_connected = true
 			break
-	
+
 	if not already_connected:
 		print("Connecting grasshopper to dialog system...")
 		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
@@ -116,23 +116,23 @@ func _ensure_input_mapping():
 func setup_glow_shader():
 	# Create shader material
 	glow_material = ShaderMaterial.new()
-	
+
 	# Create shader
 	glow_shader = Shader.new()
 	glow_shader.code = """
 	shader_type canvas_item;
-	
+
 	uniform vec4 glow_color : source_color = vec4(1.0, 1.0, 0.5, 0.8);
 	uniform float glow_amount : hint_range(0.0, 1.0) = 0.0;
-	
+
 	void fragment() {
 		vec4 original_color = texture(TEXTURE, UV);
-		
+
 		// Only glow non-transparent pixels
 		if (original_color.a > 0.0) {
 			// Mix the original color with the glow color based on glow amount
 			COLOR = mix(original_color, glow_color, glow_amount);
-			
+
 			// Ensure we keep the original alpha
 			COLOR.a = original_color.a;
 		} else {
@@ -140,14 +140,14 @@ func setup_glow_shader():
 		}
 	}
 	"""
-	
+
 	# Assign shader to material
 	glow_material.shader = glow_shader
-	
+
 	# Set initial uniform values
 	glow_material.set_shader_parameter("glow_color", glow_color)
 	glow_material.set_shader_parameter("glow_amount", 0.0)
-	
+
 	# Apply material to animated sprite
 	$AnimatedSprite2D.material = glow_material
 
@@ -155,26 +155,26 @@ func _process(delta):
 	# Skip if player not found
 	if player_node == null:
 		return
-	
+
 	# Check if player is in range using boundary-based detection
 	var was_in_range = player_in_range
 	player_in_range = is_player_in_range()
-	
+
 	# Handle player entering/exiting range
 	if player_in_range != was_in_range:
 		if player_in_range:
 			_on_player_entered()
 		else:
 			_on_player_exited()
-	
+
 	# Check for interaction when in range
 	if player_in_range and Input.is_action_just_pressed("interact") and !is_in_dialog:
 		start_dialog()
-		
+
 	# Update glow effect when player is in range
 	if player_in_range and !is_in_dialog:
 		update_glow(delta)
-		
+
 	# Redraw debug visualization if enabled
 	if show_detection_area:
 		queue_redraw()
@@ -183,15 +183,15 @@ func _process(delta):
 func is_player_in_range() -> bool:
 	if player_node == null:
 		return false
-		
+
 	# Get sprite dimensions
 	var sprite_width = get_sprite_width()
 	var sprite_height = get_sprite_height()
-	
+
 	# Calculate distance from center to boundaries
 	var half_width = sprite_width / 2.0
 	var half_height = sprite_height / 2.0
-	
+
 	# Calculate boundary box with offset
 	var boundary = Rect2(
 		global_position.x - half_width - boundary_offset,
@@ -199,23 +199,23 @@ func is_player_in_range() -> bool:
 		sprite_width + (boundary_offset * 2),
 		sprite_height + (boundary_offset * 2)
 	)
-	
+
 	# First check: is player's center point within extended boundary?
 	if boundary.has_point(player_node.global_position):
 		return true
-		
+
 	# Second check: basic distance check from center as fallback
 	var distance = global_position.distance_to(player_node.global_position)
 	return distance < detection_distance
-	
+
 func update_glow(delta):
 	# Update glow time
 	glow_time += delta * glow_pulse_speed
-	
+
 	# Calculate pulsing glow amount using sine wave
 	var pulse_factor = (sin(glow_time * PI) + 1.0) / 2.0  # Oscillates between 0 and 1
 	var current_intensity = pulse_factor * glow_intensity
-	
+
 	# Update shader parameter
 	if glow_material:
 		glow_material.set_shader_parameter("glow_amount", current_intensity)
@@ -226,27 +226,27 @@ func _draw():
 		# Get sprite dimensions
 		var sprite_width = get_sprite_width()
 		var sprite_height = get_sprite_height()
-		
+
 		# Calculate distance from center to boundaries
 		var half_width = sprite_width / 2.0
 		var half_height = sprite_height / 2.0
-		
+
 		# Draw sprite boundary in green
 		var sprite_rect = Rect2(
 			-half_width, -half_height,
 			sprite_width, sprite_height
 		)
 		draw_rect(sprite_rect, Color(0, 1, 0, 0.3), false, 2.0)
-		
+
 		# Draw detection boundary in blue
 		var detection_rect = Rect2(
-			-half_width - boundary_offset, 
+			-half_width - boundary_offset,
 			-half_height - boundary_offset,
-			sprite_width + (boundary_offset * 2), 
+			sprite_width + (boundary_offset * 2),
 			sprite_height + (boundary_offset * 2)
 		)
 		draw_rect(detection_rect, Color(0, 0, 1, 0.3), false, 2.0)
-		
+
 		# Draw circle for the distance-based detection as yellow
 		draw_circle(Vector2.ZERO, detection_distance, Color(1, 1, 0, 0.1))
 		draw_arc(Vector2.ZERO, detection_distance, 0, TAU, 32, Color(1, 1, 0, 0.3), 2.0)
@@ -257,7 +257,7 @@ func get_sprite_width() -> float:
 		var frame_texture = $AnimatedSprite2D.sprite_frames.get_frame_texture("idle", 0)
 		if frame_texture:
 			return frame_texture.get_width() * abs($AnimatedSprite2D.scale.x)
-	
+
 	# Fallback value
 	return 32.0
 
@@ -267,7 +267,7 @@ func get_sprite_height() -> float:
 		var frame_texture = $AnimatedSprite2D.sprite_frames.get_frame_texture("idle", 0)
 		if frame_texture:
 			return frame_texture.get_height() * abs($AnimatedSprite2D.scale.y)
-	
+
 	# Fallback value
 	return 32.0
 
@@ -275,7 +275,7 @@ func _on_player_entered():
 	print("Player entered interaction range with Grasshopper")
 	# Reset glow time when player enters range
 	glow_time = 0.0
-	
+
 	# Make sure shader is active
 	if $AnimatedSprite2D.material != glow_material:
 		$AnimatedSprite2D.material = glow_material
@@ -289,17 +289,17 @@ func _on_player_exited():
 func start_dialog():
 	print("Grasshopper: Starting dialog")
 	is_in_dialog = true
-	
+
 	# Turn off glow during dialog
 	if glow_material:
 		glow_material.set_shader_parameter("glow_amount", 0.0)
-	
+
 	# Get the current dialog stage
 	var current_stage = DialogTracker.get_dialog_stage(npc_id)
-	
+
 	# Get appropriate dialog lines based on stage
 	var dialog_lines_to_use = []
-	
+
 	match current_stage:
 		0:
 			dialog_lines_to_use = dialog_lines_stage0
@@ -309,7 +309,7 @@ func start_dialog():
 			# Will stay at stage 1 for subsequent interactions
 		_:
 			dialog_lines_to_use = dialog_lines_stage1  # Fallback to stage 1 for any higher stage
-	
+
 	# Call the global dialog system
 	if has_node("/root/DialogSystem"):
 		print("Grasshopper: Calling DialogSystem.start_dialog with stage", current_stage, "dialog")
@@ -325,11 +325,11 @@ func start_dialog():
 
 func _on_dialog_finished(finished_npc_id):
 	print("Grasshopper received dialog_finished signal for npc_id:", finished_npc_id)
-	
+
 	# Check if this dialog was for this NPC
 	if finished_npc_id == npc_id:
 		end_dialog()
-		
+
 		# Advance dialog stage if currently at stage 0
 		var current_stage = DialogTracker.get_dialog_stage(npc_id)
 		if current_stage == 0:
@@ -340,7 +340,7 @@ func _on_dialog_finished(finished_npc_id):
 func end_dialog():
 	print("Grasshopper: Ending dialog")
 	is_in_dialog = false
-	
+
 	# Reset glow cycle if player is still in range
 	if player_in_range:
 		glow_time = 0.0

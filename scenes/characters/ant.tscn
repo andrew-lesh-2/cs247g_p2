@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://btcs82tt5gngl"]
+[gd_scene load_steps=11 format=3 uid="uid://btcs82tt5gngl"]
 
 [ext_resource type="Texture2D" uid="uid://dpioaqeup8y7u" path="res://assets/sprites/characters/ant-sheet.png" id="1_34txw"]
-[ext_resource type="Script" uid="uid://dxjegnj6al247" path="res://scripts/ant-color.gd" id="1_wwwhq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wwwhq"]
 atlas = ExtResource("1_34txw")
@@ -73,7 +72,6 @@ animations = [{
 }]
 
 [node name="Ant" type="Node2D"]
-script = ExtResource("1_wwwhq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pba4p")

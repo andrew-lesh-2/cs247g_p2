@@ -1,6 +1,5 @@
 extends Node2D
 
-@onready var area = $Area2D
 var timer: Timer
 
 var npc_id = "ant_bodyguard"
@@ -11,12 +10,25 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 var last_exited_body: Player = null
 
 @onready var story_manager = get_parent()
+@onready var glow_effect  = get_node("Ant/Glow")
+@onready var ant_node  = get_node("Ant")
+@onready var area = $Area2D
+@onready var interaction_area = $InteractionArea
 
 var in_cutscene: bool = false
+var player_nearby: bool = false
+var player: Player = null
+
+var met_before_tunnels: bool = false
+var spoke_after_tunnels: bool = false
+
+var is_in_dialog: bool = false
 
 func _ready():
 	area.body_entered.connect(_on_body_entered)
 	area.body_exited.connect(_on_body_exited)
+	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
+	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
 	# Create and setup timer
 	timer = Timer.new()
@@ -59,20 +71,101 @@ func _on_dialog_finished(finished_npc_id):
 	# Check if this dialog was for this NPC
 	if finished_npc_id == npc_id:
 		last_exited_body.disable_player_input = false
+		is_in_dialog = false
 		in_cutscene = false
+
 
 func start_dialog():
 	print("Grasshopper: Starting dialog")
+	is_in_dialog = true
 	# Call the global dialog system
-	if has_node("/root/DialogSystem"):
+	if not has_node("/root/DialogSystem"):
+		push_error("Cannot start dialog: DialogSystem not found!")
+		return
+
+	if not story_manager.can_enter_anthill:
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": ["Hey, this way's for ants and approved guests only!", "You're not allowed to go this way.", "Go the other way for our guest check ins"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
+		print("setting met_before_tunnels to true")
+		met_before_tunnels = true
+		print("met_before_tunnels is now", met_before_tunnels)
+	elif not met_before_tunnels:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["Hey, nice to meet you!", "I heard you made it through the collapsed tunnels?", "That makes you an honorary ant in my eyes!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		spoke_after_tunnels = true
+	elif met_before_tunnels and not spoke_after_tunnels:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["I sent you into the abandoned tunnels, and you made it out in one piece!", "That makes you an honorary ant in my eyes!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		spoke_after_tunnels = true
 	else:
-		push_error("Cannot start dialog: DialogSystem not found!")
+		var line_options = [
+			["How's the anthill treating you?"],
+			["If it isn't my favorite ladybug."],
+			["You’ve earned your place here, welcome back."],
+			["Good to see you again, ladybug. Ready for another day of work?"],
+			["Not every day we get someone as skilled as you around here."],
+			["I’ve got to admit, I’m impressed with your efforts."],
+			["Ah, the ladybug returns. What’s the latest news from the outside world?"],
+			["The queen was right to trust you. I see that now."],
+			["It’s rare to see someone handle things so well around here."],
+			["So, how’s the journey treating you? Found any trouble?"],
+			["You’re more than just a guest now. You’re part of this place."],
+			["I knew you had it in you. The anthill’s better for your presence."],
+			["Not all ants are as welcoming, but I’m glad you’ve proven yourself."],
+			["Welcome back to the heart of the anthill. It’s safe here."],
+			["You’re always welcome here. Just don’t make me regret it!"],
+			["I’ve seen your strength, ladybug. I hope you’re here to stay."],
+			["Things go smoother with you around. You’ve earned respect."],
+			["Every new face has a story, but yours was written in action."],
+			["Another day, another ladybug earning their keep. You’ve done well."],
+			["It’s not easy to be trusted here. You’ve done just that."]
+		]
+		var lines = line_options[randi() % line_options.size()]
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": lines,
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+
+
+func _on_interaction_area_body_entered(body):
+	if body is Player:
+		player = body
+		player_nearby = true
+		glow_effect.enabled = true
+
+func _on_interaction_area_body_exited(body):
+	if body is Player:
+		player_nearby = false
+		glow_effect.enabled = false
+
+func _process(delta):
+	if player_nearby:
+		# Get player node
+		if player:
+			# Compare x positions to determine direction
+			var direction_to_player = player.global_position.x - ant_node.global_position.x
+			# Flip sprite based on player position
+			ant_node.scale.x = -1 if direction_to_player < 0 else 1
+
+	if Input.is_action_just_pressed("interact") and !is_in_dialog:
+		start_dialog()
+	else:
+		# Return to default orientation
+		ant_node.scale.x = 1
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
