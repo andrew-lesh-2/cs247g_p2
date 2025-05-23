@@ -811,7 +811,7 @@ tile_map_data = PackedByteArray("AAAHAPv/AAAEAAMAAAAMAPv/AAADAAMAAAAIAPv/AAABAAM
 tile_set = SubResource("TileSet_qobla")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(-1056, -997)
+position = Vector2(527, 847)
 JUMP_VELOCITY = -350.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -3233,6 +3233,7 @@ segment_count = 6
 script = ExtResource("6_5u1bi")
 
 [node name="Ant Bodyguard" type="Node2D" parent="StoryManager"]
+modulate = Color(0.454079, 0.628234, 1, 1)
 script = ExtResource("7_mfhih")
 
 [node name="Ant" parent="StoryManager/Ant Bodyguard" instance=ExtResource("3_qobla")]
@@ -3246,6 +3247,7 @@ position = Vector2(263, 224)
 shape = SubResource("RectangleShape2D_qobla")
 
 [node name="Ant Bodyguard2" type="Node2D" parent="StoryManager"]
+modulate = Color(0.563453, 0.544125, 1, 1)
 position = Vector2(187, 640)
 script = ExtResource("9_ydkw2")
 

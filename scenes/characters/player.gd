@@ -18,7 +18,7 @@ func _ready():
 func _physics_process(delta):
 	# Call the parent's physics process first
 	super._physics_process(delta)
-	
+
 	# Add ground pound logic
 	# Handle ground pound
 	if Input.is_action_just_pressed("ui_down") and not is_on_floor() and not is_ground_pounding:
@@ -29,7 +29,7 @@ func _physics_process(delta):
 		modulate = Color(1, 0.5, 0.5)
 		await get_tree().create_timer(0.1).timeout
 		modulate = Color(1, 1, 1)
-	
+
 	# Check if ground pound finished (when we hit the ground)
 	if is_ground_pounding and is_on_floor():
 		print("Ground pound landed!")
@@ -41,12 +41,12 @@ func _physics_process(delta):
 func take_damage(amount = 1):
 	current_health -= amount
 	print("Player took damage! Health: ", current_health)
-	
+
 	# Visual feedback for taking damage
 	modulate = Color(1, 0.5, 0.5)  # Flash red
 	await get_tree().create_timer(0.2).timeout
 	modulate = Color(1, 1, 1)  # Back to normal
-	
+
 	if current_health <= 0:
 		print("Player died!")
 		# Implement game over logic later

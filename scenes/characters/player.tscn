@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=3 uid="uid://sfn6ot4qssit"]
+[gd_scene load_steps=23 format=3 uid="uid://sfn6ot4qssit"]
 
 [ext_resource type="Script" uid="uid://b8nitobori1xd" path="res://scripts/player.gd" id="1_xofr2"]
 [ext_resource type="Texture2D" uid="uid://cm7w84wkg5p63" path="res://assets/sprites/characters/ladybug-sheet.png" id="2_54fnc"]
 [ext_resource type="Texture2D" uid="uid://bohuyvqm5hauw" path="res://assets/sprites/characters/ladybug-FLYING-sheet.png" id="2_76oj4"]
+[ext_resource type="Texture2D" uid="uid://dki58gc77cqvo" path="res://assets/sprites/environment/particle.png" id="4_dyp2m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dyp2m"]
 atlas = ExtResource("2_76oj4")
@@ -135,6 +136,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qcft"]
 size = Vector2(26, 18)
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dyp2m"]
+lifetime_randomness = 0.24
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(1, 15, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = -119.9
+angle_max = 276.3
+spread = 40.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 150, 0)
+scale_min = 0.75
+hue_variation_min = -2.23517e-08
+hue_variation_max = -2.23517e-08
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 3
 script = ExtResource("1_xofr2")
@@ -142,9 +159,16 @@ SPEED = 150.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hcwku")
-animation = &"fly"
-frame_progress = 0.100299
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -1)
 shape = SubResource("RectangleShape2D_5qcft")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(0, 9)
+emitting = false
+amount = 20
+texture = ExtResource("4_dyp2m")
+lifetime = 1.4
+process_material = SubResource("ParticleProcessMaterial_dyp2m")

@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Player
 
+@onready var particles = $GPUParticles2D
+
 @export var disable_player_input: bool = false
 
 @export var virtual_dir: Vector2 = Vector2.ZERO
@@ -22,7 +24,7 @@ var reset_virtual_dir: bool = false
 @export var WALL_JUMP_LOCK_TIME = 0.15   # seconds to ignore input after wall‐jump
 
 # — WALL‐SLIDE DURATION —
-@export var wall_slide_duration : float = 0.3  # how long to slide before normal gravity
+@export var wall_slide_duration : float = 1  # how long to slide before normal gravity
 var wall_slide_timer : float = 0.0
 var was_on_wall      : bool  = false
 
@@ -42,8 +44,11 @@ var wall_jump_lock_timer = 0.0
 var last_wall_jump_dir = 0.0  # Track last wall jump direction
 
 # — SPRITE OFFSET —
-var sprite_offset_left = Vector2(4, 0)  # Adjust these values to fine-tune the offset
-var sprite_offset_right = Vector2(-2, 0)  # Adjust these values to fine-tune the offset
+var sprite_offset_right = Vector2(4, 0)  # Adjust these values to fine-tune the offset
+var sprite_offset_left = Vector2(-2, 0)  # Adjust these values to fine-tune the offset
+
+var particles_offset_right = Vector2(4, 0)
+var particles_offset_left = Vector2(-12, 0)
 
 # — DIALOG PAUSE —
 var can_move = true
@@ -183,12 +188,20 @@ func _physics_process(delta):
 	# Handle wall rotation and sprite position
 	if on_wall and velocity.y > 0:
 		$AnimatedSprite2D.rotation_degrees = 90 * wall_dir
+		particles.emitting = true
 		# Offset sprite in the direction of the wall
 		if wall_dir == -1:
-			$AnimatedSprite2D.position = sprite_offset_left
-		else:
 			$AnimatedSprite2D.position = sprite_offset_right
+
+			particles.position = particles_offset_right
+			particles.rotation = 180
+		else:
+			$AnimatedSprite2D.position = sprite_offset_left
+			particles.position = particles_offset_left
+			particles.rotation = 0
+
 	else:
+		particles.emitting = false
 		$AnimatedSprite2D.rotation_degrees = 0
 		# Reset sprite position
 		$AnimatedSprite2D.position = Vector2.ZERO
