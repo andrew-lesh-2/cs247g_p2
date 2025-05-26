@@ -17,14 +17,3 @@ func _process(delta):
 
 	# Apply the offset to the original position
 	position.y = start_position.y + vertical_offset
-
-func set_is_in_dialog(value: bool) -> void:
-	_is_in_dialog = value
-	_update_visibility()
-
-func set_player_nearby(value: bool) -> void:
-	player_nearby = value
-	_update_visibility()
-
-func _update_visibility() -> void:
-	visible = not _is_in_dialog and player_nearby

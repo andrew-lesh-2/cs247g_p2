@@ -2,18 +2,17 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_bodyguard_2"
-var npc_name = "Ant Bodyguard"
+var npc_id = "ant_artist"
+var npc_name = "Ant Artist"
 var name_color = Color(1, 0.8, 0.1)
 var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
 var last_exited_body: Player = null
 
 @onready var story_manager = get_parent()
-@onready var glow_effect  = get_node("Ant/Glow")
 @onready var interact_icon  = get_node("interact_icon")
+@onready var mission_icon  = get_node("mission_icon")
 @onready var ant_node  = get_node("Ant")
-@onready var area = $Area2D
 @onready var interaction_area = $InteractionArea
 
 var in_cutscene: bool = false
@@ -25,18 +24,11 @@ var is_in_dialog: bool = false
 var have_spoken: bool = false
 
 func _ready():
-	area.body_entered.connect(_on_body_entered)
-	area.body_exited.connect(_on_body_exited)
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
 	interact_icon.visible = false
-
-
-	# Create and setup timer
-	timer = Timer.new()
-	timer.one_shot = true
-	add_child(timer)
+	mission_icon.visible = true
 
 	_ensure_dialog_connection()
 
@@ -72,8 +64,8 @@ func _ensure_dialog_connection():
 func _on_dialog_finished(finished_npc_id):
 	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
 	if finished_npc_id == npc_id:
-		story_manager.can_enter_anthill = true
 		is_in_dialog = false
+		mission_icon.visible = false
 		if player_nearby:
 			interact_icon.visible = true
 		else:
@@ -84,7 +76,7 @@ func _on_dialog_finished(finished_npc_id):
 func start_dialog():
 	is_in_dialog = true
 	interact_icon.visible = false
-	print("Grasshopper: Starting dialog")
+	mission_icon.visible = false
 	# Call the global dialog system
 	if not has_node("/root/DialogSystem"):
 		push_error("Cannot start dialog: DialogSystem not found!")
@@ -92,7 +84,7 @@ func start_dialog():
 	if not have_spoken:
 		DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": ["What?!?!?", "You really made it through the collapsed tunnels?!?!?", "-- I mean the visitors center", "You must be one tough bug", "You're cool enough to hang with the Ants!"],
+			"lines": ["Oh. hey", "Hows it going?", "Me? I'm not like most ants. I'm no good at foraging or fighting.", "But I LOVE to draw!", "I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", "I was just getting started on a new piece, though, when my last good stick broke.", "Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
@@ -139,13 +131,11 @@ func _on_interaction_area_body_entered(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player = body
 		player_nearby = true
-		glow_effect.enabled = true
 		interact_icon.visible = true
 
 func _on_interaction_area_body_exited(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player_nearby = false
-		glow_effect.enabled = false
 		interact_icon.visible = false
 
 func _process(delta):

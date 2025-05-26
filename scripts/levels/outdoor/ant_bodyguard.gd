@@ -12,7 +12,7 @@ var last_exited_body: Player = null
 @onready var story_manager = get_parent()
 @onready var glow_effect  = get_node("Ant/Glow")
 @onready var ant_node  = get_node("Ant")
-@onready var interact_icon  = get_node("Ant/interact_icon")
+@onready var interact_icon  = get_node("interact_icon")
 @onready var area = $Area2D
 @onready var interaction_area = $InteractionArea
 
