@@ -10,7 +10,6 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 var last_exited_body: Player = null
 
 @onready var story_manager = get_parent()
-@onready var glow_effect  = get_node("Ant/Glow")
 @onready var ant_node  = get_node("Ant")
 @onready var interact_icon  = get_node("interact_icon")
 @onready var area = $Area2D
@@ -99,25 +98,23 @@ func start_dialog():
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		print("setting met_before_tunnels to true")
-		met_before_tunnels = true
-		print("met_before_tunnels is now", met_before_tunnels)
-	elif not met_before_tunnels and not spoke_after_tunnels:
+		story_manager.met_first_bodyguard = true
+	elif (not story_manager.met_first_bodyguard and not story_manager.spoke_after_tunnels):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": ["Hey, nice to meet you!", "I heard you made it through the collapsed tunnels?", "That makes you an honorary ant in my eyes!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		spoke_after_tunnels = true
-	elif met_before_tunnels and not spoke_after_tunnels:
+		story_manager.spoke_after_tunnels = true
+	elif (story_manager.met_first_bodyguard and not story_manager.spoke_after_tunnels):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": ["I sent you into the abandoned tunnels, and you made it out in one piece!", "That makes you an honorary ant in my eyes!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		spoke_after_tunnels = true
+		story_manager.spoke_after_tunnels = true
 	else:
 		var line_options = [
 			["How's the anthill treating you?"],
@@ -153,13 +150,11 @@ func _on_interaction_area_body_entered(body):
 	if body is Player:
 		player = body
 		player_nearby = true
-		glow_effect.enabled = true
 		interact_icon.visible = true
 
 func _on_interaction_area_body_exited(body):
 	if body is Player:
 		player_nearby = false
-		glow_effect.enabled = false
 		interact_icon.visible = false
 
 func _process(delta):

@@ -15,7 +15,7 @@ var glow_time: float = 0.0
 var glow_shader = null
 var glow_material = null
 
-@onready var sprite = get_parent().get_node("AnimatedSprite2D")
+@onready var sprite = get_parent()
 
 func _ready():
 	# Create shader material

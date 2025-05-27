@@ -10,7 +10,6 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 var last_exited_body: Player = null
 
 @onready var story_manager = get_parent()
-@onready var glow_effect  = get_node("Ant/Glow")
 @onready var interact_icon  = get_node("interact_icon")
 @onready var ant_node  = get_node("Ant")
 @onready var area = $Area2D
@@ -72,7 +71,6 @@ func _ensure_dialog_connection():
 func _on_dialog_finished(finished_npc_id):
 	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
 	if finished_npc_id == npc_id:
-		story_manager.can_enter_anthill = true
 		is_in_dialog = false
 		if player_nearby:
 			interact_icon.visible = true
@@ -89,14 +87,14 @@ func start_dialog():
 	if not has_node("/root/DialogSystem"):
 		push_error("Cannot start dialog: DialogSystem not found!")
 		return
-	if not have_spoken:
+	if not story_manager.can_enter_anthill:
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": ["What?!?!?", "You really made it through the collapsed tunnels?!?!?", "-- I mean the visitors center", "You must be one tough bug", "You're cool enough to hang with the Ants!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		have_spoken = true
+		story_manager.can_enter_anthill = true
 	else:
 		var line_options = [
 			["Back again, I see. Everything going smoothly?"],
@@ -139,13 +137,11 @@ func _on_interaction_area_body_entered(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player = body
 		player_nearby = true
-		glow_effect.enabled = true
 		interact_icon.visible = true
 
 func _on_interaction_area_body_exited(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player_nearby = false
-		glow_effect.enabled = false
 		interact_icon.visible = false
 
 func _process(delta):

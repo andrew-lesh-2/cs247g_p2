@@ -21,14 +21,12 @@ var player: Player = null
 
 var is_in_dialog: bool = false
 
-var have_spoken: bool = false
-
 func _ready():
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
 	interact_icon.visible = false
-	mission_icon.visible = true
+	mission_icon.visible = not have_spoken()
 
 	_ensure_dialog_connection()
 
@@ -72,6 +70,9 @@ func _on_dialog_finished(finished_npc_id):
 			interact_icon.visible = false
 		in_cutscene = false
 
+func have_spoken():
+	return (story_manager.stick_mission_active or 
+		story_manager.stick_mission_completed)
 
 func start_dialog():
 	is_in_dialog = true
@@ -81,14 +82,44 @@ func start_dialog():
 	if not has_node("/root/DialogSystem"):
 		push_error("Cannot start dialog: DialogSystem not found!")
 		return
-	if not have_spoken:
+	if (not have_spoken()):
 		DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": ["Oh. hey", "Hows it going?", "Me? I'm not like most ants. I'm no good at foraging or fighting.", "But I LOVE to draw!", "I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", "I was just getting started on a new piece, though, when my last good stick broke.", "Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
+			"lines": [
+				"Oh. hey", 
+				"Hows it going?", 
+				"Me? I'm not like most ants. I'm no good at foraging or fighting.", 
+				"But I LOVE to draw!", 
+				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", 
+				"I was just getting started on a new piece, though, when my last good stick broke.", 
+				"Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		have_spoken = true
+		story_manager.set_stick_mission_active(true)
+	elif (story_manager.stick_mission_active and 
+		not story_manager.is_carrying_stick):
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"Still looking for a good stick?", 
+				"There are usually good ones under the tree"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+	elif story_manager.stick_mission_active:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"Wow! What a great stick you've brought me!",
+				"Thank you so much.",
+				"Now I can finally get back to my working on my masterpiece!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		story_manager.set_stick_mission_active(false)
+		story_manager.is_carrying_stick = false
+		story_manager.stick_mission_completed = true
 	else:
 		var line_options = [
 			["Back again, I see. Everything going smoothly?"],
@@ -132,18 +163,20 @@ func _on_interaction_area_body_entered(body):
 		player = body
 		player_nearby = true
 		interact_icon.visible = true
+		mission_icon.visible = false
 
 func _on_interaction_area_body_exited(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player_nearby = false
 		interact_icon.visible = false
+		mission_icon.visible = (not story_manager.stick_mission_active 
+								and 
+								not have_spoken())
 
 func _process(delta):
 	if player_nearby:
-		print("player nearby")
 		# Get player node
 		if player:
-			print("player set")
 			# Compare x positions to determine direction
 			var direction_to_player = player.global_position.x - ant_node.global_position.x
 			# Flip sprite based on player position

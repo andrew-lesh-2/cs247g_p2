@@ -1,7 +1,7 @@
 extends Sprite2D
 
-@export var frequency: float = 1.0  # Oscillations per second
-@export var amplitude: float = 10.0  # Distance in pixels
+@export var frequency: float = 0.5  # Oscillations per second
+@export var amplitude: float = 1.0  # Distance in pixels
 
 var start_position: Vector2
 var _is_in_dialog: bool = false
