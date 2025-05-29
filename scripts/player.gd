@@ -156,13 +156,14 @@ func _physics_process(delta):
 			velocity.y       = JUMP_VELOCITY
 			coyote_timer     = coyote_time
 			play_jump_sound(false)
-		elif on_wall and (not has_double_jumped or is_wall_jumping) and wall_dir != last_wall_jump_dir:
+			#(not has_double_jumped or is_wall_jumping)
+		elif on_wall and wall_dir != last_wall_jump_dir:
 			is_wall_jumping = true
 			velocity.y          = WALL_JUMP_Y_DEBUFF * JUMP_VELOCITY
 			velocity.x          = wall_dir * WALL_JUMP_H_SPEED
 			wall_jump_lock_timer = WALL_JUMP_LOCK_TIME
 			last_wall_jump_dir   = wall_dir  # Store the direction of this wall jump
-			has_double_jumped = true
+			#has_double_jumped = true
 			play_jump_sound(false)
 		elif not has_double_jumped:
 			velocity.y        = JUMP_VELOCITY * 0.8
