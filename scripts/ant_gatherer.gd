@@ -2,8 +2,8 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_artist"
-var npc_name = "Ant Artist"
+var npc_id = "ant_gatherer"
+var npc_name = "Ant Gatherer"
 var name_color = Color(1, 0.8, 0.1)
 var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
@@ -27,7 +27,7 @@ func _ready():
 
 	interact_icon.visible = false
 	mission_icon.visible = not have_spoken()
-
+	print("WE ARE HERE")
 	_ensure_dialog_connection()
 
 
@@ -71,8 +71,8 @@ func _on_dialog_finished(finished_npc_id):
 		in_cutscene = false
 
 func have_spoken():
-	return (story_manager.stick_mission_active or 
-		story_manager.stick_mission_completed)
+	return (story_manager.food_mission_active or 
+		story_manager.food_mission_completed)
 
 func start_dialog():
 	is_in_dialog = true
@@ -82,104 +82,82 @@ func start_dialog():
 	if not has_node("/root/DialogSystem"):
 		push_error("Cannot start dialog: DialogSystem not found!")
 		return
-	if not have_spoken() and story_manager.food_mission_active:
+	if (not have_spoken() and story_manager.stick_mission_active):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"I like your vibe, ladybug.", 
-				"Come talk to me when you're done helping collelct food"],
+				"Come talk to me when you're done helping the artist, if you're looking for a way to be useful to the colony."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif (not have_spoken()):
+	elif not have_spoken():
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Oh. hey", 
-				"Hows it going?", 
-				"Me? I'm not like most ants. I'm no good at foraging or fighting.", 
-				"But I LOVE to draw!", 
-				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", 
-				"I was just getting started on a new piece, though, when my last good stick broke.", 
-				"Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
+				"Hey there sweetie.",
+				"Rumor has it that you're a good jumper and climber.",
+				"Some people are even saying that you can fly...",
+				"Anyways, we went foraging for berries earlier, but there were a few berries left on the bush that we weren't able to reach!",
+				"Think you could grab those berries?",
+				"I'm sure someone like you could reach the top of the bush easily."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		story_manager.stick_mission_active = true
-	elif (story_manager.stick_mission_active and 
-		not story_manager.is_carrying_stick):
+		story_manager.food_mission_active = true
+	elif story_manager.food_mission_active and story_manager.holding_berries == 0:
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Still looking for a good stick?", 
-				"There are usually good ones under the tree"],
+				"Still haven't found the berries?",
+				"No worries, you're still new around here.",
+				"The bush is to the right of the anthill on the surface!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif story_manager.stick_mission_active:
+	elif story_manager.food_mission_active and story_manager.holding_berries < 4:
+		var count_str = "one"
+		if story_manager.holding_berries == 2:
+			count_str = "two"
+		elif story_manager.holding_berries == 3:
+			count_str = "three"
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Wow! What a great stick you've brought me!",
-				"Thank you so much.",
-				"Now I can finally get back to my working on my masterpiece!"],
+				"Nice job dear, you found the berries",
+				"Weren't there four berries though? You only brought " + count_str + ".", 
+				"Go check if you can find some more."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		story_manager.set_stick_mission_active(false)
-		story_manager.is_carrying_stick = false
-		story_manager.stick_mission_completed = true
-	else:
-		var line_options = [
-			["Back again, I see. Everything going smoothly?"],
-			["You’ve proven yourself to be quite the asset around here."],
-			["I can see why they trust you. You’ve earned your place."],
-			["Well, well, if it isn’t the ladybug of the hour. How’s the world treating you?"],
-			["Looks like you're fitting right in with us ants."],
-			["You’ve been a real help around here. We appreciate it."],
-			["Ah, you’re back. The anthill’s a bit brighter with you around."],
-			["I’ve seen a lot of newcomers, but you stand out."],
-			["You know, it’s not often we get someone as reliable as you."],
-			["What’s the latest news from the surface? I’m always curious."],
-			["The work here gets easier with you around. Keep it up."],
-			["I trust you’re not causing any trouble, right? You’re on our side now."],
-			["You’ve adapted quickly. I have to respect that."],
-			["Another day, another good deed. You’ve made yourself valuable."],
-			["Good to see you again. Ready for whatever comes next?"],
-			["I see the others have warmed up to you. Not an easy feat."],
-			["You're more than capable, I can tell. Keep it up."],
-			["Every time you show up, things get a little smoother around here."],
-			["You're not just a guest anymore, you’re part of the team."],
-			["Welcome back. The anthill’s always better with you in it."]
-		]
-		var lines = line_options[randi() % line_options.size()]
+	elif story_manager.food_mission_active and story_manager.holding_berries:
+		story_manager.food_mission_completed = true
+		story_manager.food_mission_active = false
 		DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": lines,
+			"lines": [
+				"I knew you could reach those berries!",
+				"Thank you so much, this will really help the colony.",
+				"You know, its not too bad having someone thats a little different around."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
+		
+		
 
-func _on_body_entered(body):
-	if body is Player and not story_manager.can_enter_anthill:
-		start_dialog()
-
-func _on_body_exited(body):
-	pass
 
 func _on_interaction_area_body_entered(body):
-	if body is Player and story_manager.can_enter_anthill:
+	if body is Player:
 		player = body
 		player_nearby = true
 		interact_icon.visible = true
 		mission_icon.visible = false
 
 func _on_interaction_area_body_exited(body):
-	if body is Player and story_manager.can_enter_anthill:
+	if body is Player:
 		player_nearby = false
 		interact_icon.visible = false
-		mission_icon.visible = (not story_manager.stick_mission_active 
-								and 
+		mission_icon.visible = (not story_manager.food_mission_active 
+								and
 								not have_spoken())
 
 func _process(delta):
