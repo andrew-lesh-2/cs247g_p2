@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=73 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -26,6 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://cugqvhvc818td" path="res://assets/sprites/environment/perfect-stick.png" id="15_6w254"]
 [ext_resource type="Script" uid="uid://m3wo67fm4l0a" path="res://scenes/levels/perfect_stick.gd" id="16_6w254"]
 [ext_resource type="Texture2D" uid="uid://byjer3xmaf7jk" path="res://assets/sprites/characters/ant-queen.png" id="16_ec8gf"]
+[ext_resource type="Texture2D" uid="uid://bw6qf5hx48e2g" path="res://assets/sprites/environment/Fence.png" id="16_pw41a"]
 [ext_resource type="Script" uid="uid://b6gy8lqc4bhtn" path="res://scripts/ant_gatherer.gd" id="23_pef58"]
 [ext_resource type="Texture2D" uid="uid://c66yeiwwo4vm6" path="res://assets/sprites/environment/berry.png" id="23_yhw85"]
 [ext_resource type="Script" uid="uid://im45jp3sn7wj" path="res://scripts/ant_doctor.gd" id="24_xwflg"]
@@ -40,6 +41,7 @@
 [ext_resource type="Script" uid="uid://c8b76lkk6l6bk" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
 [ext_resource type="Script" uid="uid://csjpkx7mwq4i3" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
 [ext_resource type="Script" uid="uid://c6qdusesj3hwd" path="res://scripts/queen.gd" id="39_sfnal"]
+[ext_resource type="Texture2D" uid="uid://dh8c5jsscdwg0" path="res://assets/sprites/characters/caterpillar.png" id="41_kl26y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_py4n2"]
 texture = ExtResource("2_l0qe0")
@@ -828,16 +830,13 @@ emission_shape = 3
 emission_box_extents = Vector3(1, 1, 1)
 angle_min = -15.0
 angle_max = 15.0
-inherit_velocity_ratio = 0.5
 direction = Vector3(0, -1, 0)
 spread = 180.0
-initial_velocity_min = 5.0
+initial_velocity_min = 2.5
 initial_velocity_max = 5.0
 angular_velocity_min = -10.0
 angular_velocity_max = 9.99998
 gravity = Vector3(0, 0, 0)
-linear_accel_min = -2.23517e-06
-linear_accel_max = -2.23517e-06
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m8xwd"]
 shader = ExtResource("34_cup7h")
@@ -861,6 +860,8 @@ linear_accel_min = -0.500002
 linear_accel_max = -2.23517e-06
 tangential_accel_min = -2.23517e-06
 tangential_accel_max = -2.23517e-06
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pw41a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qobla"]
 size = Vector2(39, 323.5)
@@ -940,6 +941,42 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_05qi3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ss6g"]
+atlas = ExtResource("41_kl26y")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi410"]
+atlas = ExtResource("41_kl26y")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80bfn"]
+atlas = ExtResource("41_kl26y")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lm6ek"]
+atlas = ExtResource("41_kl26y")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b3uru"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ss6g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi410")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80bfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lm6ek")
 }],
 "loop": true,
 "name": &"default",
@@ -1676,10 +1713,10 @@ script = ExtResource("32_sb0m0")
 
 [node name="dust" type="GPUParticles2D" parent="static/Cave Particles"]
 position = Vector2(-527, 677)
-emitting = false
-amount = 300
+amount = 600
 texture = ExtResource("32_7yp5p")
 lifetime = 20.0
+fixed_fps = 1
 visibility_rect = Rect2(-1350, -750, 2700, 1500)
 process_material = SubResource("ParticleProcessMaterial_7yp5p")
 
@@ -1690,11 +1727,29 @@ amount = 24
 texture = ExtResource("34_tpxpk")
 lifetime = 15.0
 randomness = 1.0
+fixed_fps = 20
 visibility_rect = Rect2(-1350, -750, 2700, 1500)
 process_material = SubResource("ParticleProcessMaterial_cup7h")
 
+[node name="Sprite2D" type="Sprite2D" parent="static"]
+z_index = -6
+position = Vector2(1920, -239)
+texture = ExtResource("16_pw41a")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="static/Sprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="static/Sprite2D/StaticBody2D"]
+position = Vector2(-127, 0)
+rotation = -1.57079
+shape = SubResource("WorldBoundaryShape2D_pw41a")
+
+[node name="Sprite2D2" type="Sprite2D" parent="static"]
+z_index = -6
+position = Vector2(1920, -719)
+texture = ExtResource("16_pw41a")
+
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(-769, 1194)
+position = Vector2(-570, 655)
 JUMP_VELOCITY = -350.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -1748,37 +1803,6 @@ base_segment = 17
 segment_count = 6
 period = 60.0
 
-[node name="grass53" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2765, -17)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass53" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass53" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass53" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass53" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass53" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
 [node name="grass54" type="Node2D" parent="parallax Layers/Parallax2D2"]
 position = Vector2(2526, -19)
 
@@ -1810,68 +1834,6 @@ base_segment = 17
 segment_count = 6
 period = 60.0
 
-[node name="grass55" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2996, -42)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass55" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass55" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass55" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass55" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass55" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
-[node name="grass56" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2894, -42)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass56" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass56" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass56" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass56" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass56" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
 [node name="grass57" type="Node2D" parent="parallax Layers/Parallax2D2"]
 position = Vector2(2300, 8)
 
@@ -1898,68 +1860,6 @@ segment_count = 4
 period = 60.0
 
 [node name="Grass5" parent="parallax Layers/Parallax2D2/grass57" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
-[node name="grass58" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2664, -31)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass58" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass58" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass58" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass58" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass58" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
-[node name="grass59" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2716, -31)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass59" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass59" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass59" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass59" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass59" instance=ExtResource("4_iix71")]
 position = Vector2(-718, 48)
 base_segment = 17
 segment_count = 6
@@ -2177,37 +2077,6 @@ segment_count = 4
 period = 60.0
 
 [node name="Grass5" parent="parallax Layers/Parallax2D2/grass66" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-period = 60.0
-
-[node name="grass67" type="Node2D" parent="parallax Layers/Parallax2D2"]
-position = Vector2(2702, -35)
-
-[node name="Grass" parent="parallax Layers/Parallax2D2/grass67" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass2" parent="parallax Layers/Parallax2D2/grass67" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-period = 60.0
-
-[node name="Grass3" parent="parallax Layers/Parallax2D2/grass67" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-period = 60.0
-
-[node name="Grass4" parent="parallax Layers/Parallax2D2/grass67" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-period = 60.0
-
-[node name="Grass5" parent="parallax Layers/Parallax2D2/grass67" instance=ExtResource("4_iix71")]
 position = Vector2(-718, 48)
 base_segment = 17
 segment_count = 6
@@ -4676,58 +4545,6 @@ position = Vector2(-718, 48)
 base_segment = 17
 segment_count = 6
 
-[node name="grass10" type="Node2D" parent="parallax Layers/Parallax2D4"]
-position = Vector2(2725, -39)
-
-[node name="Grass" parent="parallax Layers/Parallax2D4/grass10" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-
-[node name="Grass2" parent="parallax Layers/Parallax2D4/grass10" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-
-[node name="Grass3" parent="parallax Layers/Parallax2D4/grass10" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-
-[node name="Grass4" parent="parallax Layers/Parallax2D4/grass10" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-
-[node name="Grass5" parent="parallax Layers/Parallax2D4/grass10" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-
-[node name="grass11" type="Node2D" parent="parallax Layers/Parallax2D4"]
-position = Vector2(2802, -41)
-
-[node name="Grass" parent="parallax Layers/Parallax2D4/grass11" instance=ExtResource("4_iix71")]
-position = Vector2(-1051, 48)
-segment_count = 2
-
-[node name="Grass2" parent="parallax Layers/Parallax2D4/grass11" instance=ExtResource("4_iix71")]
-position = Vector2(-957, 48)
-base_segment = 10
-segment_count = 3
-
-[node name="Grass3" parent="parallax Layers/Parallax2D4/grass11" instance=ExtResource("4_iix71")]
-position = Vector2(-877, 48)
-segment_count = 2
-
-[node name="Grass4" parent="parallax Layers/Parallax2D4/grass11" instance=ExtResource("4_iix71")]
-position = Vector2(-794, 48)
-base_segment = 15
-segment_count = 4
-
-[node name="Grass5" parent="parallax Layers/Parallax2D4/grass11" instance=ExtResource("4_iix71")]
-position = Vector2(-718, 48)
-base_segment = 17
-segment_count = 6
-
 [node name="grass12" type="Node2D" parent="parallax Layers/Parallax2D4"]
 position = Vector2(2421, 7)
 
@@ -5266,3 +5083,9 @@ shape = SubResource("RectangleShape2D_ipcpv")
 position = Vector2(-325, 1363)
 texture = ExtResource("11_lsp5i")
 script = ExtResource("15_6so22")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StoryManager"]
+position = Vector2(-952, -922)
+scale = Vector2(-1, 1)
+sprite_frames = SubResource("SpriteFrames_b3uru")
+autoplay = "default"
