@@ -39,6 +39,7 @@ extends Node2D
 @export var gotten_past_queens_guard: bool = false
 @export var spoken_to_queens_guard: bool = false
 
+@export var met_queen: bool = false
 
 var callbacks: Dictionary = {}
 

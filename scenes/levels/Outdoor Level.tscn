@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=65 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://c266tgcks8wq7" path="res://scripts/utility/floating_icon.gd" id="15_6so22"]
 [ext_resource type="Texture2D" uid="uid://cugqvhvc818td" path="res://assets/sprites/environment/perfect-stick.png" id="15_6w254"]
 [ext_resource type="Script" uid="uid://m3wo67fm4l0a" path="res://scenes/levels/perfect_stick.gd" id="16_6w254"]
+[ext_resource type="Texture2D" uid="uid://byjer3xmaf7jk" path="res://assets/sprites/characters/ant-queen.png" id="16_ec8gf"]
 [ext_resource type="Script" uid="uid://b6gy8lqc4bhtn" path="res://scripts/ant_gatherer.gd" id="23_pef58"]
 [ext_resource type="Texture2D" uid="uid://c66yeiwwo4vm6" path="res://assets/sprites/environment/berry.png" id="23_yhw85"]
 [ext_resource type="Script" uid="uid://im45jp3sn7wj" path="res://scripts/ant_doctor.gd" id="24_xwflg"]
@@ -38,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://b0qekr2vt1sq" path="res://assets/sprites/environment/tiny-bug.png" id="34_tpxpk"]
 [ext_resource type="Script" uid="uid://c8b76lkk6l6bk" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
 [ext_resource type="Script" uid="uid://csjpkx7mwq4i3" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
+[ext_resource type="Script" uid="uid://c6qdusesj3hwd" path="res://scripts/queen.gd" id="39_sfnal"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_py4n2"]
 texture = ExtResource("2_l0qe0")
@@ -861,10 +863,10 @@ tangential_accel_min = -2.23517e-06
 tangential_accel_max = -2.23517e-06
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qobla"]
-size = Vector2(39, 302.5)
+size = Vector2(39, 323.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipcpv"]
-size = Vector2(106, 82.5)
+size = Vector2(83, 82.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6w254"]
 size = Vector2(151, 96)
@@ -906,6 +908,42 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 2.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfnal"]
+atlas = ExtResource("16_ec8gf")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kl26y"]
+atlas = ExtResource("16_ec8gf")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pw41a"]
+atlas = ExtResource("16_ec8gf")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_05qi3"]
+atlas = ExtResource("16_ec8gf")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ss6g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfnal")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kl26y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pw41a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_05qi3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
 }]
 
 [node name="OutdoorLevel" type="Node2D"]
@@ -4835,6 +4873,7 @@ can_enter_anthill = true
 stick_mission_completed = true
 food_mission_completed = true
 doctor_mission_completed = true
+gotten_past_queens_guard = true
 spoken_to_queens_guard = true
 
 [node name="Ant Bodyguard" type="Node2D" parent="StoryManager"]
@@ -5199,3 +5238,31 @@ position = Vector2(-291, -53)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Daisy2/InteractionArea"]
 position = Vector2(-4, 2.00001)
 shape = SubResource("CircleShape2D_w3eij")
+
+[node name="Queen" type="Node2D" parent="StoryManager"]
+script = ExtResource("39_sfnal")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StoryManager/Queen"]
+position = Vector2(-363, 1442)
+sprite_frames = SubResource("SpriteFrames_8ss6g")
+autoplay = "default"
+
+[node name="Area2D" type="Area2D" parent="StoryManager/Queen"]
+position = Vector2(-316, 1422)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Queen/Area2D"]
+position = Vector2(-111, -79.25)
+shape = SubResource("RectangleShape2D_qobla")
+
+[node name="InteractionArea" type="Area2D" parent="StoryManager/Queen"]
+position = Vector2(-453, 1462)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Queen/InteractionArea"]
+position = Vector2(7.5, 1.75)
+shape = SubResource("RectangleShape2D_ipcpv")
+
+[node name="interact_icon" type="Sprite2D" parent="StoryManager/Queen"]
+position = Vector2(-325, 1363)
+texture = ExtResource("11_lsp5i")
+script = ExtResource("15_6so22")
