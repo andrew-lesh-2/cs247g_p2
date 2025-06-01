@@ -1,16 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://cpqbahf0yr3cy"]
+[gd_scene load_steps=10 format=3 uid="uid://cpqbahf0yr3cy"]
 
 [ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://scenes/characters/player.tscn" id="2_gcbv1"]
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_woaog"]
 [ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/characters/grasshopper.tscn" id="3_a6dqf"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="4_2wj2o"]
 [ext_resource type="PackedScene" uid="uid://bamvxtdsqbrp5" path="res://scenes/leaf.tscn" id="5_qx8bj"]
-[ext_resource type="Texture2D" uid="uid://cof086dk02mlf" path="res://assets/sprites/environment/table.png" id="7_2q7q8"]
 [ext_resource type="Texture2D" uid="uid://bq204nbm7lksc" path="res://assets/sprites/environment/bug-box-front.png" id="7_wmkn3"]
 [ext_resource type="Script" uid="uid://ql6tacn5vibs" path="res://scripts/box_front.gd" id="8_wmkn3"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
-size = Vector2(494, 52.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ersg3"]
 size = Vector2(7, 76.5)
@@ -35,10 +31,6 @@ texture = ExtResource("2_woaog")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="box back"]
 collision_layer = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="box back/StaticBody2D"]
-position = Vector2(9, 71.75)
-shape = SubResource("RectangleShape2D_woaog")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="box back/StaticBody2D"]
 position = Vector2(-64, 9.25)
@@ -65,11 +57,6 @@ position = Vector2(24, -54)
 
 [node name="grasshopper" parent="." instance=ExtResource("3_a6dqf")]
 position = Vector2(42, 34)
-
-[node name="table" type="Sprite2D" parent="."]
-z_index = -100
-position = Vector2(10, 118)
-texture = ExtResource("7_2q7q8")
 
 [node name="box-front" type="Sprite2D" parent="."]
 texture = ExtResource("7_wmkn3")

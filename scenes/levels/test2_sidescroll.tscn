@@ -10,8 +10,9 @@ script = ExtResource("1_g4h7w")
 [node name="Box" parent="." instance=ExtResource("2_g4h7w")]
 
 [node name="Player" parent="." instance=ExtResource("3_y4hwr")]
+z_index = 5
 position = Vector2(-35, 9)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(1, 0)
-zoom = Vector2(12, 12)
+zoom = Vector2(3, 3)
