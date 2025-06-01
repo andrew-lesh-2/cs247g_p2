@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://c32mvpbx2ertd"]
+
+[ext_resource type="Texture2D" uid="uid://ml1yollvom2w" path="res://assets/sprites/environment/daisy_stem.png" id="1_4iqyo"]
+[ext_resource type="Script" uid="uid://dw7x4x627a6n7" path="res://scripts/daisy_stem.gd" id="1_eh0q8"]
+[ext_resource type="Texture2D" uid="uid://b0f7gh8vvu4mw" path="res://assets/sprites/characters/daisy.png" id="3_k1jyo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eh0q8"]
+atlas = ExtResource("1_4iqyo")
+region = Rect2(0, 0, 24, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1jyo"]
+atlas = ExtResource("1_4iqyo")
+region = Rect2(24, 0, 24, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_igfo5"]
+atlas = ExtResource("1_4iqyo")
+region = Rect2(48, 0, 24, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbftr"]
+atlas = ExtResource("1_4iqyo")
+region = Rect2(72, 0, 24, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4iqa"]
+atlas = ExtResource("3_k1jyo")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fbftr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eh0q8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k1jyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_igfo5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbftr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4iqa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="DaisyStem" type="Node2D"]
+script = ExtResource("1_eh0q8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fbftr")

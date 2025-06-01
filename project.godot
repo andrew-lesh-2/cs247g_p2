@@ -25,7 +25,7 @@ SceneTransition="*res://scripts/scene_transition.gd"
 
 [display]
 
-window/size/viewport_width=1500
+window/size/viewport_width=1600
 window/size/viewport_height=1000
 window/stretch/mode="viewport"
 

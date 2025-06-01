@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Player
 
+@export var god_mode: bool = false
+
 @onready var particles = $GPUParticles2D
 
 @export var disable_player_input: bool = false
@@ -85,6 +87,8 @@ func play_jump_sound(is_double_jump: bool = false):
 		jump_sound_player.pitch_scale = jump_sound_pitch
 	jump_sound_player.play()
 
+var slow_falling = false
+
 func _physics_process(delta):
 	# — tick down the wall‐jump input lock —
 
@@ -93,7 +97,7 @@ func _physics_process(delta):
 	var is_jump_pressed = input_result[1]
 	var is_jump_just_pressed = input_result[2]
 
-	var slow_falling = false
+
 
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
@@ -142,13 +146,22 @@ func _physics_process(delta):
 			wall_slide_timer += delta
 			# reset jump so you can wall‐jump again
 			coyote_timer      = coyote_time
-		elif velocity.y > 0 and is_jump_pressed:
+			slow_falling = false
+		elif ((velocity.y > 0 or slow_falling) and
+			is_jump_pressed and
+			not is_jump_just_pressed):
 			# slow‐fall if holding jump
-			velocity.y += slow_fall_gravity * delta
+			if god_mode:
+				velocity.y += -100 * delta
+			else:
+				velocity.y += slow_fall_gravity * delta
 			slow_falling = true
 		else:
 			# normal gravity
 			velocity.y += default_gravity * delta
+			slow_falling = false
+	else:
+		slow_falling = false
 
 	# — handle jumping / wall‐jump / double‐jump —
 	if is_jump_just_pressed:

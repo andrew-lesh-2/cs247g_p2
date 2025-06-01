@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://chalo2tpf3ich"]
+
+[ext_resource type="Script" uid="uid://dmg8nrby8dbje" path="res://scripts/daisy.gd" id="1_suqdc"]
+
+[node name="Daisy" type="Node2D"]
+script = ExtResource("1_suqdc")
+
+[node name="Enabler" type="VisibleOnScreenEnabler2D" parent="."]
+rect = Rect2(0, 0, 20, 20)

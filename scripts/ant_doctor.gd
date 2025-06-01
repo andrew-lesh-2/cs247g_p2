@@ -2,8 +2,8 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_artist"
-var npc_name = "Ant Artist"
+var npc_id = "ant_doctor"
+var npc_name = "Dr. Ant"
 var name_color = Color(1, 0.8, 0.1)
 var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
@@ -71,8 +71,8 @@ func _on_dialog_finished(finished_npc_id):
 		in_cutscene = false
 
 func have_spoken():
-	return (story_manager.stick_mission_active or 
-		story_manager.stick_mission_completed)
+	return (story_manager.doctor_mission_active or 
+		story_manager.doctor_mission_completed)
 
 func start_dialog():
 	is_in_dialog = true
@@ -86,18 +86,17 @@ func start_dialog():
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"I like your vibe, ladybug.", 
-				"Come talk to me when you're done helping collelct food"],
+				"Hey there, I could really use your help!", 
+				"Come talk to me when you're done helping the forager!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif not have_spoken() and story_manager.doctor_mission_active:
+	elif not have_spoken() and story_manager.stick_mission_active:
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"I like your vibe, ladybug.", 
-				"Come talk to me when you're done helping the doctor.",
-				"That seems important."],
+				"Hey there, I could really use your help!", 
+				"Come talk to me when you're done helping the artist!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
@@ -105,40 +104,62 @@ func start_dialog():
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Oh. hey", 
-				"Hows it going?", 
-				"Me? I'm not like most ants. I'm no good at foraging or fighting.", 
-				"But I LOVE to draw!", 
-				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", 
-				"I was just getting started on a new piece, though, when my last good stick broke.", 
-				"Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
+				"Howdy strange bug!", 
+				"How are you today?",
+				"Probably doing better than my patient over here!",
+				"Speaking of, I need some daisy petals to make the treatment for these wounds, but we just ran out.",
+				"Could you run to the surfact for me and see if you can find any daisys? It'd be a huge help."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		story_manager.stick_mission_active = true
-	elif (story_manager.stick_mission_active and 
-		not story_manager.is_carrying_stick):
+		story_manager.doctor_mission_active = true
+	elif (story_manager.doctor_mission_active and 
+		story_manager.holding_daisies == 0):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Still looking for a good stick?", 
-				"There are usually good ones under the tree"],
+				"Well, what are you waiting for?", 
+				"Daisies grow on the surface!",
+				"I'd get them myself but I have to stay with my patients"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif story_manager.stick_mission_active:
+	elif (story_manager.doctor_mission_active and 
+		story_manager.holding_daisies == 1):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Wow! What a great stick you've brought me!",
-				"Thank you so much.",
-				"Now I can finally get back to my working on my masterpiece!"],
+				"Great! You found a daisy.", 
+				"I'll need two more to produce the treatment I'm working on.",
+				"Thanks!"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		story_manager.stick_mission_active = false
-		story_manager.is_carrying_stick = false
-		story_manager.stick_mission_completed = true
+	elif (story_manager.doctor_mission_active and 
+		story_manager.holding_daisies == 2):
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"Two Daisies, that's wonderful!", 
+				"One more and I'll be able to cure our hurt friend."],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+	elif (story_manager.doctor_mission_active and 
+		story_manager.holding_daisies >= 3):
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"You found three daisies!",
+				"That's just enough for me to make my medicine.",
+				"*hits patient on the back a little too hard* You'll be walking in no time buddy!",
+				"Thanks again for your work!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		story_manager.doctor_mission_completed = true
+		story_manager.doctor_mission_active = false
+		
 	else:
 		var line_options = [
 			["Back again, I see. Everything going smoothly?"],
@@ -178,17 +199,17 @@ func _on_body_exited(body):
 	pass
 
 func _on_interaction_area_body_entered(body):
-	if body is Player and story_manager.can_enter_anthill:
+	if body is Player:
 		player = body
 		player_nearby = true
 		interact_icon.visible = true
 		mission_icon.visible = false
 
 func _on_interaction_area_body_exited(body):
-	if body is Player and story_manager.can_enter_anthill:
+	if body is Player:
 		player_nearby = false
 		interact_icon.visible = false
-		mission_icon.visible = (not story_manager.stick_mission_active 
+		mission_icon.visible = (not story_manager.doctor_mission_active 
 								and 
 								not have_spoken())
 

@@ -3,7 +3,7 @@ extends Node2D
 var timer: Timer
 
 var npc_id = "ant_gatherer"
-var npc_name = "Ant Gatherer"
+var npc_name = "Ant Forager"
 var name_color = Color(1, 0.8, 0.1)
 var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
@@ -87,6 +87,14 @@ func start_dialog():
 			"name": npc_name,
 			"lines": [
 				"Come talk to me when you're done helping the artist, if you're looking for a way to be useful to the colony."],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+	elif (not have_spoken() and story_manager.doctor_mission_active):
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"Come talk to me when you're done helping the doctor, if you're looking for a way to be useful to the colony."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
