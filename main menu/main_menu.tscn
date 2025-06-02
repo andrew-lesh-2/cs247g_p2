@@ -102,7 +102,7 @@ position = Vector2(560, 578)
 scale = Vector2(9.15625, 9.09375)
 sprite_frames = SubResource("SpriteFrames_6o5wd")
 autoplay = "default"
-frame_progress = 0.322846
+frame_progress = 0.688836
 
 [node name="button controller" type="VBoxContainer" parent="."]
 layout_mode = 1
