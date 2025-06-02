@@ -1,0 +1,100 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxoky7n15jr4g"]
+
+[ext_resource type="Texture2D" uid="uid://cgfgkxkmcmbhk" path="res://assets/sprites/environment/inside_wall.png" id="1_t62rd"]
+[ext_resource type="Texture2D" uid="uid://d2kie3d6xo4eq" path="res://assets/sprites/environment/rug.png" id="2_0tso2"]
+[ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://scenes/characters/player.tscn" id="3_0tso2"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_t62rd"]
+
+[node name="IndoorLevel" type="Node2D"]
+
+[node name="static" type="Node2D" parent="."]
+
+[node name="Walls" type="Node2D" parent="static"]
+
+[node name="Sprite2D" type="Sprite2D" parent="static/Walls"]
+position = Vector2(64, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="static/Walls"]
+position = Vector2(192, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D3" type="Sprite2D" parent="static/Walls"]
+position = Vector2(320, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D4" type="Sprite2D" parent="static/Walls"]
+position = Vector2(448, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D5" type="Sprite2D" parent="static/Walls"]
+position = Vector2(-448, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D6" type="Sprite2D" parent="static/Walls"]
+position = Vector2(-320, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D7" type="Sprite2D" parent="static/Walls"]
+position = Vector2(-192, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Sprite2D8" type="Sprite2D" parent="static/Walls"]
+position = Vector2(-64, -896)
+texture = ExtResource("1_t62rd")
+
+[node name="Rug" type="Node2D" parent="static"]
+
+[node name="Sprite2D" type="Sprite2D" parent="static/Rug"]
+position = Vector2(65, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D9" type="Sprite2D" parent="static/Rug"]
+position = Vector2(-565, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D10" type="Sprite2D" parent="static/Rug"]
+position = Vector2(569, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D2" type="Sprite2D" parent="static/Rug"]
+position = Vector2(191, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D3" type="Sprite2D" parent="static/Rug"]
+position = Vector2(317, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D4" type="Sprite2D" parent="static/Rug"]
+position = Vector2(443, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D5" type="Sprite2D" parent="static/Rug"]
+position = Vector2(-439, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D6" type="Sprite2D" parent="static/Rug"]
+position = Vector2(-313, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D7" type="Sprite2D" parent="static/Rug"]
+position = Vector2(-187, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="Sprite2D8" type="Sprite2D" parent="static/Rug"]
+position = Vector2(-61, 50)
+texture = ExtResource("2_0tso2")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="static/Rug"]
+position = Vector2(64, 23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="static/Rug/StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_t62rd")
+
+[node name="Player" parent="." instance=ExtResource("3_0tso2")]
+position = Vector2(33, -20)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2(0, -64)
+zoom = Vector2(4, 4)
