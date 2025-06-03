@@ -9,7 +9,7 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
 var last_exited_body: Player = null
 
-@onready var story_manager = get_parent()
+@onready var story_manager = StoryManager
 @onready var interact_icon  = get_node("interact_icon")
 #@onready var mission_icon  = get_node("mission_icon")
 @onready var grasshopper_node  = get_node("Grasshopper")
@@ -29,6 +29,7 @@ func _ready():
 	# mission_icon.visible = not have_spoken()
 
 	_ensure_dialog_connection()
+	
 
 
 func _ensure_dialog_connection():

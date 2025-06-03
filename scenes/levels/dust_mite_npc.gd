@@ -10,7 +10,7 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
 var last_exited_body: Player = null
 
-@onready var story_manager    = get_parent()
+@onready var story_manager = StoryManager
 @onready var interact_icon    = $interact_icon
 @onready var dust_mite_sprite : AnimatedSprite2D = $"Dust Mite/Dust Mite Sprite"
 @onready var interaction_area = $InteractionArea
@@ -25,12 +25,14 @@ var is_in_dialog: bool = false
 var _has_departed: bool = false
 
 
+
 func _ready():
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
 	interact_icon.visible = false
 	_ensure_dialog_connection()
+	
 
 
 func _ensure_dialog_connection():

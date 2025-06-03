@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=73 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://bvthlj6avdpr5" path="res://assets/sprites/environment/rock.png" id="4_b0ssf"]
 [ext_resource type="PackedScene" uid="uid://cm715imhktvq1" path="res://scenes/environment/grass.tscn" id="4_iix71"]
 [ext_resource type="Texture2D" uid="uid://db1o5agvp6no8" path="res://assets/sprites/environment/rock2.png" id="5_jkycm"]
-[ext_resource type="Script" uid="uid://bgieqblyemb0i" path="res://scripts/story_manager.gd" id="6_5u1bi"]
 [ext_resource type="Texture2D" uid="uid://pcljku6gbxnr" path="res://assets/sprites/environment/shrub.png" id="6_q71qf"]
 [ext_resource type="Texture2D" uid="uid://dn4j5cgi3hb3g" path="res://assets/sprites/environment/Big Leaf.png" id="6_sf0q0"]
 [ext_resource type="PackedScene" uid="uid://bamvxtdsqbrp5" path="res://scenes/leaf.tscn" id="7_ab3jg"]
@@ -33,13 +32,13 @@
 [ext_resource type="Script" uid="uid://c1hqafqifxfer" path="res://scripts/ant_bodyguard_3.gd" id="25_swnf8"]
 [ext_resource type="Script" uid="uid://8ox23oebqaf3" path="res://scripts/berry.gd" id="28_w3eij"]
 [ext_resource type="Texture2D" uid="uid://vpfg38m7vit0" path="res://assets/sprites/characters/ant-hurt-sheet.png" id="29_mwbdr"]
-[ext_resource type="PackedScene" uid="uid://chalo2tpf3ich" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
+[ext_resource type="PackedScene" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
 [ext_resource type="Texture2D" uid="uid://bbm7v6kb84qwa" path="res://assets/sprites/environment/fog.png" id="32_7yp5p"]
-[ext_resource type="Script" uid="uid://dt2nmdaq1561t" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
+[ext_resource type="Script" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
 [ext_resource type="Shader" uid="uid://brecjac0oyxsa" path="res://shader/try2.gdshader" id="34_cup7h"]
 [ext_resource type="Texture2D" uid="uid://b0qekr2vt1sq" path="res://assets/sprites/environment/tiny-bug.png" id="34_tpxpk"]
 [ext_resource type="Script" uid="uid://c8b76lkk6l6bk" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
-[ext_resource type="Script" uid="uid://csjpkx7mwq4i3" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
+[ext_resource type="Script" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
 [ext_resource type="Script" uid="uid://c6qdusesj3hwd" path="res://scripts/queen.gd" id="39_sfnal"]
 [ext_resource type="Texture2D" uid="uid://dh8c5jsscdwg0" path="res://assets/sprites/characters/caterpillar.png" id="41_kl26y"]
 [ext_resource type="Texture2D" uid="uid://cgfgkxkmcmbhk" path="res://assets/sprites/environment/inside_wall.png" id="43_05qi3"]
@@ -865,7 +864,7 @@ tangential_accel_max = -2.23517e-06
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pw41a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qobla"]
-size = Vector2(39, 323.5)
+size = Vector2(27.5, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipcpv"]
 size = Vector2(83, 82.5)
@@ -4686,13 +4685,6 @@ base_segment = 12
 segment_count = 5
 
 [node name="StoryManager" type="Node2D" parent="."]
-script = ExtResource("6_5u1bi")
-can_enter_anthill = true
-stick_mission_completed = true
-food_mission_completed = true
-doctor_mission_completed = true
-gotten_past_queens_guard = true
-spoken_to_queens_guard = true
 
 [node name="Ant Bodyguard" type="Node2D" parent="StoryManager"]
 position = Vector2(245, 248)
@@ -4702,11 +4694,11 @@ script = ExtResource("7_mfhih")
 modulate = Color(0.494667, 0.569714, 1, 1)
 
 [node name="Area2D" type="Area2D" parent="StoryManager/Ant Bodyguard"]
-visible = false
 position = Vector2(35, 0)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Ant Bodyguard/Area2D"]
+position = Vector2(-5.75, -11)
 shape = SubResource("RectangleShape2D_qobla")
 
 [node name="InteractionArea" type="Area2D" parent="StoryManager/Ant Bodyguard"]

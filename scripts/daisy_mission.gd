@@ -2,7 +2,7 @@ extends Node2D
 
 
 @onready var glow_effect  = get_node("Daisy/Glow")
-@onready var story_manager = get_parent()
+@onready var story_manager = StoryManager
 
 @onready var interact_icon  = get_node("interact_icon")
 @onready var interaction_area = $InteractionArea
