@@ -1,16 +1,27 @@
-[gd_scene load_steps=14 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=42 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
 [ext_resource type="PackedScene" uid="uid://bamvxtdsqbrp5" path="res://scenes/leaf.tscn" id="4_skcgy"]
-[ext_resource type="PackedScene" uid="uid://l7l0t5wrcpp7" path="res://scenes/characters/grasshopper.tscn" id="5_e5y2q"]
 [ext_resource type="Texture2D" uid="uid://cof086dk02mlf" path="res://assets/sprites/environment/table.png" id="6_2xyig"]
 [ext_resource type="Texture2D" uid="uid://bq204nbm7lksc" path="res://assets/sprites/environment/bug-box-front.png" id="7_eici0"]
 [ext_resource type="Script" uid="uid://ql6tacn5vibs" path="res://scripts/box_front.gd" id="8_2khhf"]
 [ext_resource type="Texture2D" uid="uid://bv0lwe58yfkk5" path="res://assets/backgrounds/tiles_room.png" id="9_aykq1"]
+[ext_resource type="Texture2D" uid="uid://bs2pjgqxopo3l" path="res://assets/sprites/environment/toy_bin.png" id="9_skcgy"]
+[ext_resource type="Script" uid="uid://c3o7dk7g5sxqd" path="res://scenes/levels/bin_front.gd" id="10_e5y2q"]
+[ext_resource type="Texture2D" uid="uid://cfim50yyj25t" path="res://assets/sprites/environment/test_toy_bin_interior.png" id="11_2xyig"]
+[ext_resource type="Texture2D" uid="uid://le156t4daghv" path="res://assets/sprites/environment/test_firetruck.png" id="12_2xyig"]
+[ext_resource type="Script" uid="uid://dr51kltdmfqei" path="res://scenes/levels/story_manager_indoor.gd" id="14_eici0"]
+[ext_resource type="Script" uid="uid://bkyx72a1tntdc" path="res://scenes/levels/grasshopper_npc.gd" id="15_bp465"]
+[ext_resource type="Texture2D" uid="uid://bsltygpr8b7c0" path="res://assets/sprites/characters/grasshopper-sheet.png" id="15_go8vh"]
+[ext_resource type="Texture2D" uid="uid://ckb6ndpmq4x" path="res://assets/sprites/environment/interact-icon.png" id="16_bp465"]
+[ext_resource type="Script" uid="uid://dmhi6brl2u583" path="res://scenes/levels/dust_mite_npc.gd" id="17_bp465"]
+[ext_resource type="Texture2D" uid="uid://bo11iy78mrwmw" path="res://assets/sprites/characters/dust-mite-sheet.png" id="17_cg78y"]
+[ext_resource type="Script" uid="uid://ciglma6rcrisu" path="res://scenes/levels/controller_npc.gd" id="18_yg5eo"]
+[ext_resource type="Texture2D" uid="uid://mqu863shg7dg" path="res://assets/sprites/environment/test_controller_dusty.png" id="19_0ntv5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
-size = Vector2(494, 52.5)
+size = Vector2(479, 66.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ersg3"]
 size = Vector2(7, 76.5)
@@ -39,62 +50,284 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_xet31")
 
-[node name="Box" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eici0"]
+size = Vector2(202, 137)
 
-[node name="box back" type="Sprite2D" parent="."]
-z_index = -10
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2khhf"]
+size = Vector2(201, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_go8vh"]
+size = Vector2(72.0838, 4.2515)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bp465"]
+size = Vector2(7.31738, 9.23353)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cg78y"]
+atlas = ExtResource("15_go8vh")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg5eo"]
+atlas = ExtResource("15_go8vh")
+region = Rect2(64, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ntv5"]
+atlas = ExtResource("15_go8vh")
+region = Rect2(128, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw1sg"]
+atlas = ExtResource("15_go8vh")
+region = Rect2(192, 0, 64, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q703s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cg78y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yg5eo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ntv5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw1sg")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vsdne"]
+size = Vector2(63, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q703s"]
+atlas = ExtResource("17_cg78y")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vsdne"]
+atlas = ExtResource("17_cg78y")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nu56h"]
+atlas = ExtResource("17_cg78y")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oxf2r"]
+atlas = ExtResource("17_cg78y")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dpy1m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q703s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vsdne")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nu56h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oxf2r")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5st5h"]
+size = Vector2(103, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aw1sg"]
+size = Vector2(103, 115)
+
+[node name="Level Layout" type="Node2D"]
+
+[node name="Box" type="Node2D" parent="."]
+
+[node name="box back" type="Sprite2D" parent="Box"]
+z_index = 2
 texture = ExtResource("2_aykq1")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="box back"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Box/box back"]
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="box back/StaticBody2D"]
-position = Vector2(9, 71.75)
+[node name="CollisionShape2D_table" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
+position = Vector2(-15.5, 78.75)
 shape = SubResource("RectangleShape2D_woaog")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="box back/StaticBody2D"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
 position = Vector2(-64, 9.25)
 shape = SubResource("RectangleShape2D_ersg3")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="box back/StaticBody2D"]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
 position = Vector2(71, 9)
 shape = SubResource("RectangleShape2D_ersg3")
 
-[node name="branch" type="Sprite2D" parent="."]
+[node name="branch" type="Sprite2D" parent="Box"]
+z_index = 2
 texture = ExtResource("3_xet31")
 
-[node name="Leaf" parent="." instance=ExtResource("4_skcgy")]
-z_index = -1
+[node name="Leaf" parent="Box" instance=ExtResource("4_skcgy")]
+z_index = 2
 position = Vector2(-22, 14)
 
-[node name="Leaf2" parent="." instance=ExtResource("4_skcgy")]
-z_index = -1
+[node name="Leaf2" parent="Box" instance=ExtResource("4_skcgy")]
+z_index = 2
 position = Vector2(9, -16)
 
-[node name="Leaf3" parent="." instance=ExtResource("4_skcgy")]
-z_index = -1
+[node name="Leaf3" parent="Box" instance=ExtResource("4_skcgy")]
+z_index = 2
 position = Vector2(24, -54)
 
-[node name="grasshopper" parent="." instance=ExtResource("5_e5y2q")]
-position = Vector2(42, 34)
-
-[node name="table" type="Sprite2D" parent="."]
-z_index = -100
-position = Vector2(10, 118)
+[node name="table" type="Sprite2D" parent="Box"]
+z_index = 1
+position = Vector2(-16, 132)
 texture = ExtResource("6_2xyig")
 
-[node name="box-front" type="Sprite2D" parent="."]
+[node name="box-front" type="Sprite2D" parent="Box"]
+z_index = 3
 texture = ExtResource("7_eici0")
 script = ExtResource("8_2khhf")
 
-[node name="Area2D" type="Area2D" parent="box-front"]
+[node name="Area2D" type="Area2D" parent="Box/box-front"]
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="box-front/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Box/box-front/Area2D"]
 position = Vector2(1, 15)
 shape = SubResource("RectangleShape2D_2q7q8")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAAHAAMAAQABAAAAAAAHAAQAAQABAAAAAAAHAAUAAQABAAAAAAAHAAYAAQABAAAAAAAHAAcAAQABAAAAAAAHAAgAAQABAAAAAAD5/wMAAQABAAAAAAD5/wQAAQABAAAAAAD5/wUAAQABAAAAAAD5/wYAAQABAAAAAAD5/wcAAQABAAAAAAD5/wgAAQABAAAAAAD4/wgAAQABAAAAAAD4/wcAAQABAAAAAAD4/wYAAQABAAAAAAD4/wUAAQABAAAAAAD4/wQAAQABAAAAAAD4/wMAAQABAAAAAAD4/wEAAQABAAAAAAD4/wIAAQABAAAAAAD1/wkAAQAAAAAAAAD2/wkAAQAAAAAAAAD3/wkAAQAAAAAAAAD4/wkAAQAAAAAAAAD5/wkAAQAAAAAAAAD6/wkAAQAAAAAAAAD7/wkAAQAAAAAAAAD8/wkAAQAAAAAAAAD9/wkAAQAAAAAAAAD+/wkAAQAAAAAAAAD//wkAAQAAAAAAAAAAAAkAAQAAAAAAAAABAAkAAQAAAAAAAAACAAkAAQAAAAAAAAADAAkAAQAAAAAAAAAEAAkAAQAAAAAAAAAFAAkAAQAAAAAAAAAGAAkAAQAAAAAAAAAHAAkAAQAAAAAAAAAIAAkAAQAAAAAAAAAJAAkAAQAAAAAAAAAKAAkAAQAAAAAAAAAJAAIAAQABAAAAAAD2/wIAAQABAAAAAAAIAAgAAQABAAAAAAAKAAcAAQABAAAAAAAIAAUAAQABAAAAAAAIAAMAAQABAAAAAAAKAAQAAQABAAAAAAAJAAYAAQABAAAAAAA=")
+tile_map_data = PackedByteArray("AAD4/wgAAQABAAAAAAD4/wcAAQABAAAAAAD1/wkAAQAAAAAAAAD2/wkAAQAAAAAAAAD3/wkAAQAAAAAAAAD4/wkAAQAAAAAAAAD5/wkAAQAAAAAAAAD6/wkAAQAAAAAAAAD7/wkAAQAAAAAAAAD8/wkAAQAAAAAAAAD9/wkAAQAAAAAAAAD+/wkAAQAAAAAAAAD//wkAAQAAAAAAAAAAAAkAAQAAAAAAAAABAAkAAQAAAAAAAAACAAkAAQAAAAAAAAADAAkAAQAAAAAAAAAEAAkAAQAAAAAAAAAFAAkAAQAAAAAAAAAGAAkAAQAAAAAAAAAHAAkAAQAAAAAAAAAIAAkAAQAAAAAAAAAJAAkAAQAAAAAAAAAKAAkAAQAAAAAAAAD4/wYAAQABAAAAAAD4/wUAAQABAAAAAAD4/wQAAQABAAAAAAD4/wMAAQABAAAAAAAGAAMAAQABAAAAAAAGAAQAAQABAAAAAAAGAAUAAQABAAAAAAAGAAYAAQABAAAAAAAGAAcAAQABAAAAAAAGAAgAAQABAAAAAAAFAAcAAQABAAAAAAAFAAgAAQABAAAAAAD5/wcAAQABAAAAAAD5/wgAAQABAAAAAAALAAkAAQAAAAAAAAAMAAkAAQAAAAAAAAANAAkAAQAAAAAAAAAOAAkAAQAAAAAAAAAPAAkAAQAAAAAAAAAQAAkAAQAAAAAAAAD0/wkAAQAAAAAAAADz/wkAAQAAAAAAAADy/wkAAQAAAAAAAADx/wkAAQAAAAAAAADw/wkAAQAAAAAAAADv/wkAAQAAAAAAAADu/wkAAQAAAAAAAADt/wkAAQAAAAAAAADs/wkAAQAAAAAAAADr/wkAAQAAAAAAAADq/wkAAQAAAAAAAADp/wkAAQAAAAAAAADo/wkAAQAAAAAAAADn/wkAAQAAAAAAAADm/wkAAQAAAAAAAADl/wkAAQAAAAAAAADk/wkAAQAAAAAAAADj/wkAAQAAAAAAAADi/wkAAQAAAAAAAADh/wkAAQAAAAAAAADg/wkAAQAAAAAAAADf/wkAAQAAAAAAAADe/wkAAQAAAAAAAADd/wkAAQAAAAAAAADc/wkAAQAAAAAAAADb/wkAAQAAAAAAAADa/wkAAQAAAAAAAADZ/wkAAQAAAAAAAADY/wkAAQAAAAAAAADX/wkAAQAAAAAAAADW/wkAAQAAAAAAAADV/wkAAQAAAAAAAADU/wkAAQAAAAAAAADT/wkAAQAAAAAAAADS/wkAAQAAAAAAAADR/wkAAQAAAAAAAADQ/wkAAQAAAAAAAADP/wkAAQAAAAAAAADO/wkAAQAAAAAAAADN/wkAAQAAAAAAAADM/wkAAQAAAAAAAADL/wkAAQAAAAAAAADK/wkAAQAAAAAAAADJ/wkAAQAAAAAAAADI/wkAAQAAAAAAAADH/wkAAQAAAAAAAADG/wkAAQAAAAAAAADF/wkAAQAAAAAAAADE/wkAAQAAAAAAAADD/wkAAQAAAAAAAADC/wkAAQAAAAAAAADB/wkAAQAAAAAAAADA/wkAAQAAAAAAAAC//wkAAQAAAAAAAAC+/wkAAQAAAAAAAAC9/wkAAQAAAAAAAAC8/wkAAQAAAAAAAAC7/wkAAQAAAAAAAAC6/wkAAQAAAAAAAAC5/wkAAQAAAAAAAAC4/wkAAQAAAAAAAAC3/wkAAQAAAAAAAAC2/wkAAQAAAAAAAAC1/wkAAQAAAAAAAAC0/wkAAQAAAAAAAACz/wkAAQAAAAAAAACy/wkAAQAAAAAAAACx/wkAAQAAAAAAAACw/wkAAQAAAAAAAADu/wUAAQABAAAAAADv/wYAAQABAAAAAADw/wcAAQABAAAAAADx/wgAAQABAAAAAADm/wUAAQABAAAAAADn/wYAAQABAAAAAADo/wcAAQABAAAAAADp/wgAAQABAAAAAADT/wAAAQABAAAAAADS/wAAAQABAAAAAADR/wAAAQABAAAAAADQ/wAAAQABAAAAAADP/wAAAQABAAAAAADO/wAAAQABAAAAAADN/wAAAQABAAAAAADM/wAAAQABAAAAAADL/wAAAQABAAAAAADK/wAAAQABAAAAAADJ/wAAAQABAAAAAADI/wAAAQABAAAAAADH/wAAAQABAAAAAADG/wAAAQABAAAAAACv/wkAAQAAAAAAAACu/wkAAQAAAAAAAACt/wkAAQAAAAAAAACs/wkAAQAAAAAAAACr/wkAAQAAAAAAAACq/wkAAQAAAAAAAACp/wkAAQAAAAAAAACo/wkAAQAAAAAAAACn/wkAAQAAAAAAAACm/wkAAQAAAAAAAACl/wkAAQAAAAAAAACk/wkAAQAAAAAAAACj/wkAAQAAAAAAAACi/wkAAQAAAAAAAACh/wkAAQAAAAAAAACg/wkAAQAAAAAAAACf/wkAAQAAAAAAAACe/wkAAQAAAAAAAACd/wkAAQAAAAAAAACw/wgAAQABAAAAAACw/wcAAQABAAAAAACw/wYAAQABAAAAAACw/wUAAQABAAAAAACw/wQAAQABAAAAAACw/wMAAQABAAAAAACw/wIAAQABAAAAAACw/wEAAQABAAAAAACv/wEAAQABAAAAAACu/wEAAQABAAAAAACt/wEAAQABAAAAAACs/wEAAQABAAAAAACr/wEAAQABAAAAAACq/wEAAQABAAAAAACp/wEAAQABAAAAAACo/wEAAQABAAAAAACn/wEAAQABAAAAAACm/wEAAQABAAAAAACl/wEAAQABAAAAAACk/wEAAQABAAAAAACj/wEAAQABAAAAAACi/wEAAQABAAAAAACh/wEAAQABAAAAAACg/wEAAQABAAAAAACf/wEAAQABAAAAAACe/wEAAQABAAAAAACd/wEAAQABAAAAAACd/wIAAQABAAAAAACd/wMAAQABAAAAAACd/wQAAQABAAAAAACd/wUAAQABAAAAAACd/wYAAQABAAAAAACd/wcAAQABAAAAAACd/wgAAQABAAAAAACe/wIAAQABAAAAAACf/wIAAQABAAAAAACg/wIAAQABAAAAAACh/wIAAQABAAAAAACi/wIAAQABAAAAAACj/wIAAQABAAAAAACk/wIAAQABAAAAAACl/wIAAQABAAAAAACm/wIAAQABAAAAAACn/wIAAQABAAAAAACo/wIAAQABAAAAAACp/wIAAQABAAAAAACq/wIAAQABAAAAAACr/wIAAQABAAAAAACs/wIAAQABAAAAAACt/wIAAQABAAAAAACu/wIAAQABAAAAAACv/wIAAQABAAAAAACv/wMAAQABAAAAAACu/wMAAQABAAAAAACt/wMAAQABAAAAAACs/wMAAQABAAAAAACr/wMAAQABAAAAAACq/wMAAQABAAAAAACp/wMAAQABAAAAAACo/wMAAQABAAAAAACn/wMAAQABAAAAAACm/wMAAQABAAAAAACl/wMAAQABAAAAAACk/wMAAQABAAAAAACj/wMAAQABAAAAAACi/wMAAQABAAAAAACh/wMAAQABAAAAAACg/wMAAQABAAAAAACf/wMAAQABAAAAAACe/wMAAQABAAAAAACq/wAAAQAAAAAAAACr/wAAAQAAAAAAAACr////AQAAAAAAAACs////AQAAAAAAAACs/wAAAQAAAAAAAACt/wAAAQAAAAAAAACu/wAAAQAAAAAAAACv/wAAAQAAAAAAAACv////AQAAAAAAAACu////AQAAAAAAAACt////AQAAAAAAAACw////AQAAAAAAAACe/wAAAQAAAAAAAACf/wAAAQAAAAAAAACg/wAAAQAAAAAAAACh/wAAAQAAAAAAAACi/wAAAQAAAAAAAACj/wAAAQAAAAAAAACk/wAAAQAAAAAAAACl/wAAAQAAAAAAAACm/wAAAQAAAAAAAACn/wAAAQAAAAAAAACo/wAAAQAAAAAAAACp/wAAAQAAAAAAAACw/wAAAQAAAAAAAACx////AQAAAAAAAACs//7/AQAAAAAAAACt//7/AQAAAAAAAACu//7/AQAAAAAAAACv//7/AQAAAAAAAACw//7/AQAAAAAAAACx//7/AQAAAAAAAACc/wkAAQAAAAAAAACb/wkAAQAAAAAAAACa/wkAAQAAAAAAAACZ/wkAAQAAAAAAAACY/wkAAQAAAAAAAACX/wkAAQAAAAAAAACW/wkAAQAAAAAAAACV/wkAAQAAAAAAAACU/wkAAQAAAAAAAACT/wkAAQAAAAAAAACS/wkAAQAAAAAAAACR/wkAAQAAAAAAAAARAAkAAQAAAAAAAADp/wcAAQABAAAAAADq/wcAAQABAAAAAADr/wcAAQABAAAAAADs/wYAAQABAAAAAADt/wUAAQABAAAAAACy////AQABAAAAAACz////AQABAAAAAAC0////AQABAAAAAAC1////AQABAAAAAAC2////AQABAAAAAAC3////AQABAAAAAAC4////AQABAAAAAAC5////AQABAAAAAAC6////AQABAAAAAAC7////AQABAAAAAAC8////AQABAAAAAAC9////AQABAAAAAAC+////AQABAAAAAAC/////AQABAAAAAADA////AQABAAAAAADB////AQABAAAAAADC////AQABAAAAAADD////AQABAAAAAADE////AQABAAAAAADF////AQABAAAAAADU/wEAAQABAAAAAADV/wEAAQABAAAAAADW/wEAAQABAAAAAADX/wEAAQABAAAAAADY/wEAAQABAAAAAADZ/wEAAQABAAAAAADa/wEAAQABAAAAAADb/wEAAQABAAAAAADc/wEAAQABAAAAAADM/wEAAQABAAAAAADM/wIAAQABAAAAAAD3/wIAAQABAAAAAAD2/wMAAQABAAAAAAD1/wQAAQABAAAAAAD0/wUAAQABAAAAAADz/wYAAQABAAAAAADy/wcAAQABAAAAAAA=")
 tile_set = SubResource("TileSet_skcgy")
 rendering_quadrant_size = 32
+
+[node name="toy bin" type="Node2D" parent="."]
+
+[node name="bin-front" type="Sprite2D" parent="toy bin"]
+z_index = 3
+position = Vector2(-718, 164)
+texture = ExtResource("9_skcgy")
+script = ExtResource("10_e5y2q")
+
+[node name="Area2D" type="Area2D" parent="toy bin/bin-front"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="toy bin/bin-front/Area2D"]
+position = Vector2(0, 55.5)
+shape = SubResource("RectangleShape2D_eici0")
+
+[node name="bin-back" type="Sprite2D" parent="toy bin"]
+z_index = -1
+position = Vector2(-718, 164)
+texture = ExtResource("11_2xyig")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="toy bin/bin-back"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="toy bin/bin-back/StaticBody2D"]
+position = Vector2(-0.5, 120)
+shape = SubResource("RectangleShape2D_2khhf")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="toy bin/bin-back/StaticBody2D"]
+position = Vector2(100, -14)
+polygon = PackedVector2Array(9, 0, 17, 0, 0, 137, -9, 132)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="toy bin/bin-back/StaticBody2D"]
+position = Vector2(-94, -14)
+polygon = PackedVector2Array(-25, 0, -17, 0, 0, 135, -8, 135)
+
+[node name="firetruck" type="Node2D" parent="."]
+position = Vector2(-947, 205)
+
+[node name="Sprite2D" type="Sprite2D" parent="firetruck"]
+position = Vector2(14, -47)
+scale = Vector2(2.60938, 2.60938)
+texture = ExtResource("12_2xyig")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="firetruck/Sprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="firetruck/Sprite2D/StaticBody2D"]
+position = Vector2(-5.36527, 33.3413)
+shape = SubResource("RectangleShape2D_go8vh")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="firetruck/Sprite2D/StaticBody2D"]
+polygon = PackedVector2Array(27.976, 30.2755, -29.1258, -18.012, -30.2755, -16.479, -59.7845, -45.6048, -62.4671, -43.3054, -32.5749, -13.7964, -32.9581, -12.2635, 19.9281, 30.6587)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="firetruck/Sprite2D/StaticBody2D"]
+position = Vector2(34.3174, 42.521)
+shape = SubResource("RectangleShape2D_bp465")
+
+[node name="bed" type="Node2D" parent="."]
+
+[node name="piano" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Story Manager" type="Node2D" parent="."]
+script = ExtResource("14_eici0")
+
+[node name="Grasshopper NPC" type="Node2D" parent="Story Manager"]
+z_index = 2
+script = ExtResource("15_bp465")
+
+[node name="Grasshopper" type="Node2D" parent="Story Manager/Grasshopper NPC"]
+
+[node name="Grasshopper Sprite" type="AnimatedSprite2D" parent="Story Manager/Grasshopper NPC/Grasshopper"]
+position = Vector2(45, 30)
+sprite_frames = SubResource("SpriteFrames_q703s")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="InteractionArea" type="Area2D" parent="Story Manager/Grasshopper NPC"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Grasshopper NPC/InteractionArea"]
+position = Vector2(35.5, 31.5)
+shape = SubResource("RectangleShape2D_vsdne")
+
+[node name="interact_icon" type="Sprite2D" parent="Story Manager/Grasshopper NPC"]
+position = Vector2(47, 12)
+texture = ExtResource("16_bp465")
+
+[node name="Dust Mite NPC" type="Node2D" parent="Story Manager"]
+z_index = 2
+script = ExtResource("17_bp465")
+
+[node name="Dust Mite" type="Node2D" parent="Story Manager/Dust Mite NPC"]
+
+[node name="Dust Mite Sprite" type="AnimatedSprite2D" parent="Story Manager/Dust Mite NPC/Dust Mite"]
+position = Vector2(-2619, -72)
+sprite_frames = SubResource("SpriteFrames_dpy1m")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="InteractionArea" type="Area2D" parent="Story Manager/Dust Mite NPC"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Dust Mite NPC/InteractionArea"]
+position = Vector2(-2620.5, -70)
+shape = SubResource("RectangleShape2D_5st5h")
+
+[node name="interact_icon" type="Sprite2D" parent="Story Manager/Dust Mite NPC"]
+position = Vector2(-2619, -87)
+texture = ExtResource("16_bp465")
+
+[node name="Controller NPC" type="Node2D" parent="Story Manager"]
+script = ExtResource("18_yg5eo")
+
+[node name="Controller" type="Node2D" parent="Story Manager/Controller NPC"]
+
+[node name="Controller Sprite" type="Sprite2D" parent="Story Manager/Controller NPC/Controller"]
+z_index = 2
+position = Vector2(-740, 153)
+texture = ExtResource("19_0ntv5")
+
+[node name="InteractionArea" type="Area2D" parent="Story Manager/Controller NPC"]
+position = Vector2(-2576, -79)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Controller NPC/InteractionArea"]
+position = Vector2(1862.5, 303)
+shape = SubResource("RectangleShape2D_aw1sg")
+
+[node name="interact_icon" type="Sprite2D" parent="Story Manager/Controller NPC"]
+position = Vector2(-713, 180)
+texture = ExtResource("16_bp465")

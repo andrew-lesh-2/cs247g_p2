@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=74 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -27,21 +27,22 @@
 [ext_resource type="Script" uid="uid://m3wo67fm4l0a" path="res://scenes/levels/perfect_stick.gd" id="16_6w254"]
 [ext_resource type="Texture2D" uid="uid://byjer3xmaf7jk" path="res://assets/sprites/characters/ant-queen.png" id="16_ec8gf"]
 [ext_resource type="Texture2D" uid="uid://bw6qf5hx48e2g" path="res://assets/sprites/environment/Fence.png" id="16_pw41a"]
-[ext_resource type="Script" uid="uid://b6gy8lqc4bhtn" path="res://scripts/ant_gatherer.gd" id="23_pef58"]
+[ext_resource type="Script" path="res://scripts/ant_gatherer.gd" id="23_pef58"]
 [ext_resource type="Texture2D" uid="uid://c66yeiwwo4vm6" path="res://assets/sprites/environment/berry.png" id="23_yhw85"]
-[ext_resource type="Script" uid="uid://im45jp3sn7wj" path="res://scripts/ant_doctor.gd" id="24_xwflg"]
-[ext_resource type="Script" uid="uid://c1hqafqifxfer" path="res://scripts/ant_bodyguard_3.gd" id="25_swnf8"]
-[ext_resource type="Script" uid="uid://8ox23oebqaf3" path="res://scripts/berry.gd" id="28_w3eij"]
+[ext_resource type="Script" path="res://scripts/ant_doctor.gd" id="24_xwflg"]
+[ext_resource type="Script" path="res://scripts/ant_bodyguard_3.gd" id="25_swnf8"]
+[ext_resource type="Script" path="res://scripts/berry.gd" id="28_w3eij"]
 [ext_resource type="Texture2D" uid="uid://vpfg38m7vit0" path="res://assets/sprites/characters/ant-hurt-sheet.png" id="29_mwbdr"]
-[ext_resource type="PackedScene" uid="uid://chalo2tpf3ich" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
+[ext_resource type="PackedScene" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
 [ext_resource type="Texture2D" uid="uid://bbm7v6kb84qwa" path="res://assets/sprites/environment/fog.png" id="32_7yp5p"]
-[ext_resource type="Script" uid="uid://dt2nmdaq1561t" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
+[ext_resource type="Script" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
 [ext_resource type="Shader" uid="uid://brecjac0oyxsa" path="res://shader/try2.gdshader" id="34_cup7h"]
 [ext_resource type="Texture2D" uid="uid://b0qekr2vt1sq" path="res://assets/sprites/environment/tiny-bug.png" id="34_tpxpk"]
-[ext_resource type="Script" uid="uid://c8b76lkk6l6bk" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
-[ext_resource type="Script" uid="uid://csjpkx7mwq4i3" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
-[ext_resource type="Script" uid="uid://c6qdusesj3hwd" path="res://scripts/queen.gd" id="39_sfnal"]
+[ext_resource type="Script" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
+[ext_resource type="Script" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
+[ext_resource type="Script" path="res://scripts/queen.gd" id="39_sfnal"]
 [ext_resource type="Texture2D" uid="uid://dh8c5jsscdwg0" path="res://assets/sprites/characters/caterpillar.png" id="41_kl26y"]
+[ext_resource type="Texture2D" uid="uid://cgfgkxkmcmbhk" path="res://assets/sprites/environment/inside_wall.png" id="43_05qi3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_py4n2"]
 texture = ExtResource("2_l0qe0")
@@ -1749,7 +1750,8 @@ position = Vector2(1920, -719)
 texture = ExtResource("16_pw41a")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(-570, 655)
+position = Vector2(-1114, -993)
+god_mode = true
 JUMP_VELOCITY = -350.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -5089,3 +5091,8 @@ position = Vector2(-952, -922)
 scale = Vector2(-1, 1)
 sprite_frames = SubResource("SpriteFrames_b3uru")
 autoplay = "default"
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport"]
+texture = ExtResource("43_05qi3")

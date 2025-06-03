@@ -454,7 +454,7 @@ func end_dialog():
 # Handle window resize
 func _on_viewport_size_changed():
 	# Recalculate dimensions
-	calculate_dialog_dimensions()
+	calculate_dialog_dimensions() 
 
 	# Update panel position and size
 	if dialog_panel:

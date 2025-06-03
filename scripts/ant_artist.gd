@@ -87,7 +87,7 @@ func start_dialog():
 			"name": npc_name,
 			"lines": [
 				"I like your vibe, ladybug.", 
-				"Come talk to me when you're done helping collelct food"],
+				"Come talk to me when you're done helping collect food"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)

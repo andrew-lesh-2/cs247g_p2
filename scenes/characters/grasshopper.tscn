@@ -45,8 +45,7 @@ script = ExtResource("1_eysuf")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_41lah")
 animation = &"idle"
-frame = 2
-frame_progress = 0.122055
+frame_progress = 0.300263
 
 [node name="Area2D" type="Area2D" parent="."]
 

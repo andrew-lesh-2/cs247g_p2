@@ -1,0 +1,177 @@
+[gd_scene load_steps=15 format=3 uid="uid://djj3wbqwehg5f"]
+
+[ext_resource type="Script" uid="uid://5jwrljspyt22" path="res://main menu/main_menu.gd" id="1_ra13p"]
+[ext_resource type="Texture2D" uid="uid://dfymasc7o3iug" path="res://main menu/main_menu.png" id="2_45qoi"]
+[ext_resource type="Texture2D" uid="uid://cm7w84wkg5p63" path="res://assets/sprites/characters/ladybug-sheet.png" id="3_6fy38"]
+[ext_resource type="FontFile" uid="uid://dhtrequmhtkxu" path="res://main menu/customFont.ttf" id="4_auhsi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldhbh"]
+bg_color = Color(0.615686, 0.0509804, 0.0509804, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qo5t"]
+atlas = ExtResource("3_6fy38")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iohqi"]
+atlas = ExtResource("3_6fy38")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_driid"]
+atlas = ExtResource("3_6fy38")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ft5q2"]
+atlas = ExtResource("3_6fy38")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6o5wd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qo5t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iohqi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_driid")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ft5q2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe12f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qtwp"]
+bg_color = Color(0.94902, 0.203922, 0.203922, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dy7ct"]
+bg_color = Color(0.94902, 0.203922, 0.203922, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o4t1"]
+bg_color = Color(0.803922, 0.0627451, 0.0627451, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ra13p")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -795.0
+offset_top = -494.0
+offset_right = 803.0
+offset_bottom = 509.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ldhbh")
+
+[node name="MainMenu" type="Sprite2D" parent="Panel"]
+position = Vector2(806, 321)
+scale = Vector2(3.21541, 2.75482)
+texture = ExtResource("2_45qoi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Panel"]
+position = Vector2(560, 578)
+scale = Vector2(9.15625, 9.09375)
+sprite_frames = SubResource("SpriteFrames_6o5wd")
+autoplay = "default"
+frame_progress = 0.688836
+
+[node name="button controller" type="VBoxContainer" parent="."]
+layout_mode = 1
+offset_left = 91.0
+offset_top = -116.0
+offset_right = 442.0
+offset_bottom = 121.0
+scale = Vector2(0.993652, 1)
+theme_override_constants/separation = 12
+
+[node name="start" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_auhsi")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "Start Game"
+
+[node name="about" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_auhsi")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "About"
+
+[node name="exit" type="Button" parent="button controller"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_auhsi")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8qtwp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dy7ct")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o4t1")
+text = "Exit Game"
+
+[node name="game name" type="Label" parent="."]
+layout_mode = 2
+offset_left = -421.0
+offset_top = -259.0
+offset_right = -36.0
+offset_bottom = -68.0
+scale = Vector2(0.987331, 1.06209)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_auhsi")
+theme_override_font_sizes/font_size = 60
+text = "Don't Let the
+Bedbugs Bite"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="button controller/start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="button controller/about" to="." method="_on_about_pressed"]
+[connection signal="pressed" from="button controller/exit" to="." method="_on_exit_pressed"]
