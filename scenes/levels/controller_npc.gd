@@ -1,3 +1,5 @@
+# controller_npc.gd
+
 extends Node2D
 
 var timer: Timer
@@ -12,7 +14,8 @@ var last_exited_body: Player = null
 @onready var story_manager = get_parent()
 @onready var interact_icon  = get_node("interact_icon")
 #@onready var mission_icon  = get_node("mission_icon")
-@onready var grasshopper_node  = get_node("Controller")
+@onready var controller_node  = get_node("Controller")
+@onready var controller_sprite: Sprite2D = $Controller.get_node("Controller Sprite") as Sprite2D
 @onready var interaction_area = $InteractionArea
 
 var in_cutscene: bool = false
@@ -21,7 +24,15 @@ var player: Player = null
 
 var is_in_dialog: bool = false
 
+
+# Preload both textures so you’re not doing a “load()” every frame:
+@export var clean_texture   : Texture2D = preload("res://assets/sprites/environment/test_controller.png")
+@export var dusty_texture      : Texture2D = preload("res://assets/sprites/environment/test_controller_dusty.png")
+
+
 func _ready():
+	controller_sprite.texture = dusty_texture
+	
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
@@ -103,58 +114,36 @@ func start_dialog():
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
 		story_manager.found_controller = true
-	elif (have_spoken() and story_manager.spoke_bedmite):
+	elif (have_spoken() and not story_manager.spoke_bedmite):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Still looking for a good stick?", 
-				"There are usually good ones under the tree"],
+				"Yup, it's still covered in dust.  Nasty."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif story_manager.stick_mission_active:
+		story_manager.found_controller = true
+	elif (have_spoken() and story_manager.spoke_bedmite and not story_manager.fed_bedmite):
 		DialogSystem.start_dialog({
 			"name": npc_name,
 			"lines": [
-				"Wow! What a great stick you've brought me!",
-				"Thank you so much.",
-				"Now I can finally get back to my working on my masterpiece!"],
+				"It's still covered in dust.",
+				"Maybe the dust mite would like to clean it off?"],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-		story_manager.stick_mission_active = false
-		story_manager.is_carrying_stick = false
-		story_manager.stick_mission_completed = true
-	else:
-		var line_options = [
-			["Back again, I see. Everything going smoothly?"],
-			["You’ve proven yourself to be quite the asset around here."],
-			["I can see why they trust you. You’ve earned your place."],
-			["Well, well, if it isn’t the ladybug of the hour. How’s the world treating you?"],
-			["Looks like you're fitting right in with us ants."],
-			["You’ve been a real help around here. We appreciate it."],
-			["Ah, you’re back. The anthill’s a bit brighter with you around."],
-			["I’ve seen a lot of newcomers, but you stand out."],
-			["You know, it’s not often we get someone as reliable as you."],
-			["What’s the latest news from the surface? I’m always curious."],
-			["The work here gets easier with you around. Keep it up."],
-			["I trust you’re not causing any trouble, right? You’re on our side now."],
-			["You’ve adapted quickly. I have to respect that."],
-			["Another day, another good deed. You’ve made yourself valuable."],
-			["Good to see you again. Ready for whatever comes next?"],
-			["I see the others have warmed up to you. Not an easy feat."],
-			["You're more than capable, I can tell. Keep it up."],
-			["Every time you show up, things get a little smoother around here."],
-			["You're not just a guest anymore, you’re part of the team."],
-			["Welcome back. The anthill’s always better with you in it."]
-		]
-		var lines = line_options[randi() % line_options.size()]
+		story_manager.found_controller = true
+	elif (have_spoken() and story_manager.fed_bedmite):
 		DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": lines,
+			"lines": [
+				"Squeaky clean!",
+				"You feel a strange compulsion to jump on it now."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
+		story_manager.found_controller = true
+	
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
@@ -180,15 +169,12 @@ func _on_interaction_area_body_exited(body):
 
 func _process(delta):
 	if player_nearby:
-		# Get player node
-		#if player:
-			# Compare x positions to determine direction
-		#	var direction_to_player = player.global_position.x - grasshopper_node.global_position.x
-			# Flip sprite based on player position
-		#	grasshopper_node.scale.x = -1 if direction_to_player < 0 else 1
 
 		if Input.is_action_just_pressed("interact") and !is_in_dialog:
 			start_dialog()
-	#else:
-		# Return to default orientation
-	#	grasshopper_node.scale.x = 1
+			
+	# As soon as story_manager.fed_bedmite becomes true, swap in the “fed” texture.
+	# You can guard so that you only assign it once:
+	if story_manager.fed_bedmite and controller_sprite.texture != clean_texture:
+		controller_sprite.texture = clean_texture
+	
