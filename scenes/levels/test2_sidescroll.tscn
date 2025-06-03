@@ -14,5 +14,5 @@ z_index = 5
 position = Vector2(-32, 38)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(1, 0)
+position = Vector2(-1, -57)
 zoom = Vector2(3, 3)
