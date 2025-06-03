@@ -15,7 +15,7 @@ var last_exited_body: Player = null
 @export var left_button_area_path  : NodePath = "ButtonAreas/LeftButtonArea"
 @export var right_button_area_path : NodePath = "ButtonAreas/RightButtonArea"
 
-@onready var story_manager       = get_parent()                                                  # assume StoryManager is the parent
+@onready var story_manager       = StoryManager                                                # assume StoryManager is the parent
 @onready var interact_icon       = $interact_icon
 @onready var controller_node     = $Controller
 @onready var controller_sprite   = $Controller/"Controller Sprite"  as Sprite2D
@@ -93,6 +93,8 @@ func _ready():
 	_press_timer.autostart = false
 	add_child(_press_timer)
 	_press_timer.connect("timeout", Callable(self, "_on_press_timer_timeout"))
+	
+	
 
 
 func _ensure_dialog_connection():

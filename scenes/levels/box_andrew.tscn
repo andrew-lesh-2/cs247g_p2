@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=45 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://c3o7dk7g5sxqd" path="res://scenes/levels/bin_front.gd" id="10_e5y2q"]
 [ext_resource type="Texture2D" uid="uid://cfim50yyj25t" path="res://assets/sprites/environment/test_toy_bin_interior.png" id="11_2xyig"]
 [ext_resource type="Texture2D" uid="uid://le156t4daghv" path="res://assets/sprites/environment/test_firetruck.png" id="12_2xyig"]
-[ext_resource type="Script" uid="uid://dr51kltdmfqei" path="res://scenes/levels/story_manager_indoor.gd" id="14_eici0"]
 [ext_resource type="Script" uid="uid://bkyx72a1tntdc" path="res://scenes/levels/grasshopper_npc.gd" id="15_bp465"]
 [ext_resource type="Texture2D" uid="uid://bsltygpr8b7c0" path="res://assets/sprites/characters/grasshopper-sheet.png" id="15_go8vh"]
 [ext_resource type="Texture2D" uid="uid://ckb6ndpmq4x" path="res://assets/sprites/environment/interact-icon.png" id="16_bp465"]
@@ -275,7 +274,6 @@ shape = SubResource("RectangleShape2D_bp465")
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="Story Manager" type="Node2D" parent="."]
-script = ExtResource("14_eici0")
 
 [node name="Grasshopper NPC" type="Node2D" parent="Story Manager"]
 z_index = 2
