@@ -141,7 +141,7 @@ animations = [{
 size = Vector2(103, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aw1sg"]
-size = Vector2(184, 115)
+size = Vector2(103, 115)
 
 [node name="Level Layout" type="Node2D"]
 
@@ -207,7 +207,6 @@ rendering_quadrant_size = 32
 [node name="toy bin" type="Node2D" parent="."]
 
 [node name="bin-front" type="Sprite2D" parent="toy bin"]
-visible = false
 z_index = 3
 position = Vector2(-718, 164)
 texture = ExtResource("9_skcgy")
@@ -317,7 +316,7 @@ script = ExtResource("18_yg5eo")
 
 [node name="Controller" type="Node2D" parent="Story Manager/Controller NPC"]
 
-[node name="Sprite2D" type="Sprite2D" parent="Story Manager/Controller NPC/Controller"]
+[node name="Controller Sprite" type="Sprite2D" parent="Story Manager/Controller NPC/Controller"]
 z_index = 2
 position = Vector2(-740, 153)
 texture = ExtResource("19_0ntv5")
@@ -326,7 +325,7 @@ texture = ExtResource("19_0ntv5")
 position = Vector2(-2576, -79)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Controller NPC/InteractionArea"]
-position = Vector2(1856, 303)
+position = Vector2(1862.5, 303)
 shape = SubResource("RectangleShape2D_aw1sg")
 
 [node name="interact_icon" type="Sprite2D" parent="Story Manager/Controller NPC"]

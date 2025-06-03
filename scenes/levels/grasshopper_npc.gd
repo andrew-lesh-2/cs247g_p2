@@ -94,6 +94,18 @@ func start_dialog():
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
 		story_manager.spoke_grasshopper = true
+	elif (have_spoken() and story_manager.spoke_bedmite and not story_manager.insulted_bedmite):
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": [
+				"Oh, so you've met that notorious dust mite, have you?",
+				"Well I don't mean to be rude, but are you not aware that dust mites eat dust?",
+				"Absolutely uncivilized!  I mean can you imagine?!  Dust instead of leaves?!",
+				"You really ought to think more carefully about the company you keep."],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		story_manager.insulted_bedmite = true
 	elif (have_spoken()):
 		DialogSystem.start_dialog({
 			"name": npc_name,
@@ -102,59 +114,7 @@ func start_dialog():
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
-	elif (story_manager.stick_mission_active and 
-		not story_manager.is_carrying_stick):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"Still looking for a good stick?", 
-				"There are usually good ones under the tree"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
-	elif story_manager.stick_mission_active:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"Wow! What a great stick you've brought me!",
-				"Thank you so much.",
-				"Now I can finally get back to my working on my masterpiece!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
-		story_manager.stick_mission_active = false
-		story_manager.is_carrying_stick = false
-		story_manager.stick_mission_completed = true
-	else:
-		var line_options = [
-			["Back again, I see. Everything going smoothly?"],
-			["You’ve proven yourself to be quite the asset around here."],
-			["I can see why they trust you. You’ve earned your place."],
-			["Well, well, if it isn’t the ladybug of the hour. How’s the world treating you?"],
-			["Looks like you're fitting right in with us ants."],
-			["You’ve been a real help around here. We appreciate it."],
-			["Ah, you’re back. The anthill’s a bit brighter with you around."],
-			["I’ve seen a lot of newcomers, but you stand out."],
-			["You know, it’s not often we get someone as reliable as you."],
-			["What’s the latest news from the surface? I’m always curious."],
-			["The work here gets easier with you around. Keep it up."],
-			["I trust you’re not causing any trouble, right? You’re on our side now."],
-			["You’ve adapted quickly. I have to respect that."],
-			["Another day, another good deed. You’ve made yourself valuable."],
-			["Good to see you again. Ready for whatever comes next?"],
-			["I see the others have warmed up to you. Not an easy feat."],
-			["You're more than capable, I can tell. Keep it up."],
-			["Every time you show up, things get a little smoother around here."],
-			["You're not just a guest anymore, you’re part of the team."],
-			["Welcome back. The anthill’s always better with you in it."]
-		]
-		var lines = line_options[randi() % line_options.size()]
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": lines,
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+	
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
