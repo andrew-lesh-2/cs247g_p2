@@ -59,6 +59,7 @@ position = Vector2(24, -54)
 position = Vector2(42, 34)
 
 [node name="box-front" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("7_wmkn3")
 script = ExtResource("8_wmkn3")
 
