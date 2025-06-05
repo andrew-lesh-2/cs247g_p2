@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctc12g7gv2otf"
-path="res://.godot/imported/ant_dialogue.png-32006041797fca36ef84f1c64a163157.ctex"
+uid="uid://tltgqjwguf03"
+path="res://.godot/imported/ant_portrait.png-944d5ad0f50e29f297a69aa2ac834459.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/ant_dialogue.png"
-dest_files=["res://.godot/imported/ant_dialogue.png-32006041797fca36ef84f1c64a163157.ctex"]
+source_file="res://dialogue/dialogue assets/ant_portrait.png"
+dest_files=["res://.godot/imported/ant_portrait.png-944d5ad0f50e29f297a69aa2ac834459.ctex"]
 
 [params]
 

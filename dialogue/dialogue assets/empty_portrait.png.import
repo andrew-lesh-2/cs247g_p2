@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvwc3w33amwgd"
-path="res://.godot/imported/dustmite_dialogue.png-77550fab7c4b7229048707c85ef04ff2.ctex"
+uid="uid://c1k0xbcpi0j7g"
+path="res://.godot/imported/empty_portrait.png-15d3b70b81a7c776db844e764855fb93.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/dustmite_dialogue.png"
-dest_files=["res://.godot/imported/dustmite_dialogue.png-77550fab7c4b7229048707c85ef04ff2.ctex"]
+source_file="res://dialogue/dialogue assets/empty_portrait.png"
+dest_files=["res://.godot/imported/empty_portrait.png-15d3b70b81a7c776db844e764855fb93.ctex"]
 
 [params]
 

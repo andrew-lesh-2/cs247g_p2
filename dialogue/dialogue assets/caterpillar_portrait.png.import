@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cnp1qaa1qnags"
-path="res://.godot/imported/empty_sys_dialogue.png-34b53ffc11ee3e8ac366bbbafe267cf3.ctex"
+uid="uid://dxwe6x56bc8ak"
+path="res://.godot/imported/caterpillar_portrait.png-f3051aa5bb8d1b8df9d1e1c5aebb48e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/empty_sys_dialogue.png"
-dest_files=["res://.godot/imported/empty_sys_dialogue.png-34b53ffc11ee3e8ac366bbbafe267cf3.ctex"]
+source_file="res://dialogue/dialogue assets/caterpillar_portrait.png"
+dest_files=["res://.godot/imported/caterpillar_portrait.png-f3051aa5bb8d1b8df9d1e1c5aebb48e4.ctex"]
 
 [params]
 
