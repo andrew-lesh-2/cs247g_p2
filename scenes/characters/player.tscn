@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://sfn6ot4qssit"]
+[gd_scene load_steps=28 format=3 uid="uid://sfn6ot4qssit"]
 
 [ext_resource type="Script" uid="uid://b8nitobori1xd" path="res://scripts/player.gd" id="1_xofr2"]
 [ext_resource type="Texture2D" uid="uid://cm7w84wkg5p63" path="res://assets/sprites/characters/ladybug-sheet.png" id="2_54fnc"]
 [ext_resource type="Texture2D" uid="uid://bohuyvqm5hauw" path="res://assets/sprites/characters/ladybug-FLYING-sheet.png" id="2_76oj4"]
+[ext_resource type="Texture2D" uid="uid://cos7k8n5bsmfu" path="res://assets/sprites/characters/ladybug-ground-pound.png" id="3_atpat"]
 [ext_resource type="Texture2D" uid="uid://dki58gc77cqvo" path="res://assets/sprites/environment/particle.png" id="4_dyp2m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dyp2m"]
@@ -12,6 +13,22 @@ region = Rect2(0, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_atpat"]
 atlas = ExtResource("2_76oj4")
 region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqtwu"]
+atlas = ExtResource("3_atpat")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6eyoc"]
+atlas = ExtResource("3_atpat")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eojnx"]
+atlas = ExtResource("3_atpat")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgnko"]
+atlas = ExtResource("3_atpat")
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b881y"]
 atlas = ExtResource("2_54fnc")
@@ -77,6 +94,23 @@ animations = [{
 "loop": true,
 "name": &"fly",
 "speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqtwu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6eyoc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eojnx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgnko")
+}],
+"loop": true,
+"name": &"ground_pound",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -158,7 +192,8 @@ SPEED = 150.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hcwku")
-animation = &"idle"
+animation = &"ground_pound"
+frame_progress = 0.568849
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -3)
