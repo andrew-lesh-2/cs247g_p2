@@ -22,12 +22,17 @@ DialogSystem="*res://scripts/DialogSystem.gd"
 DialogTracker="*res://scripts/dialog_tracker.gd"
 SceneTransition="*res://scripts/scene_transition.gd"
 StoryManager="*res://scripts/story_manager.gd"
+DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 
 [display]
 
 window/size/viewport_width=1600
 window/size/viewport_height=1000
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
 [input]
 
