@@ -1,0 +1,142 @@
+[gd_scene load_steps=4 format=3 uid="uid://blevhrxm7afsp"]
+
+[ext_resource type="Texture2D" uid="uid://d0e026qqp2a2j" path="res://assets/sprites/environment/tree-leaf4.png" id="1_x22f2"]
+[ext_resource type="Texture2D" uid="uid://qovlpkc0e8iw" path="res://assets/sprites/environment/tree-leaf5.png" id="2_kh7ku"]
+[ext_resource type="Texture2D" uid="uid://b1ip28mp5c34s" path="res://assets/sprites/environment/tree-leaf6.png" id="3_8evdc"]
+
+[node name="Parallax2D" type="Parallax2D"]
+scroll_scale = Vector2(1.25, 1.25)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(81.022, -36.8632)
+rotation = 0.508397
+scale = Vector2(1, 1)
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(151.022, -36.8632)
+rotation = 0.236089
+scale = Vector2(1, 1)
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-14.9781, -34.8633)
+rotation = -0.777779
+scale = Vector2(1, 1)
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D6" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-44.9781, 33.1367)
+rotation = -2.12875
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D7" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-73.9781, -15.8633)
+rotation = -1.21056
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D8" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(34.022, -44.8632)
+rotation = 0.186248
+scale = Vector2(1, 1)
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D9" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-87.9781, 43.1367)
+rotation = 2.81166
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D10" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-130.978, 12.1367)
+rotation = -2.20795
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D11" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-116.978, -31.8633)
+rotation = -1.162
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D12" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-116.978, -31.8633)
+rotation = -1.162
+texture = ExtResource("2_kh7ku")
+
+[node name="Sprite2D4" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(22.0219, 48.1367)
+rotation = -2.53667
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D5" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(131.022, 50.1367)
+rotation = 2.44953
+texture = ExtResource("1_x22f2")
+
+[node name="Sprite2D13" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(151.022, -42.8633)
+rotation = 0.669352
+texture = ExtResource("2_kh7ku")
+
+[node name="Sprite2D16" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(0.0220146, -56.8632)
+rotation = -0.694591
+scale = Vector2(1, 1)
+texture = ExtResource("2_kh7ku")
+
+[node name="Sprite2D14" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-49.9781, 75.1367)
+rotation = -2.42519
+texture = ExtResource("2_kh7ku")
+
+[node name="Sprite2D15" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(81.0219, 46.1367)
+rotation = -0.943601
+scale = Vector2(1, -1)
+texture = ExtResource("2_kh7ku")
+
+[node name="Sprite2D17" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-63.978, -58.8632)
+rotation = -0.694591
+scale = Vector2(1, 1)
+texture = ExtResource("3_8evdc")
+
+[node name="Sprite2D18" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(84.0219, -57.8633)
+rotation = 0.103558
+texture = ExtResource("3_8evdc")
+
+[node name="Sprite2D19" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-13.9781, 40.1367)
+rotation = -1.80404
+texture = ExtResource("3_8evdc")
+
+[node name="Sprite2D20" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-135.978, 55.1367)
+rotation = -2.46006
+texture = ExtResource("3_8evdc")
+
+[node name="Sprite2D21" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(155.022, 51.1367)
+rotation = -0.965323
+scale = Vector2(1, -1)
+texture = ExtResource("3_8evdc")

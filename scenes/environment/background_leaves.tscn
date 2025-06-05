@@ -1,0 +1,126 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnm5m4ehdsn3y"]
+
+[ext_resource type="Texture2D" uid="uid://d0e026qqp2a2j" path="res://assets/sprites/environment/tree-leaf4.png" id="1_clkl6"]
+[ext_resource type="Texture2D" uid="uid://qovlpkc0e8iw" path="res://assets/sprites/environment/tree-leaf5.png" id="2_cvjlx"]
+[ext_resource type="Texture2D" uid="uid://b1ip28mp5c34s" path="res://assets/sprites/environment/tree-leaf6.png" id="3_bkdeq"]
+
+[node name="Parallax2D" type="Parallax2D"]
+modulate = Color(0.499572, 0.660988, 1, 1)
+z_index = -10
+scroll_scale = Vector2(0.9, 0.9)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(65.022, -33.8633)
+rotation = 0.508397
+scale = Vector2(1, 1)
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(135.022, -33.8633)
+rotation = 0.236089
+scale = Vector2(1, 1)
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-30.9781, -31.8635)
+rotation = -0.777779
+scale = Vector2(1, 1)
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D7" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-89.9781, -12.8635)
+rotation = -1.21056
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D8" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(18.022, -41.8633)
+rotation = 0.186248
+scale = Vector2(1, 1)
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D10" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-146.978, 15.1365)
+rotation = -2.20795
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D11" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-132.978, -28.8635)
+rotation = -1.162
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D12" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-132.978, -28.8635)
+rotation = -1.162
+texture = ExtResource("2_cvjlx")
+
+[node name="Sprite2D4" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(6.02191, 51.1365)
+rotation = -2.53667
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D5" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(115.022, 53.1365)
+rotation = 2.44953
+texture = ExtResource("1_clkl6")
+
+[node name="Sprite2D13" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(135.022, -39.8635)
+rotation = 0.669352
+texture = ExtResource("2_cvjlx")
+
+[node name="Sprite2D16" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-15.978, -53.8633)
+rotation = -0.694591
+scale = Vector2(1, 1)
+texture = ExtResource("2_cvjlx")
+
+[node name="Sprite2D15" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(65.0219, 49.1365)
+rotation = -0.943601
+scale = Vector2(1, -1)
+texture = ExtResource("2_cvjlx")
+
+[node name="Sprite2D17" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-79.978, -55.8633)
+rotation = -0.694591
+scale = Vector2(1, 1)
+texture = ExtResource("3_bkdeq")
+
+[node name="Sprite2D18" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(68.0219, -54.8635)
+rotation = 0.103558
+texture = ExtResource("3_bkdeq")
+
+[node name="Sprite2D19" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-29.9781, 43.1365)
+rotation = -1.80404
+texture = ExtResource("3_bkdeq")
+
+[node name="Sprite2D20" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(-151.978, 58.1365)
+rotation = -2.46006
+texture = ExtResource("3_bkdeq")
+
+[node name="Sprite2D21" type="Sprite2D" parent="."]
+z_index = 13
+position = Vector2(139.022, 54.1365)
+rotation = -0.965323
+scale = Vector2(1, -1)
+texture = ExtResource("3_bkdeq")
