@@ -2,7 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
+<<<<<<< HEAD
 uid="uid://cnoa360xokaih"
+=======
+uid="uid://bjdi5qxxafidr"
+>>>>>>> dc18ed2 (art)
 path="res://.godot/imported/tire.png-e3cd75e3da01d179e4240d91bf48bd52.ctex"
 metadata={
 "vram_texture": false

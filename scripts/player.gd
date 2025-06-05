@@ -165,7 +165,7 @@ func _physics_process(delta):
 	# — handle jumping / wall‐jump / double‐jump —
 	if is_jump_just_pressed:
 		if on_floor or coyote_timer < coyote_time:
-			velocity.y       = JUMP_VELOCITY
+			velocity      = -Vector2.UP * JUMP_VELOCITY
 			coyote_timer     = coyote_time
 			play_jump_sound(false)
 		elif on_wall and wall_dir != last_wall_jump_dir:

@@ -2,7 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
+<<<<<<< HEAD
 uid="uid://b57glfluhjay6"
+=======
+uid="uid://beyfv2qldema8"
+>>>>>>> dc18ed2 (art)
 path="res://.godot/imported/firetruck.png-16ea35b4189d65143d61e7f9385bc98e.ctex"
 metadata={
 "vram_texture": false
