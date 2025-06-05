@@ -35,10 +35,10 @@ const MAX_RIGHT_OFFSET :=  1 * SHIFT_AMOUNT    # +20 px from start
 const MAX_LEFT_OFFSET  := -15 * SHIFT_AMOUNT   # –300 px from start
 
 # — PRELOADED TEXTURES — 
-@export var clean_texture       : Texture2D = preload("res://assets/sprites/environment/test_controller.png")
-@export var dusty_texture       : Texture2D = preload("res://assets/sprites/environment/test_controller_dusty.png")
-@export var press_left_texture  : Texture2D = preload("res://assets/sprites/environment/test_controller_left.png")
-@export var press_right_texture : Texture2D = preload("res://assets/sprites/environment/test_controller_right.png")
+@export var clean_texture       : Texture2D = preload("res://assets/sprites/environment/controller.png")
+@export var dusty_texture       : Texture2D = preload("res://assets/sprites/environment/controller_dirty.png")
+@export var press_left_texture  : Texture2D = preload("res://assets/sprites/environment/controller_up.png")
+@export var press_right_texture : Texture2D = preload("res://assets/sprites/environment/controller_down.png")
 
 # A Timer we’ll use to revert the sprite back after 0.6 s
 var _press_timer: Timer
@@ -89,7 +89,7 @@ func _ready():
 	# 7) Create a one-shot Timer to revert the press texture after 0.6 s
 	_press_timer = Timer.new()
 	_press_timer.one_shot = true
-	_press_timer.wait_time = 0.3
+	_press_timer.wait_time = 0.6
 	_press_timer.autostart = false
 	add_child(_press_timer)
 	_press_timer.connect("timeout", Callable(self, "_on_press_timer_timeout"))

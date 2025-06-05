@@ -1,7 +1,7 @@
 # Player.gd
 extends CharacterBody2D
 
-# (<<< “class_name Player” was HERE, but has been removed to avoid the duplicate‐class_name error.)
+class_name Player
 
 @export var god_mode: bool = false
 
@@ -19,7 +19,7 @@ var prev_virtual_jump_pressed: bool = false
 @export var interact_action : String = "interact"
 
 # — MOVEMENT TUNING —
-@export var SPEED               = 50.0
+@export var SPEED               = 100.0
 @export var JUMP_VELOCITY       = -250.0
 @export var WALL_SLIDE_SPEED    = 30.0
 @export var WALL_JUMP_H_SPEED   = 300.0
@@ -230,25 +230,23 @@ func _physics_process(delta):
 	#  IMMEDIATELY AFTER move_and_slide(), look for any RigidBody2D collisions
 	#  and give them a small horizontal “nudge” so they will actually roll.
 	# ------------------------------------------------------
-	var PUSH_FACTOR: float = 0.5  # tweak this if you want more/less push
-	for i in range(get_slide_collision_count()):
-		var col = get_slide_collision(i)
-		var collider = col.get_collider()
-		if collider is RigidBody2D:
-			var rb = collider as RigidBody2D
-			# We only push horizontally, using our current velocity.x
-			# Multiply by RigidBody’s mass, then by PUSH_FACTOR:
-			var push_vector = Vector2(velocity.x * rb.mass * PUSH_FACTOR, 0)
-			var contact_point = col.get_position() - rb.global_position
-			rb.apply_impulse(contact_point, push_vector)
+	var PUSH_FACTOR: float = 0.5  # tweak this if you want more/less push   # **ADDED**
+	for i in range(get_slide_collision_count()):                             # **ADDED**
+		var col = get_slide_collision(i)                                     # **ADDED**
+		var collider = col.get_collider()                                    # **ADDED**
+		if collider is RigidBody2D:                                          # **ADDED**
+			var rb = collider as RigidBody2D                                 # **ADDED**
+			# We only push horizontally, using our current velocity.x         # **ADDED**
+			# Multiply by RigidBody’s mass, then by PUSH_FACTOR:             # **ADDED**
+			var push_vector = Vector2(velocity.x * rb.mass * PUSH_FACTOR, 0) # **ADDED**
+			var contact_point = col.get_position() - rb.global_position      # **ADDED**
+			rb.apply_impulse(contact_point, push_vector)                    # **ADDED**
 
 func _handle_input():
 	if disable_player_input:
-		var out = [
-			virtual_dir.x,
-			virtual_jump_pressed,
-			virtual_jump_pressed and not prev_virtual_jump_pressed
-		]
+		var out = [virtual_dir.x,
+				   virtual_jump_pressed,
+				   virtual_jump_pressed and not prev_virtual_jump_pressed]
 		prev_virtual_jump_pressed = virtual_jump_pressed
 		virtual_jump_pressed = false
 		if reset_virtual_dir:
