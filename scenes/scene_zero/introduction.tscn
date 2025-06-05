@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://okmavgg7luvf"]
+
+[ext_resource type="Script" uid="uid://bmfulj41ipe2r" path="res://scenes/scene_zero/introduction.gd" id="1_4gcsr"]
+[ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/scene_zero/introduction.png" id="2_0tg4w"]
+
+[node name="Introduction" type="Node2D"]
+script = ExtResource("1_4gcsr")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1602.0
+offset_bottom = 999.0
+texture = ExtResource("2_0tg4w")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+offset_left = 387.0
+offset_top = 184.0
+offset_right = 773.0
+offset_bottom = 570.0
+bbcode_enabled = true
+text = "This text will not show up on the screen. "
+scroll_active = false
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="."]
+offset_left = 919.0
+offset_top = 753.0
+offset_right = 1253.0
+offset_bottom = 776.0
+theme_override_colors/font_color = Color(0.352941, 0.266667, 0.219608, 1)
+text = "[Hold the spacebar to speed up your story.]"
