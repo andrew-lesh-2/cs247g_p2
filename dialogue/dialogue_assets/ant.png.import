@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfdfq5ncgklqa"
-path="res://.godot/imported/grasshopper_dialogue.png-036d3d61a95cbffef08a953e2e6afb0f.ctex"
+uid="uid://tltgqjwguf03"
+path="res://.godot/imported/ant.png-cf5a34ce76d85fe9e54e2310d036aa3d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/dialogue assets/grasshopper_dialogue.png"
-dest_files=["res://.godot/imported/grasshopper_dialogue.png-036d3d61a95cbffef08a953e2e6afb0f.ctex"]
+source_file="res://dialogue/dialogue_assets/ant.png"
+dest_files=["res://.godot/imported/ant.png-cf5a34ce76d85fe9e54e2310d036aa3d.ctex"]
 
 [params]
 

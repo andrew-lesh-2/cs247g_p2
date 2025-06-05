@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctvn0pw7op51u"
-path="res://.godot/imported/ant-queen_portrait.png-0838a4ec0a63037e6b7c52802f873c47.ctex"
+uid="uid://cq0rwaefl1j1a"
+path="res://.godot/imported/dustmite.png-84caf8106bae881c0740f2f12234d1c5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/dialogue assets/ant-queen_portrait.png"
-dest_files=["res://.godot/imported/ant-queen_portrait.png-0838a4ec0a63037e6b7c52802f873c47.ctex"]
+source_file="res://dialogue/dialogue_assets/dustmite.png"
+dest_files=["res://.godot/imported/dustmite.png-84caf8106bae881c0740f2f12234d1c5.ctex"]
 
 [params]
 

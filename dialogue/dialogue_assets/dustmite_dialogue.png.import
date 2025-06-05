@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctc12g7gv2otf"
-path="res://.godot/imported/ant_dialogue.png-ab23db4b6966c2eb20db1e81117a2ff0.ctex"
+uid="uid://bvwc3w33amwgd"
+path="res://.godot/imported/dustmite_dialogue.png-f6c4cd690414f331c10904c89eb7edb9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogue/dialogue assets/ant_dialogue.png"
-dest_files=["res://.godot/imported/ant_dialogue.png-ab23db4b6966c2eb20db1e81117a2ff0.ctex"]
+source_file="res://dialogue/dialogue_assets/dustmite_dialogue.png"
+dest_files=["res://.godot/imported/dustmite_dialogue.png-f6c4cd690414f331c10904c89eb7edb9.ctex"]
 
 [params]
 
