@@ -13,21 +13,18 @@ scroll_scale = Vector2(0.9, 0.9)
 z_index = 13
 position = Vector2(65.022, -33.8633)
 rotation = 0.508397
-scale = Vector2(1, 1)
 texture = ExtResource("1_clkl6")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
 z_index = 13
 position = Vector2(135.022, -33.8633)
 rotation = 0.236089
-scale = Vector2(1, 1)
 texture = ExtResource("1_clkl6")
 
 [node name="Sprite2D3" type="Sprite2D" parent="."]
 z_index = 13
 position = Vector2(-30.9781, -31.8635)
 rotation = -0.777779
-scale = Vector2(1, 1)
 texture = ExtResource("1_clkl6")
 
 [node name="Sprite2D7" type="Sprite2D" parent="."]
@@ -40,7 +37,6 @@ texture = ExtResource("1_clkl6")
 z_index = 13
 position = Vector2(18.022, -41.8633)
 rotation = 0.186248
-scale = Vector2(1, 1)
 texture = ExtResource("1_clkl6")
 
 [node name="Sprite2D10" type="Sprite2D" parent="."]
@@ -83,7 +79,6 @@ texture = ExtResource("2_cvjlx")
 z_index = 13
 position = Vector2(-15.978, -53.8633)
 rotation = -0.694591
-scale = Vector2(1, 1)
 texture = ExtResource("2_cvjlx")
 
 [node name="Sprite2D15" type="Sprite2D" parent="."]
@@ -97,7 +92,6 @@ texture = ExtResource("2_cvjlx")
 z_index = 13
 position = Vector2(-79.978, -55.8633)
 rotation = -0.694591
-scale = Vector2(1, 1)
 texture = ExtResource("3_bkdeq")
 
 [node name="Sprite2D18" type="Sprite2D" parent="."]

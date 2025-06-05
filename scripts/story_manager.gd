@@ -39,6 +39,7 @@ extends Node2D
 
 @export var doctor_mission_active: bool = false:
 	set(value):
+		print("setting doctor_mission_active")
 		doctor_mission_active = value
 		if "doctor_mission_active" not in callbacks:
 			return
