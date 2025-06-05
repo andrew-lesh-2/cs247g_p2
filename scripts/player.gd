@@ -51,7 +51,7 @@ var sprite_offset_left = Vector2(-2, 0)  # Adjust these values to fine-tune the 
 
 var particles_offset_right = Vector2(4, 0)
 var particles_offset_left = Vector2(-12, 0)
-
+var was_on_floor = false
 # — DIALOG PAUSE —
 var can_move = true
 # — JUMP SOUND —
@@ -60,6 +60,8 @@ var can_move = true
 @export_range(0.0, 1.0) var jump_sound_volume  : float  = 0.5
 @export_range(0.5, 2.0) var jump_sound_pitch   : float  = 1.0
 @export var play_sound_for_double_jump : bool   = true
+
+const ROTATE_TIME = 0.1
 
 func _ready():
 	add_to_group("player")
@@ -88,6 +90,7 @@ func play_jump_sound(is_double_jump: bool = false):
 	jump_sound_player.play()
 
 var slow_falling = false
+var rotate_timer = 0.0
 
 func _physics_process(delta):
 	# — tick down the wall‐jump input lock —
@@ -97,6 +100,7 @@ func _physics_process(delta):
 	var is_jump_pressed = input_result[1]
 	var is_jump_just_pressed = input_result[2]
 
+	rotate_timer = max(0.0, rotate_timer - delta)
 
 
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
@@ -186,13 +190,20 @@ func _physics_process(delta):
 	# — horizontal movement & animations —
 	if wall_jump_lock_timer <= 0.0:
 		if dir != 0:
-			velocity.x             = dir * SPEED
-			$AnimatedSprite2D.flip_h = dir < 0
 			if on_floor:
+				var normal = get_floor_normal()
+				var tangent = Vector2(normal.y, -normal.x)
+				velocity = -1 * tangent * (dir * SPEED) + normal * velocity.dot(normal)
 				$AnimatedSprite2D.play("walk")
+			else:
+				velocity.x = dir * SPEED
+
+			$AnimatedSprite2D.flip_h = dir < 0
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
 			if on_floor:
+				# Project velocity onto normal to stop horizontal movement
+				var normal = get_floor_normal()
+				velocity = normal * velocity.dot(normal)
 				$AnimatedSprite2D.play("idle")
 	else:
 		# during the lock, preserve your wall‐jump burst
@@ -213,6 +224,9 @@ func _physics_process(delta):
 			$AnimatedSprite2D.position = sprite_offset_left
 			particles.position = particles_offset_left
 			particles.rotation = 0
+	elif not on_floor:
+		particles.emitting = false
+		$AnimatedSprite2D.rotation_degrees = 0
 
 	else:
 		particles.emitting = false
@@ -227,6 +241,18 @@ func _physics_process(delta):
 			$AnimatedSprite2D.play("jump")
 
 	move_and_slide()
+
+	if is_on_floor() and rotate_timer == 0.0 and (dir != 0 or not was_on_floor):
+		var normal = get_floor_normal()
+		rotate_timer = ROTATE_TIME
+		# For a flat floor, normal is usually (0, -1)
+		# You can use this to rotate your sprite:
+		rotation = normal.angle() + PI/2
+	elif rotate_timer == 0.0 and dir != 0:
+		rotate_timer = ROTATE_TIME
+		rotation = 0
+
+	was_on_floor = is_on_floor()
 
 func _handle_input():
 	if disable_player_input:
