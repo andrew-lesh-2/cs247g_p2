@@ -1,18 +1,19 @@
 # indoor_to_outdoor.gd
-# Attach this to your Portal node (which must be a Node2D)
 extends Node2D
 
-# In the Inspector, point this at the .tscn you want to load:
+# Scene to load
 @export var target_scene_path: String = "res://scenes/levels/Outdoor Level.tscn"
 
+# Transition settings (these won't be used directly if your autoload doesn't support them)
+@export var transition_duration: float = 1.5
+@export var transition_color: Color = Color.BLACK
+
 func _ready() -> void:
-	# If your Area2D child is named something else, change “Area2D” below.
+	# Connect the area entry signal
 	$Area2D.body_entered.connect(_on_body_entered)
 
-
 func _on_body_entered(body: Node) -> void:
-	# Make sure it’s actually the Player who entered:
+	# Make sure it's the Player
 	if body is Player:
-		# In Godot 4, use change_scene_to_file (or change_scene_to).        
-		get_tree().change_scene_to_file(target_scene_path)
-		# (Any code after this line will not run, since the scene switches immediately.)
+		# Just call the transition with only the required parameter
+		SceneTransition.transition_to_scene(target_scene_path)

@@ -23,6 +23,12 @@ var last_exited_body: Player = null
 @export var button_press_depth: float = 30.0  # How far down the button moves
 @export var button_press_duration: float = 0.6  # How long the button animation takes
 
+# Camera pan settings
+@export var camera_pan_duration: float = 1.5  # How long to pan the camera
+@export var pause_on_truck_duration: float = 2.0  # How long to watch the truck move
+var _first_button_press: bool = true  # Track if this is the first time a button is pressed
+var _camera_tween: Tween  # Store the camera tween for management
+
 @onready var story_manager       = StoryManager                                                # assume StoryManager is the parent
 @onready var interact_icon       = $interact_icon
 @onready var controller_node     = $Controller
@@ -335,6 +341,11 @@ func _process(delta):
 		# Check if movement is complete
 		if progress >= 1.0:
 			_is_moving = false
+			
+			# If camera is still focused on the truck after movement completes
+			# and this was a first-time press demonstration, pan back to player
+			if _first_button_press == false and in_cutscene:
+				_pan_camera_to_player()
 	
 	# 4) Handle left button animation
 	if _left_button_pressing and _left_button_node:
@@ -384,6 +395,68 @@ func _enable_button_areas() -> void:
 	print("✅ ButtonAreas unlocked: player can now push the firetruck.")
 
 
+# Camera panning functions for the first button press demonstration
+func _pan_camera_to_firetruck() -> void:
+	# Get the main camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera:
+		return
+		
+	# Store the player's position to return to later
+	var player_pos = player.global_position
+	
+	# Set cutscene flag
+	in_cutscene = true
+	
+	# Temporarily disable player input
+	if player and player.has_method("disable_input"):
+		player.disable_input(true)
+	elif player:
+		player.disable_player_input = true
+	
+	# Create a tween to move the camera
+	_camera_tween = create_tween()
+	_camera_tween.set_ease(Tween.EASE_IN_OUT)
+	_camera_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Pan to the firetruck
+	_camera_tween.tween_property(camera, "global_position", 
+		firetruck_node.global_position, camera_pan_duration)
+	
+	# Add a pause to watch the truck move
+	_camera_tween.tween_interval(pause_on_truck_duration)
+	
+	# The camera will pan back to the player after the truck finishes moving
+	# This happens in the _process function when _is_moving becomes false
+
+
+func _pan_camera_to_player() -> void:
+	# Get the main camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera or not player:
+		in_cutscene = false
+		return
+	
+	# Create a tween to move back to the player
+	_camera_tween = create_tween()
+	_camera_tween.set_ease(Tween.EASE_IN_OUT)
+	_camera_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Pan back to the player
+	_camera_tween.tween_property(camera, "global_position", 
+		player.global_position, camera_pan_duration)
+	
+	# Re-enable player input when done
+	_camera_tween.tween_callback(func():
+		in_cutscene = false
+		if player and player.has_method("disable_input"):
+			player.disable_input(false)
+		elif player:
+			player.disable_player_input = false
+	)
+
+
+
 func _on_left_button_pressed(body: Node) -> void:
 	if not _buttons_enabled or _is_moving:
 		return
@@ -414,6 +487,11 @@ func _on_left_button_pressed(body: Node) -> void:
 				# Start button press animation
 				_left_button_pressing = true
 				_left_button_press_timer = 0.0
+				
+				# For the first button press, pan the camera to show the firetruck
+				if _first_button_press:
+					_first_button_press = false
+					_pan_camera_to_firetruck()
 				
 				print("Player fell into LEFT button → Firetruck shifting left to X=", desired_x)
 
@@ -463,6 +541,11 @@ func _on_right_button_pressed(body: Node) -> void:
 				# Start button press animation
 				_right_button_pressing = true
 				_right_button_press_timer = 0.0
+				
+				# For the first button press, pan the camera to show the firetruck
+				if _first_button_press:
+					_first_button_press = false
+					_pan_camera_to_firetruck()
 				
 				print("Player fell into RIGHT button → Firetruck shifting right to X=", desired_x)
 
