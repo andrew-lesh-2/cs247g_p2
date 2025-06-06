@@ -1,9 +1,9 @@
 extends Node2D
 
 @export var spoke_grasshopper: bool = false
-@export var spoke_bedmite: bool = false
-@export var found_controller: bool = false
-@export var fed_bedmite: bool = false
+@export var spoke_bedmite: bool = true
+@export var found_controller: bool = true
+@export var fed_bedmite: bool = true
 @export var insulted_bedmite: bool = false
 
 @export var mite_mission_active: bool = false:

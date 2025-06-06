@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cliq6urv2mw6c"
-path="res://.godot/imported/tire.png-e3cd75e3da01d179e4240d91bf48bd52.ctex"
+uid="uid://dsk1svadr1etw"
+path="res://.godot/imported/window-inside.png-8a7d26ee726bd966e8c997c1710d1a2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/environment/tire.png"
-dest_files=["res://.godot/imported/tire.png-e3cd75e3da01d179e4240d91bf48bd52.ctex"]
+source_file="res://assets/sprites/environment/window-inside.png"
+dest_files=["res://.godot/imported/window-inside.png-8a7d26ee726bd966e8c997c1710d1a2f.ctex"]
 
 [params]
 

@@ -34,13 +34,25 @@ const SHIFT_AMOUNT     := 20.0
 const MAX_RIGHT_OFFSET :=  1 * SHIFT_AMOUNT    # +20 px from start
 const MAX_LEFT_OFFSET  := -15 * SHIFT_AMOUNT   # –300 px from start
 
+# — SMOOTH MOVEMENT SETTINGS —
+@export var movement_duration: float = 2.0  # Seconds for firetruck to complete movement
+var _is_moving: bool = false
+var _move_start_position: Vector2
+var _move_target_position: Vector2
+var _move_time: float = 0.0
+var _move_direction: int = 0  # -1 for left, 1 for right
+
+# — WHEEL ROTATION SETTINGS —
+@export var wheel_rotation_speed: float = 0.5  # Rotations per second
+@onready var wheel_nodes = []  # Will store references to wheel sprites
+
 # — PRELOADED TEXTURES — 
 @export var clean_texture       : Texture2D = preload("res://assets/sprites/environment/controller.png")
 @export var dusty_texture       : Texture2D = preload("res://assets/sprites/environment/controller_dirty.png")
 @export var press_left_texture  : Texture2D = preload("res://assets/sprites/environment/controller_up.png")
 @export var press_right_texture : Texture2D = preload("res://assets/sprites/environment/controller_down.png")
 
-# A Timer we’ll use to revert the sprite back after 0.6 s
+# A Timer we'll use to revert the sprite back after 0.6 s
 var _press_timer: Timer
 
 # — OTHER FLAGS — 
@@ -50,7 +62,7 @@ var player: Player      = null
 
 var is_in_dialog: bool  = false
 
-# — INTERNAL FLAG TO ENSURE “DUSTY→CLEAN” ONLY RUNS ONCE — 
+# — INTERNAL FLAG TO ENSURE "DUSTY→CLEAN" ONLY RUNS ONCE — 
 var _has_unlocked_buttons: bool = false
 
 
@@ -58,10 +70,18 @@ func _ready():
 	# 1) Record the starting X of the firetruck so we can clamp its movement later
 	if firetruck_node:
 		_firetruck_start_x = firetruck_node.position.x
+		
+		# Get references to the wheel sprites
+		if firetruck_node.has_node("Wheels"):
+			var wheels_node = firetruck_node.get_node("Wheels")
+			for i in range(wheels_node.get_child_count()):
+				var child = wheels_node.get_child(i)
+				if child is Sprite2D:
+					wheel_nodes.append(child)
 	else:
 		push_error("⚠️ controller_npc.gd: firetruck_node is null (check firetruck_path).")
 
-	# 2) Immediately show the “dusty” texture (since it hasn’t been fed yet)
+	# 2) Immediately show the "dusty" texture (since it hasn't been fed yet)
 	if controller_sprite:
 		print("DEBUG: _ready() → setting dusty_texture")
 		controller_sprite.texture = dusty_texture
@@ -73,7 +93,7 @@ func _ready():
 	left_button_area.monitoring  = false
 	right_button_area.monitoring = false
 
-	# 4) Connect interaction‐area signals (so we can show/hide the “Press E” icon)
+	# 4) Connect interaction‐area signals (so we can show/hide the "Press E" icon)
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
@@ -82,7 +102,7 @@ func _ready():
 	# 5) Hook up DialogSystem
 	_ensure_dialog_connection()
 
-	# 6) Connect the button‐area “body_entered” callbacks
+	# 6) Connect the button‐area "body_entered" callbacks
 	left_button_area.body_entered.connect(_on_left_button_pressed)
 	right_button_area.body_entered.connect(_on_right_button_pressed)
 
@@ -122,7 +142,7 @@ func _ensure_dialog_connection():
 
 func _on_dialog_finished(finished_npc_id):
 	# Called whenever ANY NPC finishes dialog.
-	# We no longer do “dusty→clean” here; that happens in _process().
+	# We no longer do "dusty→clean" here; that happens in _process().
 	if finished_npc_id != npc_id:
 		return
 
@@ -237,12 +257,16 @@ func _on_interaction_area_body_exited(body):
 		interact_icon.visible = false
 
 
+# Add these variables at the top with your other variables
+@export var wheel_radius: float = 8.0  # Estimated radius of your wheel sprites in pixels
+
+
 func _process(delta):
-	# 1) If player is nearby and presses “interact” (E or Space), start dialog
+	# 1) If player is nearby and presses "interact" (E or Space), start dialog
 	if player_nearby and Input.is_action_just_pressed("interact") and not is_in_dialog:
 		start_dialog()
 
-	# 2) Once bedmite is fed, swap “dusty → clean” exactly once, then enable buttons.
+	# 2) Once bedmite is fed, swap "dusty → clean" exactly once, then enable buttons.
 	if story_manager.fed_bedmite and not _has_unlocked_buttons:
 		_has_unlocked_buttons = true
 
@@ -253,6 +277,35 @@ func _process(delta):
 			push_error("⚠️ controller_sprite is null in _process() swap.")
 
 		_enable_button_areas()
+	
+	# 3) Handle smooth firetruck movement if it's currently in motion
+	if _is_moving and firetruck_node:
+		# Store previous position before updating
+		var previous_position = firetruck_node.position
+		
+		# Update time and calculate progress
+		_move_time += delta
+		var progress = min(_move_time / movement_duration, 1.0)
+		
+		# Use ease_in_out for smooth acceleration and deceleration
+		var ease_progress = smoothstep(0.0, 1.0, progress)
+		
+		# Update firetruck position
+		firetruck_node.position = _move_start_position.lerp(_move_target_position, ease_progress)
+		
+		# Calculate actual distance moved this frame
+		var distance_moved = firetruck_node.position.x - previous_position.x
+		
+		# Only rotate wheels if the truck actually moved this frame
+		if abs(distance_moved) > 0.001:  # Small threshold to avoid tiny movements
+			# Calculate wheel rotation based on distance moved
+			var rotation_amount = distance_moved / wheel_radius
+			for wheel in wheel_nodes:
+				wheel.rotation += rotation_amount
+		
+		# Check if movement is complete
+		if progress >= 1.0:
+			_is_moving = false
 
 
 #
@@ -271,7 +324,7 @@ func _enable_button_areas() -> void:
 
 
 func _on_left_button_pressed(body: Node) -> void:
-	if not _buttons_enabled:
+	if not _buttons_enabled or _is_moving:
 		return
 	if body is Player:
 		# Only if the Player is moving downward
@@ -290,8 +343,14 @@ func _on_left_button_pressed(body: Node) -> void:
 
 			# Only apply if it actually changed
 			if !is_equal_approx(desired_x, firetruck_node.position.x):
-				firetruck_node.position.x = desired_x
-				print("Player fell into LEFT button → Firetruck shifted left to X=", desired_x)
+				# Set up smooth movement
+				_move_start_position = firetruck_node.position
+				_move_target_position = Vector2(desired_x, firetruck_node.position.y)
+				_move_time = 0.0
+				_is_moving = true
+				_move_direction = -1  # Moving left
+				
+				print("Player fell into LEFT button → Firetruck shifting left to X=", desired_x)
 
 				# Change sprite to the left-press image:
 				print("DEBUG: swapping clean → press_left")
@@ -300,7 +359,7 @@ func _on_left_button_pressed(body: Node) -> void:
 				else:
 					push_error("⚠️ controller_sprite is null in _on_left_button_pressed()")
 
-				# Restart the 0.6 s timer that will revert to “clean” texture:
+				# Restart the 0.6 s timer that will revert to "clean" texture:
 				if not _press_timer.is_stopped():
 					_press_timer.stop()
 				_press_timer.start()
@@ -310,7 +369,7 @@ func _on_left_button_pressed(body: Node) -> void:
 
 
 func _on_right_button_pressed(body: Node) -> void:
-	if not _buttons_enabled:
+	if not _buttons_enabled or _is_moving:
 		return
 	if body is Player:
 		# Only if the Player is moving downward
@@ -329,8 +388,14 @@ func _on_right_button_pressed(body: Node) -> void:
 
 			# Only apply if it actually changed
 			if !is_equal_approx(desired_x, firetruck_node.position.x):
-				firetruck_node.position.x = desired_x
-				print("Player fell into RIGHT button → Firetruck shifted right to X=", desired_x)
+				# Set up smooth movement
+				_move_start_position = firetruck_node.position
+				_move_target_position = Vector2(desired_x, firetruck_node.position.y)
+				_move_time = 0.0
+				_is_moving = true
+				_move_direction = 1  # Moving right
+				
+				print("Player fell into RIGHT button → Firetruck shifting right to X=", desired_x)
 
 				# Change sprite to the right-press image:
 				print("DEBUG: swapping clean → press_right")
@@ -339,7 +404,7 @@ func _on_right_button_pressed(body: Node) -> void:
 				else:
 					push_error("⚠️ controller_sprite is null in _on_right_button_pressed()")
 
-				# Restart the 0.6 s timer that will revert to “clean” texture:
+				# Restart the 0.6 s timer that will revert to "clean" texture:
 				if not _press_timer.is_stopped():
 					_press_timer.stop()
 				_press_timer.start()
@@ -349,8 +414,8 @@ func _on_right_button_pressed(body: Node) -> void:
 
 
 func _on_press_timer_timeout() -> void:
-	# After 0.6 s, revert from “press” texture back to the normal clean look.
-	# (By this point, story_manager.fed_bedmite must be true, so “clean_texture” is correct.)
+	# After 0.6 s, revert from "press" texture back to the normal clean look.
+	# (By this point, story_manager.fed_bedmite must be true, so "clean_texture" is correct.)
 	print("DEBUG: _on_press_timer_timeout() → swapping press_* → clean")
 	if controller_sprite:
 		controller_sprite.texture = clean_texture
