@@ -1,7 +1,7 @@
 # Player.gd
 extends CharacterBody2D
 
-# (<<< “class_name Player” was HERE, but has been removed to avoid the duplicate‐class_name error.)
+class_name Player
 
 @export var god_mode: bool = false
 
