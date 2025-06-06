@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=57 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -166,6 +166,12 @@ size = Vector2(103, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aw1sg"]
 size = Vector2(172.5, 171.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eu5w3"]
+size = Vector2(38.5, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cbhfm"]
+size = Vector2(36, 10.5)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q703s"]
 size = Vector2(248, 67.75)
 
@@ -255,6 +261,7 @@ rendering_quadrant_size = 32
 [node name="toy bin" type="Node2D" parent="."]
 
 [node name="bin-front" type="Sprite2D" parent="toy bin"]
+visible = false
 z_index = 7
 position = Vector2(-713, 190)
 texture = ExtResource("9_aw1sg")
@@ -478,7 +485,24 @@ polygon = PackedVector2Array(-712, 237, -680, 204, -671, 240, -671, 258, -712, 2
 [node name="StaticBody2D" type="StaticBody2D" parent="Story Manager/Controller NPC"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Story Manager/Controller NPC/StaticBody2D"]
-polygon = PackedVector2Array(-829, 181, -816, 183, -806, 189, -802, 198, -802, 210, -807, 218, -804, 219, -796, 216, -789, 217, -783, 220, -781, 198, -764, 194, -749, 194, -715, 195, -703, 230, -677, 231, -654, 247, -654, 270, -643, 265, -629, 267, -635, 256, -637, 243, -629, 231, -642, 233, -655, 226, -661, 210, -653, 194, -639, 190, -623, 198, -620, 210, -625, 227, -613, 227, -601, 234, -595, 246, -597, 259, -606, 268, -625, 269, -617, 285, -620, 296, -630, 307, -643, 307, -656, 301, -660, 288, -673, 302, -688, 306, -704, 300, -722, 298, -827, 293, -829, 261, -810, 252, -813, 222, -839, 218, -844, 199, -838, 186)
+z_index = 3
+polygon = PackedVector2Array(-829, 181, -816, 183, -806, 189, -802, 198, -802, 210, -807, 218, -804, 219, -796, 216, -789, 217, -783, 220, -781, 198, -764, 194, -749, 194, -747, 210, -728, 209, -720, 201, -713, 227, -711, 238, -674, 239, -667.222, 237.802, -654, 247, -654, 270, -643, 265, -629, 267, -635, 256, -637, 243, -629, 231, -642, 233, -655, 226, -661, 210, -653, 194, -639, 190, -623, 198, -620, 210, -625, 227, -613, 227, -601, 234, -595, 246, -597, 259, -606, 268, -625, 269, -617, 285, -620, 296, -630, 307, -643, 307, -656, 301, -660, 288, -673, 302, -688, 306, -704, 300, -722, 298, -827, 293, -829, 261, -810, 252, -813, 222, -839, 218, -844, 199, -838, 186)
+
+[node name="Buttons" type="Node2D" parent="Story Manager/Controller NPC"]
+
+[node name="LeftButton" type="StaticBody2D" parent="Story Manager/Controller NPC/Buttons"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Controller NPC/Buttons/LeftButton"]
+z_index = 2
+position = Vector2(-730, 188)
+shape = SubResource("RectangleShape2D_eu5w3")
+
+[node name="RightButton" type="StaticBody2D" parent="Story Manager/Controller NPC/Buttons"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Controller NPC/Buttons/RightButton"]
+z_index = 2
+position = Vector2(-693, 228)
+shape = SubResource("RectangleShape2D_cbhfm")
 
 [node name="Portal" type="Node2D" parent="."]
 script = ExtResource("20_0ntv5")
@@ -659,6 +683,7 @@ polygon = PackedVector2Array(-27.5114, -26.7023, -24.2748, -10.5191, -16.9924, -
 polygon = PackedVector2Array(-25.8931, 3.23662, -33.1756, 1.6183, -41.2672, 2.42746, -46.1221, 8.09158, -47.7404, 13.7557, -46.1221, 17.8015, -42.0763, 21.8473, -37.2214, 23.4656, -30.7481, 22.6565, -25.8931, 21.0382)
 
 [node name="wallpaper" type="TileMapLayer" parent="."]
+visible = false
 z_index = -3
 position = Vector2(32, 0)
 tile_map_data = PackedByteArray("AAADAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD8/wAAAAAAAAAAAAD7/wAAAAAAAAAAAAD6/wAAAAAAAAAAAAD5/wAAAAAAAAAAAAD4/wAAAAAAAAAAAAADAP//AAAAAAAAAAACAP//AAAAAAAAAAABAP//AAAAAAAAAAAAAP//AAAAAAAAAAD/////AAAAAAAAAAD+////AAAAAAAAAAD9////AAAAAAAAAAD8////AAAAAAAAAAD7////AAAAAAAAAAD6////AAAAAAAAAAD5////AAAAAAAAAAD4////AAAAAAAAAAD3////AAAAAAAAAAD3/wAAAAAAAAAAAAD2////AAAAAAAAAAD1/wAAAAAAAAAAAAD1////AAAAAAAAAAD0/wAAAAAAAAAAAAD0////AAAAAAAAAADz////AAAAAAAAAADz/wAAAAAAAAAAAADy/wAAAAAAAAAAAADx/wAAAAAAAAAAAADx////AAAAAAAAAADw////AAAAAAAAAADw/wAAAAAAAAAAAADv////AAAAAAAAAADv/wAAAAAAAAAAAADu////AAAAAAAAAADu/wAAAAAAAAAAAADt/wAAAAAAAAAAAADt////AAAAAAAAAADs////AAAAAAAAAADs/wAAAAAAAAAAAADr////AAAAAAAAAADr/wAAAAAAAAAAAADq/wAAAAAAAAAAAADq////AAAAAAAAAADp/wAAAAAAAAAAAADp////AAAAAAAAAADo////AAAAAAAAAADo/wAAAAAAAAAAAADn////AAAAAAAAAADn/wAAAAAAAAAAAADm/wAAAAAAAAAAAADm////AAAAAAAAAADl////AAAAAAAAAADl/wAAAAAAAAAAAADk/wAAAAAAAAAAAADk////AAAAAAAAAAD2/wAAAAAAAAAAAADy////AAAAAAAAAAA=")

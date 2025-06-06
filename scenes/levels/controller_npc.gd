@@ -15,6 +15,14 @@ var last_exited_body: Player = null
 @export var left_button_area_path  : NodePath = "ButtonAreas/LeftButtonArea"
 @export var right_button_area_path : NodePath = "ButtonAreas/RightButtonArea"
 
+# Add these paths to access the physical button colliders
+@export var left_button_collider_path: NodePath = "Buttons/LeftButton"
+@export var right_button_collider_path: NodePath = "Buttons/RightButton"
+
+# Button press animation settings
+@export var button_press_depth: float = 30.0  # How far down the button moves
+@export var button_press_duration: float = 0.6  # How long the button animation takes
+
 @onready var story_manager       = StoryManager                                                # assume StoryManager is the parent
 @onready var interact_icon       = $interact_icon
 @onready var controller_node     = $Controller
@@ -23,6 +31,16 @@ var last_exited_body: Player = null
 @onready var left_button_area    = get_node(left_button_area_path)  as Area2D
 @onready var right_button_area   = get_node(right_button_area_path) as Area2D
 var _buttons_enabled: bool = false
+
+# Physical button state tracking
+var _left_button_node: StaticBody2D
+var _right_button_node: StaticBody2D
+var _left_button_original_position: Vector2
+var _right_button_original_position: Vector2
+var _left_button_pressing: bool = false
+var _right_button_pressing: bool = false
+var _left_button_press_timer: float = 0.0
+var _right_button_press_timer: float = 0.0
 
 # — FIRETRUCK REFERENCE & POSITION CLAMPING — 
 @export var firetruck_path : NodePath = "../../firetruck"
@@ -44,6 +62,7 @@ var _move_direction: int = 0  # -1 for left, 1 for right
 
 # — WHEEL ROTATION SETTINGS —
 @export var wheel_rotation_speed: float = 0.5  # Rotations per second
+@export var wheel_radius: float = 8.0  # Estimated radius of your wheel sprites in pixels
 @onready var wheel_nodes = []  # Will store references to wheel sprites
 
 # — PRELOADED TEXTURES — 
@@ -80,6 +99,20 @@ func _ready():
 					wheel_nodes.append(child)
 	else:
 		push_error("⚠️ controller_npc.gd: firetruck_node is null (check firetruck_path).")
+	
+	# Get references to the physical button nodes
+	_left_button_node = get_node(left_button_collider_path)
+	_right_button_node = get_node(right_button_collider_path)
+	
+	if _left_button_node:
+		_left_button_original_position = _left_button_node.position
+	else:
+		push_error("Left button collider not found at path: " + str(left_button_collider_path))
+		
+	if _right_button_node:
+		_right_button_original_position = _right_button_node.position
+	else:
+		push_error("Right button collider not found at path: " + str(right_button_collider_path))
 
 	# 2) Immediately show the "dusty" texture (since it hasn't been fed yet)
 	if controller_sprite:
@@ -257,10 +290,6 @@ func _on_interaction_area_body_exited(body):
 		interact_icon.visible = false
 
 
-# Add these variables at the top with your other variables
-@export var wheel_radius: float = 8.0  # Estimated radius of your wheel sprites in pixels
-
-
 func _process(delta):
 	# 1) If player is nearby and presses "interact" (E or Space), start dialog
 	if player_nearby and Input.is_action_just_pressed("interact") and not is_in_dialog:
@@ -306,6 +335,38 @@ func _process(delta):
 		# Check if movement is complete
 		if progress >= 1.0:
 			_is_moving = false
+	
+	# 4) Handle left button animation
+	if _left_button_pressing and _left_button_node:
+		_left_button_press_timer += delta
+		var progress = min(_left_button_press_timer / button_press_duration, 1.0)
+		
+		if progress < 0.4:  # Press down phase (40% of total time)
+			var press_progress = progress / 0.4
+			_left_button_node.position = _left_button_original_position + Vector2(0, button_press_depth * press_progress)
+		else:  # Release phase (60% of total time)
+			var release_progress = (progress - 0.4) / 0.6
+			_left_button_node.position = _left_button_original_position + Vector2(0, button_press_depth * (1.0 - release_progress))
+		
+		if progress >= 1.0:
+			_left_button_pressing = false
+			_left_button_node.position = _left_button_original_position
+	
+	# 5) Handle right button animation
+	if _right_button_pressing and _right_button_node:
+		_right_button_press_timer += delta
+		var progress = min(_right_button_press_timer / button_press_duration, 1.0)
+		
+		if progress < 0.4:  # Press down phase
+			var press_progress = progress / 0.4
+			_right_button_node.position = _right_button_original_position + Vector2(0, button_press_depth * press_progress)
+		else:  # Release phase
+			var release_progress = (progress - 0.4) / 0.6
+			_right_button_node.position = _right_button_original_position + Vector2(0, button_press_depth * (1.0 - release_progress))
+		
+		if progress >= 1.0:
+			_right_button_pressing = false
+			_right_button_node.position = _right_button_original_position
 
 
 #
@@ -349,6 +410,10 @@ func _on_left_button_pressed(body: Node) -> void:
 				_move_time = 0.0
 				_is_moving = true
 				_move_direction = -1  # Moving left
+				
+				# Start button press animation
+				_left_button_pressing = true
+				_left_button_press_timer = 0.0
 				
 				print("Player fell into LEFT button → Firetruck shifting left to X=", desired_x)
 
@@ -394,6 +459,10 @@ func _on_right_button_pressed(body: Node) -> void:
 				_move_time = 0.0
 				_is_moving = true
 				_move_direction = 1  # Moving right
+				
+				# Start button press animation
+				_right_button_pressing = true
+				_right_button_press_timer = 0.0
 				
 				print("Player fell into RIGHT button → Firetruck shifting right to X=", desired_x)
 
