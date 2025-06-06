@@ -24,7 +24,7 @@
 [ext_resource type="Script" uid="uid://c266tgcks8wq7" path="res://scripts/utility/floating_icon.gd" id="21_vsdne"]
 [ext_resource type="Texture2D" uid="uid://bd7kt0wbm0hvm" path="res://assets/sprites/environment/teddy_bear.png" id="24_nu56h"]
 [ext_resource type="Texture2D" uid="uid://ufqt38a6m47e" path="res://assets/sprites/environment/inside_wall_wide.png" id="24_oxf2r"]
-[ext_resource type="Script" uid="uid://dkdkr6b63hnnd" path="res://scenes/levels/ball.gd" id="25_oxf2r"]
+[ext_resource type="Script" uid="uid://cddrlm3u2aunb" path="res://scenes/levels/object_ball.gd" id="25_oxf2r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
 size = Vector2(640, 66.5)
@@ -179,7 +179,7 @@ texture_region_size = Vector2i(128, 1024)
 tile_size = Vector2i(128, 1024)
 sources/0 = SubResource("TileSetAtlasSource_dpy1m")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_oxf2r"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_nu56h"]
 radius = 21.0
 
 [node name="Level Layout" type="Node2D"]
@@ -355,12 +355,10 @@ position = Vector2(-1096, 208)
 position = Vector2(-87, -135)
 texture = ExtResource("13_nu56h")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="firetruck/Sprite2D"]
-polygon = PackedVector2Array(-177, 168, -143, 106, -143, 106, -53, 105, -53, 105, -47, 110, -47, 184, 15, 184, 16, 137, 169, 138, 176, 141, 176, 169, 204, 169, 208, 172, 208, 190, 215, 190, 215, 195, -167, 193, -171, 181, -177, 178)
-
 [node name="StaticBody2D" type="StaticBody2D" parent="firetruck/Sprite2D"]
-collision_layer = 3
-collision_mask = 3
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="firetruck/Sprite2D/StaticBody2D"]
+polygon = PackedVector2Array(-177, 168, -143, 106, -143, 106, -53, 105, -53, 105, -47, 110, -47, 184, 15, 184, 16, 137, 169, 138, 176, 141, 176, 169, 204, 169, 208, 172, 208, 190, 215, 190, 215, 195, -167, 193, -171, 180, -177, 178)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="firetruck/Sprite2D/StaticBody2D"]
 polygon = PackedVector2Array(174, 135, -79, -117, -81, -105, -67, -90, -80, -78, -123, -118, -123, -104, 124, 144, 124, 144, 171, 145)
@@ -646,17 +644,17 @@ tile_set = SubResource("TileSet_oxf2r")
 
 [node name="Toy Balls" type="Node2D" parent="."]
 
-[node name="RigidBody2D" type="RigidBody2D" parent="Toy Balls"]
-position = Vector2(-207, 19)
-collision_layer = 3
-collision_mask = 3
-script = ExtResource("25_oxf2r")
-
-[node name="Sprite2D" type="Sprite2D" parent="Toy Balls/RigidBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls"]
 modulate = Color(1, 0.152941, 0.541176, 1)
 z_index = 1
+position = Vector2(-207, 19)
 texture = ExtResource("12_q703s")
+script = ExtResource("25_oxf2r")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls/RigidBody2D"]
+[node name="RigidBody2D" type="RigidBody2D" parent="Toy Balls/Sprite2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls/Sprite2D/RigidBody2D"]
 position = Vector2(2, -2)
-shape = SubResource("CircleShape2D_oxf2r")
+shape = SubResource("CircleShape2D_nu56h")
