@@ -30,6 +30,9 @@ var prev_virtual_jump_pressed: bool = false
 @export var wall_slide_duration : float = 1   # how long to slide before normal gravity
 var wall_slide_timer : float = 0.0
 var was_on_wall      : bool  = false
+var was_on_floor     : bool  = false
+const ROTATE_TIME = 0.1
+var rotate_timer = 0.0
 
 # — GRAVITY —
 var gravity           = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -62,6 +65,9 @@ var can_move = true
 @export_range(0.0, 1.0)  var jump_sound_volume : float   = 0.5
 @export_range(0.5, 2.0)  var jump_sound_pitch  : float   = 1.0
 @export var play_sound_for_double_jump    : bool    = true
+
+
+@export var normals_enabled = true
 
 func _ready():
 	add_to_group("player")
@@ -98,6 +104,7 @@ func _physics_process(delta):
 	var is_jump_pressed = input_result[1]
 	var is_jump_just_pressed = input_result[2]
 
+	rotate_timer = max(0.0, rotate_timer - delta)
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
 	# — pause during dialog —
@@ -209,6 +216,9 @@ func _physics_process(delta):
 			$AnimatedSprite2D.position = sprite_offset_left
 			particles.position        = particles_offset_left
 			particles.rotation        = 0
+	elif not on_floor:
+		particles.emitting = false
+		$AnimatedSprite2D.rotation_degrees = 0
 	else:
 		particles.emitting        = false
 		$AnimatedSprite2D.rotation_degrees = 0
@@ -220,6 +230,20 @@ func _physics_process(delta):
 			$AnimatedSprite2D.play("fly")
 		else:
 			$AnimatedSprite2D.play("jump")
+
+	if normals_enabled:
+		if is_on_floor() and rotate_timer == 0.0 and (dir != 0 or not was_on_floor):
+			var normal = get_floor_normal()
+			print(normal)
+			rotate_timer = ROTATE_TIME
+			# For a flat floor, normal is usually (0, -1)
+			# You can use this to rotate your sprite:
+			rotation = normal.angle() + PI/2
+		elif rotate_timer == 0.0 and dir != 0:
+			rotate_timer = ROTATE_TIME
+			rotation = 0
+
+	was_on_floor = is_on_floor()
 
 	# ------------------------------------------------------
 	#  This actually moves the CharacterBody2D with physics
