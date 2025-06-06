@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=63 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://mrncav618qm4" path="res://assets/sprites/environment/controller_dirty.png" id="19_aw1sg"]
 [ext_resource type="Script" uid="uid://bsagvbi5thanm" path="res://scenes/levels/indoor_to_outdoor.gd" id="20_0ntv5"]
 [ext_resource type="Script" uid="uid://c266tgcks8wq7" path="res://scripts/utility/floating_icon.gd" id="21_vsdne"]
+[ext_resource type="Script" uid="uid://cxwj72albkvsi" path="res://scenes/levels/fed_dust_mite_npc.gd" id="23_eu5w3"]
+[ext_resource type="Texture2D" uid="uid://cstllaasojys1" path="res://assets/sprites/characters/fed_dustmite.png" id="24_cbhfm"]
 [ext_resource type="Texture2D" uid="uid://bd7kt0wbm0hvm" path="res://assets/sprites/environment/teddy_bear.png" id="24_nu56h"]
 [ext_resource type="Texture2D" uid="uid://ufqt38a6m47e" path="res://assets/sprites/environment/inside_wall_wide.png" id="24_oxf2r"]
 [ext_resource type="Script" uid="uid://dkdkr6b63hnnd" path="res://scenes/levels/ball.gd" id="25_oxf2r"]
@@ -164,13 +166,38 @@ animations = [{
 size = Vector2(103, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aw1sg"]
-size = Vector2(172.5, 171.5)
+size = Vector2(125.25, 171.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eu5w3"]
 size = Vector2(38.5, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cbhfm"]
 size = Vector2(36, 10.5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrm5j"]
+atlas = ExtResource("24_cbhfm")
+region = Rect2(40, 0, 40, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yq4wy"]
+atlas = ExtResource("24_cbhfm")
+region = Rect2(80, 0, 40, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8k4bt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrm5j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yq4wy")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.2
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gq2bl"]
+size = Vector2(53, 73)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q703s"]
 size = Vector2(248, 67.75)
@@ -461,7 +488,7 @@ texture = ExtResource("19_aw1sg")
 position = Vector2(-2576, -79)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Controller NPC/InteractionArea"]
-position = Vector2(1867, 302)
+position = Vector2(1843.38, 302)
 shape = SubResource("RectangleShape2D_aw1sg")
 
 [node name="interact_icon" type="Sprite2D" parent="Story Manager/Controller NPC"]
@@ -503,6 +530,30 @@ shape = SubResource("RectangleShape2D_eu5w3")
 z_index = 2
 position = Vector2(-693, 228)
 shape = SubResource("RectangleShape2D_cbhfm")
+
+[node name="Fed Dust Mite NPC" type="Node2D" parent="Story Manager"]
+script = ExtResource("23_eu5w3")
+
+[node name="Dust Mite" type="Node2D" parent="Story Manager/Fed Dust Mite NPC"]
+
+[node name="Dust Mite Sprite" type="AnimatedSprite2D" parent="Story Manager/Fed Dust Mite NPC/Dust Mite"]
+z_index = 4
+position = Vector2(-605, 170)
+sprite_frames = SubResource("SpriteFrames_8k4bt")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.0447613
+
+[node name="InteractionArea" type="Area2D" parent="Story Manager/Fed Dust Mite NPC"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story Manager/Fed Dust Mite NPC/InteractionArea"]
+position = Vector2(-604.5, 174.5)
+shape = SubResource("RectangleShape2D_gq2bl")
+
+[node name="interact_icon" type="Sprite2D" parent="Story Manager/Fed Dust Mite NPC"]
+position = Vector2(-603, 144)
+texture = ExtResource("16_bp465")
+script = ExtResource("21_vsdne")
 
 [node name="Portal" type="Node2D" parent="."]
 script = ExtResource("20_0ntv5")
