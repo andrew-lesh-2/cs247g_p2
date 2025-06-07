@@ -1,5 +1,6 @@
-[gd_scene load_steps=20 format=4 uid="uid://c1sepphx28rpf"]
+[gd_scene load_steps=21 format=4 uid="uid://c1sepphx28rpf"]
 
+[ext_resource type="Script" uid="uid://d0ye0wvk11tfl" path="res://scenes/levels/combat_scene_fade.gd" id="1_cdsv5"]
 [ext_resource type="Texture2D" uid="uid://be8we2xg3o7pw" path="res://assets/sprites/environment/tree-tiles.png" id="1_eoq2n"]
 [ext_resource type="Texture2D" uid="uid://d2rpxb7ai1ge0" path="res://assets/backgrounds/sr5za56265ca9caws3.png" id="1_lkdqo"]
 [ext_resource type="AudioStream" uid="uid://b410vlx87ikrb" path="res://audio/music/Lvl4Music.mp3" id="2_tai2j"]
@@ -187,6 +188,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_lkdqo")
 
 [node name="CombatScene" type="Node2D"]
+script = ExtResource("1_cdsv5")
 
 [node name="sky" type="Sprite2D" parent="."]
 modulate = Color(0.53, 0.898167, 1, 1)

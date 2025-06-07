@@ -19,6 +19,7 @@ var player_nearby: bool = false
 var player: Player = null
 
 var is_in_dialog: bool = false
+var final_dialog_completed: bool = false  # Track if the final dialog completed
 
 func _ready():
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
@@ -41,14 +42,6 @@ func start_dialog():
 		push_error("Cannot start dialog: DialogSystem not found!")
 		return
 
-	if story_manager.met_caterpillar:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": ["You can get to the anthill by traveling down the tree.", "Please deliver my love letter to the queen! I'll be eating away these leaves while I await your return. Hehe."],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
-		
 	if story_manager.met_caterpillar and story_manager.met_queen:
 		DialogSystem.start_dialog({
 			"name": npc_name,
@@ -58,6 +51,17 @@ func start_dialog():
 			"Now, just crawl up on top of the tree, and you should be able to find your path back home.",
 			"Best of luck on your journey. I hope we run into each other again very soon -- maybe you won't recognize me at first,
 			but I promise I'll never forget you!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		
+		# Mark that this is the final dialog
+		final_dialog_completed = true
+		
+	elif story_manager.met_caterpillar:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["You can get to the anthill by traveling down the tree.", "Please deliver my love letter to the queen! I'll be eating away these leaves while I await your return. Hehe."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
@@ -109,14 +113,25 @@ func _process(delta):
 		# Return to default orientation
 		caterpillar_node.scale.x = 1
 
-
-
-
-
-
-
-# !! Boilerplate code below, feel free to ignore !!
-
+# Start the transition to the Combat Scene with fade-out
+func start_level_transition():
+	# Get the parent level node (should be the outdoor level with fade capability)
+	var level_node = get_tree().current_scene
+	
+	# Check if the parent level has the fade_out method
+	if level_node.has_method("fade_out"):
+		# Disable player input if possible
+		if player:
+			if player.has_method("disable_input"):
+				player.disable_input(true)
+			else:
+				player.disable_player_input = true
+		
+		# Call the parent's fade_out method with a callback to change scenes
+		level_node.fade_out(2.0, 0.5, func(): get_tree().change_scene_to_file("res://scenes/levels/CombatScene.tscn"))
+	else:
+		# Fallback if parent doesn't have fade capability
+		get_tree().change_scene_to_file("res://scenes/levels/CombatScene.tscn")
 
 func _ensure_dialog_connection():
 	# Check if DialogSystem exists
@@ -141,18 +156,26 @@ func _ensure_dialog_connection():
 			break
 
 	if not already_connected:
-		print("Connecting ant bodyguard to dialog system...")
+		print("Connecting caterpillar to dialog system...")
 		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
 	else:
-		print("Ant bodyguard already connected to dialog system")
+		print("Caterpillar already connected to dialog system")
 
 func _on_dialog_finished(finished_npc_id):
-	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
+	print("Caterpillar received dialog_finished signal for npc_id:", finished_npc_id)
 	if finished_npc_id == npc_id:
 		is_in_dialog = false
 		mission_icon.visible = false
-		if player_nearby:
-			interact_icon.visible = true
+		
+		# Check if this was the final dialog that should trigger level transition
+		if final_dialog_completed and story_manager.met_caterpillar and story_manager.met_queen:
+			# Wait a brief moment before starting transition
+			var timer = get_tree().create_timer(1.0)
+			timer.timeout.connect(func(): start_level_transition())
 		else:
-			interact_icon.visible = false
-		in_cutscene = false
+			# Normal dialog end behavior
+			if player_nearby:
+				interact_icon.visible = true
+			else:
+				interact_icon.visible = false
+			in_cutscene = false
