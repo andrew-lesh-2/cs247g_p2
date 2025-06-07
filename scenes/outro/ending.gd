@@ -4,7 +4,7 @@ extends Node2D
 @onready var rich_text_label2 = $Control/RichTextLabel2 # right page
 @onready var fade_rect = $Control/Screen_Fade  # screen fade colorrect
 
-var typing_speed := 0.06
+var typing_speed := 0.1
 var fast_typing_speed := 0.01
 var is_speeding_up := false
 var typing_finished := false
@@ -61,9 +61,9 @@ func _process(_delta: float) -> void:
 
 func type_text_sequence() -> void:
 	typing_finished = false
-	await type_text(rich_text_label, "The aphids were mighty, but the ladybug was mightier! At the end of the highest branch, the ladybug could see it far away in the distance: Home. Just as the ladybug turned around to travel back down the tree... A familiar but unknown butterfly emerged from the leaves, offering to fly the ladybug back home.")
+	await type_text(rich_text_label, "Goodnight, sleep tight...")
 	await get_tree().create_timer(0.5).timeout
-	await type_text(rich_text_label2, "On top of the butterfly's back, the ladybug saw fragments of a long journey below -- a windowsill, a tree, an anthill. Though the journey was long and unexpected, the ladybug couldn't wait to tell this story to their friends. \n \n THE END.")
+	await type_text(rich_text_label2, "don't let the bedbugs bite.")
 
 	typing_finished = true
 
@@ -96,4 +96,4 @@ func start_fade_to_black() -> void:
 	fade_tween.tween_callback(Callable(self, "go_to_next_scene"))
 
 func go_to_next_scene() -> void:
-	get_tree().change_scene_to_file("res://scenes/outro/ending.tscn")
+	get_tree().change_scene_to_file("res://main menu/main_menu.tscn")

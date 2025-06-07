@@ -1,3 +1,77 @@
-[gd_scene format=3 uid="uid://b4cw8d2peug3g"]
+[gd_scene load_steps=4 format=3 uid="uid://b4cw8d2peug3g"]
+
+[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/introduction/CalligraphyFLF.ttf" id="1_4a3vw"]
+[ext_resource type="Script" uid="uid://bnd70t5qsqcjs" path="res://scenes/outro/ending.gd" id="1_8ttig"]
+[ext_resource type="AudioStream" uid="uid://u2wj0pxw5ltu" path="res://audio/music/Lvl0Music.mp3" id="2_8ttig"]
 
 [node name="Ending" type="Node2D"]
+script = ExtResource("1_8ttig")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1610.0
+offset_bottom = 1016.0
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 227.0
+offset_right = 1530.0
+offset_bottom = 414.0
+theme_override_colors/default_color = Color(0.848845, 0.759369, 0.7123, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("1_4a3vw")
+theme_override_font_sizes/normal_font_size = 120
+bbcode_enabled = true
+text = "
+"
+scroll_active = false
+autowrap_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 432.0
+offset_top = 527.0
+offset_right = 1558.0
+offset_bottom = 757.0
+theme_override_colors/default_color = Color(0.847059, 0.760784, 0.713726, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("1_4a3vw")
+theme_override_font_sizes/normal_font_size = 120
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 640.0
+offset_top = 899.0
+offset_right = 1027.0
+offset_bottom = 948.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.836171, 0.738387, 0.686178, 1)
+text = "[ Press the spacebar to return to the main menu ]"
+
+[node name="Screen_Fade" type="ColorRect" parent="Control"]
+visible = false
+layout_mode = 0
+offset_right = 1601.0
+offset_bottom = 997.0
+color = Color(0, 0, 0, 1)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8ttig")
+pitch_scale = 0.5
+autoplay = true
