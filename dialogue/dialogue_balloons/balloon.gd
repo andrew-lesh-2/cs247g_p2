@@ -101,8 +101,6 @@ func apply_dialogue_line() -> void:
 	var portrait_path: String = "res://dialogue/dialogue_assets/%s.png" % dialogue_line.character
 	if ResourceLoader.exists(portrait_path):
 		portrait.texture = load(portrait_path)
-	else:
-		portrait.texture = null
 
 	dialogue_label.hide()
 	dialogue_label.dialogue_line = dialogue_line
