@@ -1165,7 +1165,7 @@ z_index = 1
 position = Vector2(0, -281)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="Toy Balls"]
-position = Vector2(-207, 19)
+position = Vector2(-186, 27)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("25_oxf2r")
@@ -1183,7 +1183,7 @@ shape = SubResource("CircleShape2D_oxf2r")
 position = Vector2(-1343, 260)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="Toy Balls2"]
-position = Vector2(-607, 14)
+position = Vector2(-384, -113)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("25_oxf2r")
@@ -1432,3 +1432,139 @@ texture = ExtResource("37_7f8rb")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="blocks/Sprite2D2/StaticBody2D"]
 position = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_r4hln")
+
+[node name="Toy Balls3" type="Node2D" parent="."]
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="Toy Balls3"]
+position = Vector2(-2692, 285)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls3/RigidBody2D2"]
+modulate = Color(0.223529, 0.807843, 1, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls3/RigidBody2D2"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls4" type="Node2D" parent="."]
+
+[node name="RigidBody2D4" type="RigidBody2D" parent="Toy Balls4"]
+position = Vector2(-2855, 284)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls4/RigidBody2D4"]
+modulate = Color(0.223529, 0.807843, 0.235294, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls4/RigidBody2D4"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls5" type="Node2D" parent="."]
+
+[node name="RigidBody2D7" type="RigidBody2D" parent="Toy Balls5"]
+position = Vector2(-3365, 286)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls5/RigidBody2D7"]
+modulate = Color(0.529436, 0.316527, 1, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls5/RigidBody2D7"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls6" type="Node2D" parent="."]
+
+[node name="RigidBody2D8" type="RigidBody2D" parent="Toy Balls6"]
+position = Vector2(-3229, 287)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls6/RigidBody2D8"]
+modulate = Color(1, 0.113725, 0.196078, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls6/RigidBody2D8"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls7" type="Node2D" parent="."]
+
+[node name="RigidBody2D9" type="RigidBody2D" parent="Toy Balls7"]
+position = Vector2(-3107, 285)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls7/RigidBody2D9"]
+modulate = Color(1, 0.835294, 0, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls7/RigidBody2D9"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls8" type="Node2D" parent="."]
+
+[node name="RigidBody2D6" type="RigidBody2D" parent="Toy Balls8"]
+position = Vector2(-3001, 283)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls8/RigidBody2D6"]
+modulate = Color(0.216293, 0.438466, 1, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls8/RigidBody2D6"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls9" type="Node2D" parent="."]
+
+[node name="RigidBody2D5" type="RigidBody2D" parent="Toy Balls9"]
+position = Vector2(-3514, 286)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls9/RigidBody2D5"]
+modulate = Color(1, 0.533473, 0.226907, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls9/RigidBody2D5"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")
+
+[node name="Toy Balls10" type="Node2D" parent="."]
+
+[node name="RigidBody2D3" type="RigidBody2D" parent="Toy Balls10"]
+position = Vector2(-3637, 285)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("25_oxf2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Toy Balls10/RigidBody2D3"]
+modulate = Color(0.961184, 0.443533, 0.918774, 1)
+z_index = 1
+texture = ExtResource("12_q703s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Toy Balls10/RigidBody2D3"]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_oxf2r")

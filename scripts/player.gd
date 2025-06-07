@@ -66,6 +66,9 @@ var can_move = true
 @export_range(0.5, 2.0)  var jump_sound_pitch  : float   = 1.0
 @export var play_sound_for_double_jump    : bool    = true
 
+# — RIGIDBODY PUSH SETTINGS — (Added from old script)
+@export var PUSH_FACTOR: float = 2.0  # Increased from 0.5 for better pushing
+@export var MIN_PUSH_SPEED: float = 50.0  # Minimum push force even when standing still
 
 @export var normals_enabled = true
 
@@ -172,8 +175,8 @@ func _physics_process(delta):
 	# — handle jumping / wall‐jump / double‐jump —
 	if is_jump_just_pressed:
 		if on_floor or coyote_timer < coyote_time:
-			velocity      = -Vector2.UP * JUMP_VELOCITY
-			coyote_timer     = coyote_time
+			velocity = -Vector2.UP * JUMP_VELOCITY  # Unchanged from original
+			coyote_timer = coyote_time
 			play_jump_sound(false)
 		elif on_wall and wall_dir != last_wall_jump_dir:
 			is_wall_jumping    = true
@@ -252,19 +255,34 @@ func _physics_process(delta):
 
 	# ------------------------------------------------------
 	#  IMMEDIATELY AFTER move_and_slide(), look for any RigidBody2D collisions
-	#  and give them a small horizontal “nudge” so they will actually roll.
+	#  and give them a push so they will actually roll.
 	# ------------------------------------------------------
-	var PUSH_FACTOR: float = 0.5  # tweak this if you want more/less push
 	for i in range(get_slide_collision_count()):
 		var col = get_slide_collision(i)
 		var collider = col.get_collider()
 		if collider is RigidBody2D:
 			var rb = collider as RigidBody2D
-			# We only push horizontally, using our current velocity.x
-			# Multiply by RigidBody’s mass, then by PUSH_FACTOR:
-			var push_vector = Vector2(velocity.x * rb.mass * PUSH_FACTOR, 0)
+			
+			# Calculate direction from player to rigidbody
+			var push_direction = (rb.global_position - global_position).normalized()
+			
+			# Get player's speed, with a minimum value to ensure pushing works even when stationary
+			var speed = max(abs(velocity.x), MIN_PUSH_SPEED)
+			
+			# Create push vector with primarily horizontal force but some vertical component
+			# This makes the pushing more natural and helps objects move up slopes
+			var push_vector = Vector2(
+				push_direction.x * speed * PUSH_FACTOR * rb.mass,
+				push_direction.y * speed * 0.5 * rb.mass
+			)
+			
+			# Apply impulse at contact point for more natural physics
 			var contact_point = col.get_position() - rb.global_position
-			rb.apply_impulse(contact_point, push_vector)
+			rb.apply_impulse(push_vector, contact_point)
+			
+			# For very lightweight objects, add a central impulse as well
+			if rb.mass < 1.0:
+				rb.apply_central_impulse(push_vector * 0.5)
 
 func _handle_input():
 	if disable_player_input:
