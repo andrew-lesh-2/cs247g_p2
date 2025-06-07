@@ -26,9 +26,9 @@ func _process(_delta: float) -> void:
 
 func type_text_sequence() -> void:
 	typing_finished = false
-	await type_text(rich_text_label, "Once upon a time, there was a small but mighty ladybug who loved to play with their friends -- using 'A' and 'D' to run around and play tag, 'Space' to double dutch blades of grass, and sometimes double clicking or holding 'Space' to see who can fly the highest!")
+	await type_text(rich_text_label, "Once upon a time, there was a small but mighty ladybug who loved to play -- using 'A' and 'D' to run around and play tag, 'Space' to double dutch blades of grass, and sometimes double clicking or holding 'Space' to see who can fly the highest!")
 	await get_tree().create_timer(0.5).timeout
-	await type_text(rich_text_label2, "One day, during  hide and seek the ladybug was searching for one of its friends, when suddenly... STOMP. STOMP. STOMP. The ladybug felt the world shake, and soon, everything was dark... \n But just as quickly as the darkness came, a strange warmth followed... and a mysterious light began to bloom in the shadows.")
+	await type_text(rich_text_label2, "One day, during hide and seek the ladybug was searching for one of its friends, when suddenly... STOMP. STOMP. STOMP. The ladybug felt the world shake, and soon, everything was dark... \n But just as quickly as the darkness came, a strange warmth followed... and a mysterious light began to bloom in the shadows.")
 
 	typing_finished = true
 
