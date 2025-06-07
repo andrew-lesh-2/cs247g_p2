@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bvqsp81btee4a" path="res://scenes/levels/LoopingLevel2.gd" id="1_g4h7w"]
 [ext_resource type="PackedScene" uid="uid://bgk1yn8gx65m1" path="res://scenes/levels/box_andrew.tscn" id="2_g4h7w"]
 [ext_resource type="PackedScene" uid="uid://sfn6ot4qssit" path="res://scenes/characters/player.tscn" id="3_y4hwr"]
-[ext_resource type="Script" uid="uid://dmkchoymop3qd" path="res://scenes/characters/player_indoor.gd" id="4_yscqg"]
+[ext_resource type="Script" path="res://scenes/characters/player_indoor.gd" id="4_yscqg"]
 
 [node name="LoopingLevel" type="Node2D"]
 script = ExtResource("1_g4h7w")

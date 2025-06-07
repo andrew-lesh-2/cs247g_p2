@@ -28,6 +28,8 @@ var last_exited_body: Player = null
 @export var pause_on_truck_duration: float = 2.0  # How long to watch the truck move
 var _first_button_press: bool = true  # Track if this is the first time a button is pressed
 var _camera_tween: Tween  # Store the camera tween for management
+var _original_camera_offset: Vector2  # Store the camera's original offset from player
+
 
 @onready var story_manager       = StoryManager                                                # assume StoryManager is the parent
 @onready var interact_icon       = $interact_icon
@@ -395,15 +397,18 @@ func _enable_button_areas() -> void:
 	print("✅ ButtonAreas unlocked: player can now push the firetruck.")
 
 
-# Camera panning functions for the first button press demonstration
+
+
+
+# Update the _pan_camera_to_firetruck function
 func _pan_camera_to_firetruck() -> void:
 	# Get the main camera
 	var camera = get_viewport().get_camera_2d()
-	if not camera:
+	if not camera or not player:
 		return
 		
-	# Store the player's position to return to later
-	var player_pos = player.global_position
+	# Store the original camera offset from player for later restoration
+	_original_camera_offset = camera.global_position - player.global_position
 	
 	# Set cutscene flag
 	in_cutscene = true
@@ -430,6 +435,8 @@ func _pan_camera_to_firetruck() -> void:
 	# This happens in the _process function when _is_moving becomes false
 
 
+
+# Update the _pan_camera_to_player function to use the stored offset
 func _pan_camera_to_player() -> void:
 	# Get the main camera
 	var camera = get_viewport().get_camera_2d()
@@ -437,14 +444,14 @@ func _pan_camera_to_player() -> void:
 		in_cutscene = false
 		return
 	
-	# Create a tween to move back to the player
+	# Create a tween to move back to the player with the original offset
 	_camera_tween = create_tween()
 	_camera_tween.set_ease(Tween.EASE_IN_OUT)
 	_camera_tween.set_trans(Tween.TRANS_SINE)
 	
-	# Pan back to the player
+	# Pan back to the player's position plus the original offset
 	_camera_tween.tween_property(camera, "global_position", 
-		player.global_position, camera_pan_duration)
+		player.global_position + _original_camera_offset, camera_pan_duration)
 	
 	# Re-enable player input when done
 	_camera_tween.tween_callback(func():
