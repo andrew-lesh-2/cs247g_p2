@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://lkjnpi6mmewt"]
+
+[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/introduction/CalligraphyFLF.ttf" id="1_j37ss"]
+[ext_resource type="Script" uid="uid://b2v8paddrf4dp" path="res://main menu/about.gd" id="1_lr26e"]
+
+[node name="Intro Scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lr26e")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1602.0
+offset_bottom = 1008.0
+color = Color(0.184314, 0.133333, 0.105882, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -683.5
+offset_top = -405.5
+offset_right = 683.5
+offset_bottom = 405.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.933333, 0.764706, 0.603922, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -633.0
+offset_top = -348.0
+offset_right = 633.0
+offset_bottom = 348.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0.184314, 0.133333, 0.105882, 1)
+theme_override_constants/line_separation = 15
+theme_override_fonts/normal_font = ExtResource("1_j37ss")
+theme_override_font_sizes/normal_font_size = 50
+text = "This game was created with love as a project for Stanford's CS 247G: Design for Play. We the authors wanted to create a game that evokes feelings of nostalgia, childlike wonder, and comfort. By creating a narrative adventure told as a 'bedtime' story, we hope to transport the player back underneath the covers of their childhood bed, though they may have long outgrown it. 
+
+With love from the authors, Destiny Tran Saucedo Martinez, Luciano Gonzalez, Andrew Lesh, and Claire Birge. We hope you enjoy playing as much as we enjoyed creating. 
+
+[Press return to go back to the main menu]"
+scroll_active = false

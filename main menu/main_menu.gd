@@ -13,7 +13,7 @@ func _on_start_pressed() -> void:
 	fade_to_black_then_start()
 
 func _on_about_pressed() -> void:
-	pass
+	get_tree().change_scene_to_file("res://main menu/about.tscn")
 
 func _on_exit_pressed() -> void:
 	get_tree().quit()
