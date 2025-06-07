@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://djj3wbqwehg5f"]
+[gd_scene load_steps=16 format=3 uid="uid://djj3wbqwehg5f"]
 
 [ext_resource type="Script" uid="uid://5jwrljspyt22" path="res://main menu/main_menu.gd" id="1_ra13p"]
 [ext_resource type="Texture2D" uid="uid://dfymasc7o3iug" path="res://main menu/main_menu.png" id="2_45qoi"]
 [ext_resource type="Texture2D" uid="uid://cm7w84wkg5p63" path="res://assets/sprites/characters/ladybug-sheet.png" id="3_6fy38"]
 [ext_resource type="FontFile" uid="uid://dhtrequmhtkxu" path="res://main menu/customFont.ttf" id="4_auhsi"]
+[ext_resource type="AudioStream" uid="uid://u2wj0pxw5ltu" path="res://audio/music/Lvl0Music.mp3" id="5_45qoi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldhbh"]
 bg_color = Color(0.184314, 0.133333, 0.105882, 1)
@@ -181,6 +182,10 @@ theme_override_font_sizes/font_size = 60
 text = "Don't Let the
 Bedbugs Bite"
 horizontal_alignment = 1
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_45qoi")
+autoplay = true
 
 [connection signal="pressed" from="button controller/start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="button controller/about" to="." method="_on_about_pressed"]
