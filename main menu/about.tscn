@@ -52,7 +52,7 @@ theme_override_fonts/normal_font = ExtResource("1_j37ss")
 theme_override_font_sizes/normal_font_size = 50
 text = "This game was created with love as a project for Stanford's CS 247G: Design for Play. We the authors wanted to create a game that evokes feelings of nostalgia, childlike wonder, and comfort. By creating a narrative adventure told as a 'bedtime' story, we hope to transport the player back underneath the covers of their childhood bed, though they may have long outgrown it. 
 
-With love from the authors, Destiny Tran Saucedo Martinez, Luciano Gonzalez, Andrew Lesh, and Claire Birge. We hope you enjoy playing as much as we enjoyed creating. 
+With love from the authors, Destiny Tran Saucedo-Martinez, Luciano Gonzalez, Andrew Lesh, and Claire Birge. We hope you enjoy playing as much as we enjoyed creating. 
 
-[Press return to go back to the main menu]"
+[ Press return to go back to the main menu ]"
 scroll_active = false
