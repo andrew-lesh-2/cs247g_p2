@@ -28,4 +28,4 @@ func fade_to_black_then_start() -> void:
 
 func _load_next_scene() -> void:
 	print("Fade complete: loading scene")
-	get_tree().change_scene_to_file("res://scenes/scene_zero/introduction.tscn")
+	get_tree().change_scene_to_file("res://scenes/introduction/introduction.tscn")
