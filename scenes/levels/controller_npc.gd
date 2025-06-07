@@ -1,4 +1,3 @@
-# controller_npc.gd
 extends Node2D
 
 # — NPC IDENTIFIERS & DIALOG TUNING — 
@@ -11,11 +10,11 @@ var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
 var last_exited_body: Player = null
 
-# You already have these exported NodePaths for your button areas:
+# Button area paths
 @export var left_button_area_path  : NodePath = "ButtonAreas/LeftButtonArea"
 @export var right_button_area_path : NodePath = "ButtonAreas/RightButtonArea"
 
-# Add these paths to access the physical button colliders
+# Button collider paths
 @export var left_button_collider_path: NodePath = "Buttons/LeftButton"
 @export var right_button_collider_path: NodePath = "Buttons/RightButton"
 
@@ -29,7 +28,6 @@ var last_exited_body: Player = null
 var _first_button_press: bool = true  # Track if this is the first time a button is pressed
 var _camera_tween: Tween  # Store the camera tween for management
 var _original_camera_offset: Vector2  # Store the camera's original offset from player
-
 
 @onready var story_manager       = StoryManager                                                # assume StoryManager is the parent
 @onready var interact_icon       = $interact_icon
@@ -49,6 +47,14 @@ var _left_button_pressing: bool = false
 var _right_button_pressing: bool = false
 var _left_button_press_timer: float = 0.0
 var _right_button_press_timer: float = 0.0
+
+# Left button improved detection
+var _left_button_cooldown: float = 0.0
+const LEFT_BUTTON_COOLDOWN_DURATION: float = 0.8
+
+# Track player position and velocity
+var _player_positions: Array = []
+const POSITION_HISTORY_LENGTH: int = 3
 
 # — FIRETRUCK REFERENCE & POSITION CLAMPING — 
 @export var firetruck_path : NodePath = "../../firetruck"
@@ -131,7 +137,7 @@ func _ready():
 
 	# 3) Disable both button areas until we explicitly unlock them
 	_buttons_enabled = false
-	left_button_area.monitoring  = false
+	left_button_area.monitoring = false
 	right_button_area.monitoring = false
 
 	# 4) Connect interaction‐area signals (so we can show/hide the "Press E" icon)
@@ -144,7 +150,7 @@ func _ready():
 	_ensure_dialog_connection()
 
 	# 6) Connect the button‐area "body_entered" callbacks
-	left_button_area.body_entered.connect(_on_left_button_pressed)
+	left_button_area.body_entered.connect(_on_left_button_area_body_entered)
 	right_button_area.body_entered.connect(_on_right_button_pressed)
 
 	# 7) Create a one-shot Timer to revert the press texture after 0.6 s
@@ -298,6 +304,43 @@ func _on_interaction_area_body_exited(body):
 		interact_icon.visible = false
 
 
+# This function now tracks player position history instead of immediately triggering
+func _on_left_button_area_body_entered(body: Node) -> void:
+	if not _buttons_enabled or _is_moving:
+		return
+		
+	if body is Player and _left_button_cooldown <= 0:
+		var player_body = body as Player
+		
+		# Store velocity.y to make this consistent with right button
+		if player_body.velocity.y > 0:
+			_trigger_left_button(player_body)
+			_left_button_cooldown = LEFT_BUTTON_COOLDOWN_DURATION
+		elif player_body.velocity.y >= 0 and player_body.slow_falling:
+			# Special case for slow-falling (holding jump button)
+			_trigger_left_button(player_body)
+			_left_button_cooldown = LEFT_BUTTON_COOLDOWN_DURATION
+
+
+func _physics_process(delta):
+	# Update the left button cooldown
+	if _left_button_cooldown > 0:
+		_left_button_cooldown -= delta
+	
+	# Track player position history for fast falls
+	if player and _buttons_enabled and not _is_moving:
+		# Check if player is in left button area but moving too fast
+		var bodies = left_button_area.get_overlapping_bodies()
+		if bodies.has(player) and _left_button_cooldown <= 0:
+			var current_vel_y = player.velocity.y
+			
+			# If player is falling (even fast) through the button
+			if current_vel_y > 50:  # Minimum downward speed threshold
+				# Record that we triggered the button
+				_trigger_left_button(player)
+				_left_button_cooldown = LEFT_BUTTON_COOLDOWN_DURATION
+
+
 func _process(delta):
 	# 1) If player is nearby and presses "interact" (E or Space), start dialog
 	if player_nearby and Input.is_action_just_pressed("interact") and not is_in_dialog:
@@ -392,130 +435,9 @@ func _enable_button_areas() -> void:
 	if _buttons_enabled:
 		return
 	_buttons_enabled = true
-	left_button_area.monitoring  = true
+	left_button_area.monitoring = true
 	right_button_area.monitoring = true
 	print("✅ ButtonAreas unlocked: player can now push the firetruck.")
-
-
-
-
-
-# Update the _pan_camera_to_firetruck function
-func _pan_camera_to_firetruck() -> void:
-	# Get the main camera
-	var camera = get_viewport().get_camera_2d()
-	if not camera or not player:
-		return
-		
-	# Store the original camera offset from player for later restoration
-	_original_camera_offset = camera.global_position - player.global_position
-	
-	# Set cutscene flag
-	in_cutscene = true
-	
-	# Temporarily disable player input
-	if player and player.has_method("disable_input"):
-		player.disable_input(true)
-	elif player:
-		player.disable_player_input = true
-	
-	# Create a tween to move the camera
-	_camera_tween = create_tween()
-	_camera_tween.set_ease(Tween.EASE_IN_OUT)
-	_camera_tween.set_trans(Tween.TRANS_SINE)
-	
-	# Pan to the firetruck
-	_camera_tween.tween_property(camera, "global_position", 
-		firetruck_node.global_position, camera_pan_duration)
-	
-	# Add a pause to watch the truck move
-	_camera_tween.tween_interval(pause_on_truck_duration)
-	
-	# The camera will pan back to the player after the truck finishes moving
-	# This happens in the _process function when _is_moving becomes false
-
-
-
-# Update the _pan_camera_to_player function to use the stored offset
-func _pan_camera_to_player() -> void:
-	# Get the main camera
-	var camera = get_viewport().get_camera_2d()
-	if not camera or not player:
-		in_cutscene = false
-		return
-	
-	# Create a tween to move back to the player with the original offset
-	_camera_tween = create_tween()
-	_camera_tween.set_ease(Tween.EASE_IN_OUT)
-	_camera_tween.set_trans(Tween.TRANS_SINE)
-	
-	# Pan back to the player's position plus the original offset
-	_camera_tween.tween_property(camera, "global_position", 
-		player.global_position + _original_camera_offset, camera_pan_duration)
-	
-	# Re-enable player input when done
-	_camera_tween.tween_callback(func():
-		in_cutscene = false
-		if player and player.has_method("disable_input"):
-			player.disable_input(false)
-		elif player:
-			player.disable_player_input = false
-	)
-
-
-
-func _on_left_button_pressed(body: Node) -> void:
-	if not _buttons_enabled or _is_moving:
-		return
-	if body is Player:
-		# Only if the Player is moving downward
-		var pvel = (body as CharacterBody2D).velocity
-		if pvel.y > 0:
-			# If Player is also in the RIGHT area simultaneously, cancel
-			var right_bodies = right_button_area.get_overlapping_bodies()
-			if right_bodies.has(body):
-				return
-
-			# Compute new candidate X and clamp it
-			var desired_x = firetruck_node.position.x + (-SHIFT_AMOUNT)
-			var min_x = _firetruck_start_x + MAX_LEFT_OFFSET
-			var max_x = _firetruck_start_x + MAX_RIGHT_OFFSET
-			desired_x = clamp(desired_x, min_x, max_x)
-
-			# Only apply if it actually changed
-			if !is_equal_approx(desired_x, firetruck_node.position.x):
-				# Set up smooth movement
-				_move_start_position = firetruck_node.position
-				_move_target_position = Vector2(desired_x, firetruck_node.position.y)
-				_move_time = 0.0
-				_is_moving = true
-				_move_direction = -1  # Moving left
-				
-				# Start button press animation
-				_left_button_pressing = true
-				_left_button_press_timer = 0.0
-				
-				# For the first button press, pan the camera to show the firetruck
-				if _first_button_press:
-					_first_button_press = false
-					_pan_camera_to_firetruck()
-				
-				print("Player fell into LEFT button → Firetruck shifting left to X=", desired_x)
-
-				# Change sprite to the left-press image:
-				print("DEBUG: swapping clean → press_left")
-				if controller_sprite:
-					controller_sprite.texture = press_left_texture
-				else:
-					push_error("⚠️ controller_sprite is null in _on_left_button_pressed()")
-
-				# Restart the 0.6 s timer that will revert to "clean" texture:
-				if not _press_timer.is_stopped():
-					_press_timer.stop()
-				_press_timer.start()
-			else:
-				# Already at the leftmost limit; do nothing
-				pass
 
 
 func _on_right_button_pressed(body: Node) -> void:
@@ -570,6 +492,110 @@ func _on_right_button_pressed(body: Node) -> void:
 			else:
 				# Already at the rightmost limit; do nothing
 				pass
+
+
+# Helper function to trigger the left button
+func _trigger_left_button(body: Player) -> void:
+	if not _buttons_enabled or _is_moving:
+		return
+		
+	# Only apply if it actually changed
+	var desired_x = firetruck_node.position.x + (-SHIFT_AMOUNT)
+	var min_x = _firetruck_start_x + MAX_LEFT_OFFSET
+	var max_x = _firetruck_start_x + MAX_RIGHT_OFFSET
+	desired_x = clamp(desired_x, min_x, max_x)
+	
+	if !is_equal_approx(desired_x, firetruck_node.position.x):
+		# Set up smooth movement
+		_move_start_position = firetruck_node.position
+		_move_target_position = Vector2(desired_x, firetruck_node.position.y)
+		_move_time = 0.0
+		_is_moving = true
+		_move_direction = -1  # Moving left
+		
+		# Start button press animation
+		_left_button_pressing = true
+		_left_button_press_timer = 0.0
+		
+		# For the first button press, pan the camera to show the firetruck
+		if _first_button_press:
+			_first_button_press = false
+			_pan_camera_to_firetruck()
+		
+		print("Player triggered LEFT button → Firetruck shifting left to X=", desired_x)
+
+		# Change sprite to the left-press image:
+		if controller_sprite:
+			controller_sprite.texture = press_left_texture
+		else:
+			push_error("⚠️ controller_sprite is null in _trigger_left_button()")
+
+		# Restart the 0.6 s timer that will revert to "clean" texture:
+		if not _press_timer.is_stopped():
+			_press_timer.stop()
+		_press_timer.start()
+
+
+# Update the _pan_camera_to_firetruck function
+func _pan_camera_to_firetruck() -> void:
+	# Get the main camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera or not player:
+		return
+		
+	# Store the original camera offset from player for later restoration
+	_original_camera_offset = camera.global_position - player.global_position
+	
+	# Set cutscene flag
+	in_cutscene = true
+	
+	# Temporarily disable player input
+	if player and player.has_method("disable_input"):
+		player.disable_input(true)
+	elif player:
+		player.disable_player_input = true
+	
+	# Create a tween to move the camera
+	_camera_tween = create_tween()
+	_camera_tween.set_ease(Tween.EASE_IN_OUT)
+	_camera_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Pan to the firetruck
+	_camera_tween.tween_property(camera, "global_position", 
+		firetruck_node.global_position, camera_pan_duration)
+	
+	# Add a pause to watch the truck move
+	_camera_tween.tween_interval(pause_on_truck_duration)
+	
+	# The camera will pan back to the player after the truck finishes moving
+	# This happens in the _process function when _is_moving becomes false
+
+
+# Update the _pan_camera_to_player function to use the stored offset
+func _pan_camera_to_player() -> void:
+	# Get the main camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera or not player:
+		in_cutscene = false
+		return
+	
+	# Create a tween to move back to the player with the original offset
+	_camera_tween = create_tween()
+	_camera_tween.set_ease(Tween.EASE_IN_OUT)
+	_camera_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Pan back to the player's position plus the original offset
+	_camera_tween.tween_property(camera, "global_position", 
+		player.global_position + _original_camera_offset, camera_pan_duration)
+	
+	# Re-enable player input when done
+	_camera_tween.tween_callback(func():
+		in_cutscene = false
+		if player and player.has_method("disable_input"):
+			player.disable_input(false)
+		elif player:
+			player.disable_player_input = false
+	)
 
 
 func _on_press_timer_timeout() -> void:
