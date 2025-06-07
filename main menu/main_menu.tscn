@@ -6,7 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dhtrequmhtkxu" path="res://main menu/customFont.ttf" id="4_auhsi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldhbh"]
-bg_color = Color(0.184935, 0.133131, 0.104843, 1)
+bg_color = Color(0.184314, 0.133333, 0.105882, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5qo5t"]
 atlas = ExtResource("3_6fy38")
@@ -83,6 +83,16 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ra13p")
+
+[node name="ScreenFade" type="ColorRect" parent="."]
+z_index = 100
+layout_mode = 2
+offset_left = -803.0
+offset_top = -503.0
+offset_right = 802.0
+offset_bottom = 502.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0

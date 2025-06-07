@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkp2eqnon4d7"]
+[gd_scene load_steps=2 format=3 uid="uid://lkjnpi6mmewt"]
 
-[ext_resource type="Script" uid="uid://ckf3v6k65lmva" path="res://main menu/scene_0.gd" id="1_dsgba"]
+[sub_resource type="GDScript" id="GDScript_w2by3"]
+script/source = "extends Control
+var resource = load(\"res://scenes/scene_zero/introduction.dialogue\")
+var dialogue_line = await DialogueManager.get_next_dialogue_line(resource, \"start\")
+"
 
 [node name="Intro Scene" type="Control"]
 layout_mode = 3
@@ -9,4 +13,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dsgba")
+script = SubResource("GDScript_w2by3")

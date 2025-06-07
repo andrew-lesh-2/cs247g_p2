@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://okmavgg7luvf"]
+[gd_scene load_steps=4 format=3 uid="uid://ce7dx00nkv26m"]
 
 [ext_resource type="Script" uid="uid://bmfulj41ipe2r" path="res://scenes/scene_zero/introduction.gd" id="1_4gcsr"]
 [ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/scene_zero/introduction.png" id="2_0tg4w"]
+[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/scene_zero/CalligraphyFLF.ttf" id="3_0tg4w"]
 
 [node name="Introduction" type="Node2D"]
 script = ExtResource("1_4gcsr")
@@ -19,19 +20,52 @@ offset_bottom = 40.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control"]
 layout_mode = 0
-offset_left = 387.0
-offset_top = 184.0
-offset_right = 773.0
-offset_bottom = 570.0
+offset_left = 370.0
+offset_top = 179.0
+offset_right = 780.0
+offset_bottom = 724.0
+theme_override_colors/default_color = Color(0.184314, 0.133333, 0.105882, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("3_0tg4w")
+theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
-text = "This text will not show up on the screen. "
+text = "
+"
 scroll_active = false
 autowrap_mode = 2
 
-[node name="Label" type="Label" parent="."]
-offset_left = 919.0
-offset_top = 753.0
-offset_right = 1253.0
-offset_bottom = 776.0
-theme_override_colors/font_color = Color(0.352941, 0.266667, 0.219608, 1)
-text = "[Hold the spacebar to speed up your story.]"
+[node name="RichTextLabel2" type="RichTextLabel" parent="Control"]
+offset_left = 858.0
+offset_top = 179.0
+offset_right = 1256.0
+offset_bottom = 767.0
+theme_override_colors/default_color = Color(0.184314, 0.133333, 0.105882, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("3_0tg4w")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 466.0
+offset_top = 905.0
+offset_right = 1131.0
+offset_bottom = 954.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.836171, 0.738387, 0.686178, 1)
+text = "Hold the spacebar to speed up your story. Then, press the spacebar to turn the page."
+
+[node name="Screen_Fade" type="ColorRect" parent="Control"]
+visible = false
+layout_mode = 0
+offset_right = 1601.0
+offset_bottom = 997.0
+color = Color(0, 0, 0, 1)
