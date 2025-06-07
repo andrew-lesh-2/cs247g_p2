@@ -262,7 +262,7 @@ func _physics_process(delta):
 			$AnimatedSprite2D.play("jump")
 
 	if normals_enabled:
-		if is_on_floor() and (player_has_input):
+		if is_on_floor() and (player_has_input or not was_on_floor):
 			var angle = get_floor_angle()
 			var normal = get_floor_normal()
 
@@ -277,12 +277,12 @@ func _physics_process(delta):
 				angle = angle
 			else:
 				angle = -angle
-			
+
 			target_angle = angle
 
 		elif is_jump_pressed:
 			target_angle = 0
-		
+
 		rotation = move_toward(rotation, target_angle, .2)
 
 	was_on_floor = is_on_floor()
