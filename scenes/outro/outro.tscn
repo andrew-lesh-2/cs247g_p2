@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl1bdhfkflob1"]
+
+[ext_resource type="Script" uid="uid://06c6hrgu4n5h" path="res://scenes/outro/outro.gd" id="1_6ls5a"]
+[ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/introduction/introduction.png" id="2_lglfs"]
+[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/introduction/CalligraphyFLF.ttf" id="3_uikrw"]
+[ext_resource type="AudioStream" uid="uid://u2wj0pxw5ltu" path="res://audio/music/Lvl0Music.mp3" id="4_imvwe"]
+
+[node name="Outro" type="Node2D"]
+script = ExtResource("1_6ls5a")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1602.0
+offset_bottom = 999.0
+texture = ExtResource("2_lglfs")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 370.0
+offset_top = 179.0
+offset_right = 780.0
+offset_bottom = 724.0
+theme_override_colors/default_color = Color(0.184314, 0.133333, 0.105882, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("3_uikrw")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "
+"
+scroll_active = false
+autowrap_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 858.0
+offset_top = 179.0
+offset_right = 1256.0
+offset_bottom = 767.0
+theme_override_colors/default_color = Color(0.184314, 0.133333, 0.105882, 1)
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("3_uikrw")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 466.0
+offset_top = 905.0
+offset_right = 1131.0
+offset_bottom = 954.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.836171, 0.738387, 0.686178, 1)
+text = "Hold the spacebar to speed up your story. Then, press the spacebar to turn the page."
+
+[node name="Screen_Fade" type="ColorRect" parent="Control"]
+visible = false
+layout_mode = 0
+offset_right = 1601.0
+offset_bottom = 997.0
+color = Color(0, 0, 0, 1)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_imvwe")
+pitch_scale = 0.5
+autoplay = true
