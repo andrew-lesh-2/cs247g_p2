@@ -93,7 +93,15 @@ func start_dialog():
 	
 	DialogSystem.start_dialog({
 			"name": npc_name,
-			"lines": ["Hi I'm the queen", "Here is where i would say a bunch of story stuff regarding my romance with the spider."],
+			"lines": ["Is that... it couldn't be... a ladybug?", "My my... how unexpected. You are far from your home, young traveler.
+			It must have taken no small measure of wit and strength to have reached my chambers.", "...", "What have we here? A letter?
+			How curious... Let's see...", "To Her Majesty, Queen of the Endless Tunnels, From beyond your earthen halls, a humble creature sends their heart.
+			I have seen many wonders beneath leaf and sky, but none so radiant as you. Your voice commands armies, yet it silences mine with awe.
+			Your grace turns soil to silk and duty into art.", "I am no king, no soldier, only a wanderer with growing wings, which I hope will carry me to you.
+			If your heart holds space for one who is not of your kind, then let me wait at your gates and dream until you call.", 
+			"— Yours, if you'll have me A Devoted Stranger", "...", "Little ladybug... will you please convey to this stranger that I would like to meet them
+			in seven days time. I shall be awaiting their presence at the top of the anthill.",  "Thank you for traveling all the way
+			here little ladybug. Now, make haste. I wish you luck on your journey."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
