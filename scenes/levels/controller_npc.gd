@@ -56,6 +56,10 @@ const LEFT_BUTTON_COOLDOWN_DURATION: float = 0.8
 var _player_positions: Array = []
 const POSITION_HISTORY_LENGTH: int = 3
 
+# Player movement control - to disable during button press
+var _player_movement_disabled: bool = false
+var _need_to_restore_player_movement: bool = false
+
 # — FIRETRUCK REFERENCE & POSITION CLAMPING — 
 @export var firetruck_path : NodePath = "../../firetruck"
 @onready var firetruck_node  = get_node(firetruck_path) as Node2D
@@ -97,6 +101,9 @@ var is_in_dialog: bool  = false
 
 # — INTERNAL FLAG TO ENSURE "DUSTY→CLEAN" ONLY RUNS ONCE — 
 var _has_unlocked_buttons: bool = false
+
+# Active button tracking
+var _active_button: String = ""  # "left" or "right"
 
 
 func _ready():
@@ -339,6 +346,10 @@ func _physics_process(delta):
 				# Record that we triggered the button
 				_trigger_left_button(player)
 				_left_button_cooldown = LEFT_BUTTON_COOLDOWN_DURATION
+	
+	# Check if we need to restore player movement when firetruck stops
+	if _player_movement_disabled and not _is_moving:
+		_restore_player_movement()
 
 
 func _process(delta):
@@ -387,13 +398,21 @@ func _process(delta):
 		if progress >= 1.0:
 			_is_moving = false
 			
+			# When truck stops moving, release the buttons
+			if _active_button == "left":
+				_release_left_button()
+			elif _active_button == "right":
+				_release_right_button()
+				
+			_active_button = ""
+			
 			# If camera is still focused on the truck after movement completes
 			# and this was a first-time press demonstration, pan back to player
 			if _first_button_press == false and in_cutscene:
 				_pan_camera_to_player()
 	
-	# 4) Handle left button animation
-	if _left_button_pressing and _left_button_node:
+	# 4) Handle left button animation - only if manually animating release
+	if _left_button_pressing and _left_button_node and _active_button != "left":
 		_left_button_press_timer += delta
 		var progress = min(_left_button_press_timer / button_press_duration, 1.0)
 		
@@ -408,8 +427,8 @@ func _process(delta):
 			_left_button_pressing = false
 			_left_button_node.position = _left_button_original_position
 	
-	# 5) Handle right button animation
-	if _right_button_pressing and _right_button_node:
+	# 5) Handle right button animation - only if manually animating release
+	if _right_button_pressing and _right_button_node and _active_button != "right":
 		_right_button_press_timer += delta
 		var progress = min(_right_button_press_timer / button_press_duration, 1.0)
 		
@@ -460,6 +479,12 @@ func _on_right_button_pressed(body: Node) -> void:
 
 			# Only apply if it actually changed
 			if !is_equal_approx(desired_x, firetruck_node.position.x):
+				# Disable player movement during button press
+				_disable_player_movement()
+				
+				# Remember which button is active
+				_active_button = "right"
+				
 				# Set up smooth movement
 				_move_start_position = firetruck_node.position
 				_move_target_position = Vector2(desired_x, firetruck_node.position.y)
@@ -467,9 +492,8 @@ func _on_right_button_pressed(body: Node) -> void:
 				_is_moving = true
 				_move_direction = 1  # Moving right
 				
-				# Start button press animation
-				_right_button_pressing = true
-				_right_button_press_timer = 0.0
+				# Press the button down immediately
+				_press_right_button()
 				
 				# For the first button press, pan the camera to show the firetruck
 				if _first_button_press:
@@ -485,10 +509,9 @@ func _on_right_button_pressed(body: Node) -> void:
 				else:
 					push_error("⚠️ controller_sprite is null in _on_right_button_pressed()")
 
-				# Restart the 0.6 s timer that will revert to "clean" texture:
+				# Stop the press timer if it's running
 				if not _press_timer.is_stopped():
 					_press_timer.stop()
-				_press_timer.start()
 			else:
 				# Already at the rightmost limit; do nothing
 				pass
@@ -506,6 +529,12 @@ func _trigger_left_button(body: Player) -> void:
 	desired_x = clamp(desired_x, min_x, max_x)
 	
 	if !is_equal_approx(desired_x, firetruck_node.position.x):
+		# Disable player movement during button press
+		_disable_player_movement()
+		
+		# Remember which button is active
+		_active_button = "left"
+		
 		# Set up smooth movement
 		_move_start_position = firetruck_node.position
 		_move_target_position = Vector2(desired_x, firetruck_node.position.y)
@@ -513,9 +542,8 @@ func _trigger_left_button(body: Player) -> void:
 		_is_moving = true
 		_move_direction = -1  # Moving left
 		
-		# Start button press animation
-		_left_button_pressing = true
-		_left_button_press_timer = 0.0
+		# Press the button down immediately
+		_press_left_button()
 		
 		# For the first button press, pan the camera to show the firetruck
 		if _first_button_press:
@@ -530,10 +558,86 @@ func _trigger_left_button(body: Player) -> void:
 		else:
 			push_error("⚠️ controller_sprite is null in _trigger_left_button()")
 
-		# Restart the 0.6 s timer that will revert to "clean" texture:
+		# Stop the press timer if it's running
 		if not _press_timer.is_stopped():
 			_press_timer.stop()
+
+
+# Press the left button down immediately
+func _press_left_button() -> void:
+	if _left_button_node:
+		_left_button_pressing = true
+		_left_button_node.position = _left_button_original_position + Vector2(0, button_press_depth)
+
+
+# Press the right button down immediately
+func _press_right_button() -> void:
+	if _right_button_node:
+		_right_button_pressing = true
+		_right_button_node.position = _right_button_original_position + Vector2(0, button_press_depth)
+
+
+# Release the left button with animation
+func _release_left_button() -> void:
+	if _left_button_node:
+		# Create tween for smooth button release
+		var button_tween = create_tween()
+		button_tween.set_ease(Tween.EASE_OUT)
+		button_tween.set_trans(Tween.TRANS_SINE)
+		
+		# Tween button back to original position
+		button_tween.tween_property(_left_button_node, "position", 
+			_left_button_original_position, 0.3)
+		
+		_left_button_pressing = false
+		
+		# Reset controller sprite
+		if controller_sprite:
+			controller_sprite.texture = clean_texture
+		
+		# Start the press timer to ensure controller resets
 		_press_timer.start()
+
+
+# Release the right button with animation
+func _release_right_button() -> void:
+	if _right_button_node:
+		# Create tween for smooth button release
+		var button_tween = create_tween()
+		button_tween.set_ease(Tween.EASE_OUT)
+		button_tween.set_trans(Tween.TRANS_SINE)
+		
+		# Tween button back to original position
+		button_tween.tween_property(_right_button_node, "position", 
+			_right_button_original_position, 0.3)
+		
+		_right_button_pressing = false
+		
+		# Reset controller sprite
+		if controller_sprite:
+			controller_sprite.texture = clean_texture
+		
+		# Start the press timer to ensure controller resets
+		_press_timer.start()
+
+
+# Disable player movement during button press
+func _disable_player_movement() -> void:
+	if player and not _player_movement_disabled:
+		_player_movement_disabled = true
+		_need_to_restore_player_movement = true
+		player.disable_player_input = true
+		player.velocity = Vector2.ZERO  # Stop all movement
+		print("Player movement disabled during button press")
+
+
+# Restore player movement when button press animation completes
+func _restore_player_movement() -> void:
+	if player and _player_movement_disabled:
+		_player_movement_disabled = false
+		_need_to_restore_player_movement = false
+		player.disable_player_input = false
+		print("Player movement restored after button press")
 
 
 # Update the _pan_camera_to_firetruck function
@@ -600,7 +704,7 @@ func _pan_camera_to_player() -> void:
 
 func _on_press_timer_timeout() -> void:
 	# After 0.6 s, revert from "press" texture back to the normal clean look.
-	# (By this point, story_manager.fed_bedmite must be true, so "clean_texture" is correct.)
+	# This is now only used for controller sprite resets
 	print("DEBUG: _on_press_timer_timeout() → swapping press_* → clean")
 	if controller_sprite:
 		controller_sprite.texture = clean_texture
