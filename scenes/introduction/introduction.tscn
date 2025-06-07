@@ -35,6 +35,7 @@ scroll_active = false
 autowrap_mode = 2
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="Control"]
+layout_mode = 0
 offset_left = 858.0
 offset_top = 179.0
 offset_right = 1256.0
