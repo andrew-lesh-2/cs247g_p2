@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=77 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
 [ext_resource type="Texture2D" uid="uid://d3jvlaf3vd4bh" path="res://assets/sprites/environment/dirt-tiles.png" id="2_l0qe0"]
@@ -32,15 +32,16 @@
 [ext_resource type="Script" uid="uid://c1hqafqifxfer" path="res://scripts/ant_bodyguard_3.gd" id="25_swnf8"]
 [ext_resource type="Script" uid="uid://8ox23oebqaf3" path="res://scripts/berry.gd" id="28_w3eij"]
 [ext_resource type="Texture2D" uid="uid://vpfg38m7vit0" path="res://assets/sprites/characters/ant-hurt-sheet.png" id="29_mwbdr"]
-[ext_resource type="PackedScene" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
+[ext_resource type="PackedScene" uid="uid://chalo2tpf3ich" path="res://scenes/environment/daisy.tscn" id="31_fpnma"]
 [ext_resource type="Texture2D" uid="uid://bbm7v6kb84qwa" path="res://assets/sprites/environment/fog.png" id="32_7yp5p"]
-[ext_resource type="Script" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
+[ext_resource type="Script" uid="uid://dt2nmdaq1561t" path="res://scripts/VisibleOnScreenAreaVisualizer.gd" id="32_sb0m0"]
 [ext_resource type="Shader" uid="uid://brecjac0oyxsa" path="res://shader/try2.gdshader" id="34_cup7h"]
 [ext_resource type="Texture2D" uid="uid://b0qekr2vt1sq" path="res://assets/sprites/environment/tiny-bug.png" id="34_tpxpk"]
 [ext_resource type="Script" uid="uid://c8b76lkk6l6bk" path="res://scripts/daisy_mission.gd" id="35_m8xwd"]
-[ext_resource type="Script" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
+[ext_resource type="Script" uid="uid://csjpkx7mwq4i3" path="res://scripts/utility/multi_sprite_glow_effect.gd" id="37_hsis4"]
 [ext_resource type="Script" uid="uid://c6qdusesj3hwd" path="res://scripts/queen.gd" id="39_sfnal"]
 [ext_resource type="Texture2D" uid="uid://dh8c5jsscdwg0" path="res://assets/sprites/characters/caterpillar.png" id="41_kl26y"]
+[ext_resource type="Script" uid="uid://c4g7bundcxuch" path="res://scenes/levels/caterpillar.gd" id="42_oi410"]
 [ext_resource type="Texture2D" uid="uid://cgfgkxkmcmbhk" path="res://assets/sprites/environment/inside_wall.png" id="43_05qi3"]
 [ext_resource type="PackedScene" uid="uid://blevhrxm7afsp" path="res://scenes/environment/foreground_leaves.tscn" id="43_8ss6g"]
 [ext_resource type="PackedScene" uid="uid://bnm5m4ehdsn3y" path="res://scenes/environment/background_leaves.tscn" id="44_oi410"]
@@ -1002,6 +1003,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8ss6g"]
+size = Vector2(113, 87)
+
 [node name="OutdoorLevel" type="Node2D"]
 
 [node name="static" type="Node2D" parent="."]
@@ -1769,7 +1773,7 @@ position = Vector2(1920, -719)
 texture = ExtResource("16_pw41a")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(399, 217)
+position = Vector2(-1003, -1222)
 god_mode = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -5094,11 +5098,31 @@ position = Vector2(-325, 1363)
 texture = ExtResource("11_lsp5i")
 script = ExtResource("15_6so22")
 
-[node name="caterpillar" type="AnimatedSprite2D" parent="StoryManager"]
-position = Vector2(-787, -1172)
+[node name="Caterpillar" type="Node2D" parent="StoryManager"]
+script = ExtResource("42_oi410")
+
+[node name="caterpillar" type="AnimatedSprite2D" parent="StoryManager/Caterpillar"]
+position = Vector2(-787, -1169)
 scale = Vector2(-1, 1)
 sprite_frames = SubResource("SpriteFrames_b3uru")
 autoplay = "default"
+frame_progress = 0.738711
+
+[node name="InteractionArea" type="Area2D" parent="StoryManager/Caterpillar"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Caterpillar/InteractionArea"]
+position = Vector2(-794.5, -1176.5)
+shape = SubResource("RectangleShape2D_8ss6g")
+
+[node name="interact_icon" type="Sprite2D" parent="StoryManager/Caterpillar"]
+position = Vector2(-790, -1204)
+texture = ExtResource("11_lsp5i")
+script = ExtResource("15_6so22")
+
+[node name="mission_icon" type="Sprite2D" parent="StoryManager/Caterpillar"]
+position = Vector2(0, -24)
+texture = ExtResource("14_bvc21")
+script = ExtResource("15_6so22")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 
@@ -5158,7 +5182,7 @@ scroll_offset = Vector2(-639, -1146)
 [node name="Background Leaves6" parent="." instance=ExtResource("44_oi410")]
 z_index = -14
 rotation = 0.244989
-scroll_offset = Vector2(-915, -1221)
+scroll_offset = Vector2(-907, -1207)
 
 [node name="Background Leaves7" parent="." instance=ExtResource("44_oi410")]
 z_index = -14
