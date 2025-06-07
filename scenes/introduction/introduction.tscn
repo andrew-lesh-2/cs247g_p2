@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://ce7dx00nkv26m"]
 
-[ext_resource type="Script" uid="uid://bmfulj41ipe2r" path="res://scenes/scene_zero/introduction.gd" id="1_4gcsr"]
-[ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/scene_zero/introduction.png" id="2_0tg4w"]
-[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/scene_zero/CalligraphyFLF.ttf" id="3_0tg4w"]
+[ext_resource type="Script" uid="uid://bmfulj41ipe2r" path="res://scenes/introduction/introduction.gd" id="1_4gcsr"]
+[ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/introduction/introduction.png" id="2_0tg4w"]
+[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/introduction/CalligraphyFLF.ttf" id="3_0tg4w"]
 
 [node name="Introduction" type="Node2D"]
 script = ExtResource("1_4gcsr")
