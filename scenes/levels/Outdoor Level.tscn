@@ -1134,7 +1134,7 @@ region_enabled = true
 region_rect = Rect2(163.75, 40.9261, 14.7103, 15.2761)
 
 [node name="Sprite2D10" type="Sprite2D" parent="static/decals"]
-position = Vector2(972, 330)
+position = Vector2(985, 309)
 texture = ExtResource("9_78ots")
 region_enabled = true
 region_rect = Rect2(163.75, 40.9261, 14.7103, 15.2761)

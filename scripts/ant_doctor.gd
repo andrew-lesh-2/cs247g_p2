@@ -108,7 +108,7 @@ func start_dialog():
 				"How are you today?",
 				"Probably doing better than my patient over here!",
 				"Speaking of, I need some daisy petals to make the treatment for these wounds, but we just ran out.",
-				"Could you run to the surfact for me and see if you can find any daisys? It'd be a huge help."],
+				"Could you run to the surface for me and see if you can find any daisys? It'd be a huge help."],
 			"name_color": name_color,
 			"voice_sound_path": voice_sound_path
 		}, npc_id)
