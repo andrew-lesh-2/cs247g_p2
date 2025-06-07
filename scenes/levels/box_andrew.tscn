@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=84 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://cjgqu5423r2ij" path="res://assets/sprites/environment/toy_ball.png" id="12_q703s"]
 [ext_resource type="Texture2D" uid="uid://fy5v37rs3200" path="res://assets/sprites/environment/firetruck.png" id="13_nu56h"]
 [ext_resource type="Texture2D" uid="uid://dsmvnmafay0if" path="res://assets/sprites/environment/tire.png" id="14_5st5h"]
+[ext_resource type="Script" uid="uid://dtnj5disvj8g2" path="res://scenes/levels/xylophone.gd" id="14_sfeqx"]
+[ext_resource type="Texture2D" uid="uid://bodnowc2yda6y" path="res://assets/sprites/environment/xylophone1.png" id="15_7f8rb"]
 [ext_resource type="Script" uid="uid://bkyx72a1tntdc" path="res://scenes/levels/grasshopper_npc.gd" id="15_bp465"]
 [ext_resource type="Texture2D" uid="uid://bsltygpr8b7c0" path="res://assets/sprites/characters/grasshopper-sheet.png" id="15_go8vh"]
 [ext_resource type="Texture2D" uid="uid://ckb6ndpmq4x" path="res://assets/sprites/environment/interact-icon.png" id="16_bp465"]
@@ -110,6 +112,15 @@ size = Vector2(7, 9)
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_7f8rb"]
 a = Vector2(-144, 108)
 b = Vector2(-176, 169)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n524o"]
+size = Vector2(226, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t43ob"]
+size = Vector2(36, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nj4uo"]
+size = Vector2(32, 25.5)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cg78y"]
 atlas = ExtResource("15_go8vh")
@@ -395,7 +406,6 @@ rendering_quadrant_size = 32
 [node name="toy bin" type="Node2D" parent="."]
 
 [node name="bin-front" type="Sprite2D" parent="toy bin"]
-visible = false
 z_index = 7
 position = Vector2(-713, 190)
 texture = ExtResource("9_aw1sg")
@@ -553,7 +563,87 @@ texture = ExtResource("14_5st5h")
 
 [node name="bed" type="Node2D" parent="."]
 
-[node name="piano" type="Node2D" parent="."]
+[node name="xylophone" type="Node2D" parent="."]
+script = ExtResource("14_sfeqx")
+
+[node name="Sprite2D" type="Sprite2D" parent="xylophone"]
+position = Vector2(-2101, 285)
+texture = ExtResource("15_7f8rb")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="xylophone/Sprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/Sprite2D/StaticBody2D"]
+position = Vector2(0, 13.5)
+shape = SubResource("RectangleShape2D_n524o")
+
+[node name="ButtonAreas" type="Node2D" parent="xylophone"]
+
+[node name="Button2" type="StaticBody2D" parent="xylophone/ButtonAreas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/ButtonAreas/Button2"]
+position = Vector2(-2005, 275)
+shape = SubResource("RectangleShape2D_t43ob")
+
+[node name="Button3" type="StaticBody2D" parent="xylophone/ButtonAreas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/ButtonAreas/Button3"]
+position = Vector2(-2053, 278)
+shape = SubResource("RectangleShape2D_t43ob")
+
+[node name="Button4" type="StaticBody2D" parent="xylophone/ButtonAreas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/ButtonAreas/Button4"]
+position = Vector2(-2101, 281)
+shape = SubResource("RectangleShape2D_t43ob")
+
+[node name="Button5" type="StaticBody2D" parent="xylophone/ButtonAreas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/ButtonAreas/Button5"]
+position = Vector2(-2149, 282)
+shape = SubResource("RectangleShape2D_t43ob")
+
+[node name="Button6" type="StaticBody2D" parent="xylophone/ButtonAreas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/ButtonAreas/Button6"]
+position = Vector2(-2197, 283)
+shape = SubResource("RectangleShape2D_t43ob")
+
+[node name="DetectionAreas" type="Node2D" parent="xylophone"]
+
+[node name="area6" type="Area2D" parent="xylophone/DetectionAreas"]
+position = Vector2(-2196.5, 272.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/DetectionAreas/area6"]
+position = Vector2(-0.5, -2.75)
+shape = SubResource("RectangleShape2D_nj4uo")
+
+[node name="area5" type="Area2D" parent="xylophone/DetectionAreas"]
+position = Vector2(-2196.5, 272.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/DetectionAreas/area5"]
+position = Vector2(47.5, -3.5)
+shape = SubResource("RectangleShape2D_nj4uo")
+
+[node name="area4" type="Area2D" parent="xylophone/DetectionAreas"]
+position = Vector2(-2196.5, 272.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/DetectionAreas/area4"]
+position = Vector2(95.5, -5.5)
+shape = SubResource("RectangleShape2D_nj4uo")
+
+[node name="area3" type="Area2D" parent="xylophone/DetectionAreas"]
+position = Vector2(-2196.5, 272.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/DetectionAreas/area3"]
+position = Vector2(143.5, -7.5)
+shape = SubResource("RectangleShape2D_nj4uo")
+
+[node name="area2" type="Area2D" parent="xylophone/DetectionAreas"]
+position = Vector2(-2196.5, 272.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="xylophone/DetectionAreas/area2"]
+position = Vector2(191.5, -9.5)
+shape = SubResource("RectangleShape2D_nj4uo")
 
 [node name="Node2D" type="Node2D" parent="."]
 
@@ -1059,7 +1149,6 @@ polygon = PackedVector2Array(-27.5114, -26.7023, -24.2748, -10.5191, -16.9924, -
 polygon = PackedVector2Array(-25.8931, 3.23662, -33.1756, 1.6183, -41.2672, 2.42746, -46.1221, 8.09158, -47.7404, 13.7557, -46.1221, 17.8015, -42.0763, 21.8473, -37.2214, 23.4656, -30.7481, 22.6565, -25.8931, 21.0382)
 
 [node name="wallpaper" type="TileMapLayer" parent="."]
-visible = false
 z_index = -3
 position = Vector2(32, 0)
 tile_map_data = PackedByteArray("AAADAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD7/wAAAAAAAAAAAAD6/wAAAAAAAAAAAAD5/wAAAAAAAAAAAAD4/wAAAAAAAAAAAAADAP//AAAAAAAAAAACAP//AAAAAAAAAAABAP//AAAAAAAAAAAAAP//AAAAAAAAAAD/////AAAAAAAAAAD+////AAAAAAAAAAD9////AAAAAAAAAAD8////AAAAAAAAAAD7////AAAAAAAAAAD6////AAAAAAAAAAD5////AAAAAAAAAAD4////AAAAAAAAAAD3////AAAAAAAAAAD3/wAAAAAAAAAAAAD2////AAAAAAAAAAD1////AAAAAAAAAAD0/wAAAAAAAAAAAAD0////AAAAAAAAAADz////AAAAAAAAAADz/wAAAAAAAAAAAADx////AAAAAAAAAADw////AAAAAAAAAADv////AAAAAAAAAADu////AAAAAAAAAADt////AAAAAAAAAADs////AAAAAAAAAADs/wAAAAAAAAAAAADr////AAAAAAAAAADr/wAAAAAAAAAAAADq/wAAAAAAAAAAAADq////AAAAAAAAAADp/wAAAAAAAAAAAADp////AAAAAAAAAADo////AAAAAAAAAADo/wAAAAAAAAAAAADn////AAAAAAAAAADn/wAAAAAAAAAAAADm/wAAAAAAAAAAAADm////AAAAAAAAAADl////AAAAAAAAAADl/wAAAAAAAAAAAADk/wAAAAAAAAAAAADk////AAAAAAAAAAD2/wAAAAAAAAAAAAD1/wAAAAAAAAAAAADy////AAAAAAAAAAD8/wAAAAAAAAAAAADy/wAAAAAAAAAAAADx/wAAAAAAAAAAAADw/wAAAAAAAAAAAADv/wAAAAAAAAAAAADu/wAAAAAAAAAAAADt/wAAAAAAAAAAAADj/wAAAAAAAAAAAADi/wAAAAAAAAAAAADh/wAAAAAAAAAAAADj////AAAAAAAAAADi////AAAAAAAAAADh////AAAAAAAAAADg////AAAAAAAAAADf////AAAAAAAAAADg/wAAAAAAAAAAAADf/wAAAAAAAAAAAAA=")
