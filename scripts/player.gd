@@ -19,8 +19,8 @@ var prev_virtual_jump_pressed: bool = false
 @export var interact_action : String = "interact"
 
 # — MOVEMENT TUNING —
-@export var SPEED               = 50.0
-@export var JUMP_VELOCITY       = -250.0
+@export var SPEED               = 150.0
+@export var JUMP_VELOCITY       = -350.0
 @export var WALL_SLIDE_SPEED    = 30.0
 @export var WALL_JUMP_H_SPEED   = 300.0
 @export var WALL_JUMP_Y_DEBUFF  = 0.85

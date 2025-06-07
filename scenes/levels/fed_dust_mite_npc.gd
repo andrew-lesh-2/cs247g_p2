@@ -76,7 +76,7 @@ func _update_visibility():
 				interact_icon.visible = false
 			
 	# Debug output
-	print("Fed dust mite visibility updated to: ", should_be_visible)
+	#print("Fed dust mite visibility updated to: ", should_be_visible)
 
 func _ensure_dialog_connection():
 	# We rely on DialogSystem existing at /root/DialogSystem

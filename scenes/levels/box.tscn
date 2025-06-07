@@ -19,7 +19,6 @@ size = Vector2(140, 94)
 [node name="Player" parent="." instance=ExtResource("2_gcbv1")]
 z_index = 1
 position = Vector2(-45, 33)
-JUMP_VELOCITY = -350.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(45, -33)

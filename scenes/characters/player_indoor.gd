@@ -1,7 +1,7 @@
 # Player.gd
 extends CharacterBody2D
 
-class_name Player
+#class_name Player
 
 @export var god_mode: bool = false
 
