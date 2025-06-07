@@ -33,6 +33,7 @@ var was_on_wall      : bool  = false
 var was_on_floor     : bool  = false
 const ROTATE_TIME = 0.1
 var rotate_timer = 0.0
+var last_position = Vector2.ZERO
 
 # — GRAVITY —
 var gravity           = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -58,6 +59,7 @@ var particles_offset_left  = Vector2(-12, 0)
 
 # — DIALOG PAUSE —
 var can_move = true
+var target_angle = 0.0
 
 # — JUMP SOUND —
 @onready var jump_sound_player = AudioStreamPlayer.new()
@@ -69,8 +71,14 @@ var can_move = true
 # — RIGIDBODY PUSH SETTINGS — (Added from old script)
 @export var PUSH_FACTOR: float = 2.0  # Increased from 0.5 for better pushing
 @export var MIN_PUSH_SPEED: float = 50.0  # Minimum push force even when standing still
+@export var SNAP_LOCK_TIME: float = 0.3
 
 @export var normals_enabled = true
+
+# Toggle for velocity arrow
+@export var show_velocity_arrow: bool = false
+# Toggle for collider shape rendering
+@export var show_collider_shape: bool = false
 
 func _ready():
 	add_to_group("player")
@@ -100,14 +108,20 @@ func play_jump_sound(is_double_jump: bool = false):
 
 var slow_falling = false
 
+var impulse_vector = Vector2.ZERO
+var jump_timer = 0.0
+var jumping = false
+
 func _physics_process(delta):
 	# — tick down the wall‐jump input lock —
 	var input_result = _handle_input()
 	var dir = input_result[0]
 	var is_jump_pressed = input_result[1]
 	var is_jump_just_pressed = input_result[2]
+	var player_has_input = (dir != 0) or is_jump_pressed
 
 	rotate_timer = max(0.0, rotate_timer - delta)
+	jump_timer = max(0.0, jump_timer - delta)
 	wall_jump_lock_timer = max(0.0, wall_jump_lock_timer - delta)
 
 	# — pause during dialog —
@@ -117,11 +131,14 @@ func _physics_process(delta):
 
 	# — floor vs air & coyote‐time —
 	var on_floor = is_on_floor()
+
 	if on_floor:
 		has_double_jumped  = false
 		is_wall_jumping    = false
 		coyote_timer       = 0.0
 		last_wall_jump_dir = 0.0  # Reset last wall jump direction when on ground
+		if jump_timer == 0:
+			jumping = false
 	else:
 		coyote_timer += delta
 
@@ -175,10 +192,14 @@ func _physics_process(delta):
 	# — handle jumping / wall‐jump / double‐jump —
 	if is_jump_just_pressed:
 		if on_floor or coyote_timer < coyote_time:
+			jump_timer = SNAP_LOCK_TIME
+			jumping = true
 			velocity = -Vector2.UP * JUMP_VELOCITY  # Unchanged from original
 			coyote_timer = coyote_time
 			play_jump_sound(false)
 		elif on_wall and wall_dir != last_wall_jump_dir:
+			jump_timer = SNAP_LOCK_TIME
+			jumping = true
 			is_wall_jumping    = true
 			velocity.y         = WALL_JUMP_Y_DEBUFF * JUMP_VELOCITY
 			velocity.x         = wall_dir * WALL_JUMP_H_SPEED
@@ -186,6 +207,8 @@ func _physics_process(delta):
 			last_wall_jump_dir   = wall_dir  # Store direction of this wall jump
 			play_jump_sound(false)
 		elif not has_double_jumped:
+			jump_timer = SNAP_LOCK_TIME
+			jumping = true
 			velocity.y        = JUMP_VELOCITY * 0.8
 			has_double_jumped = true
 			play_jump_sound(true)
@@ -193,11 +216,12 @@ func _physics_process(delta):
 	# — horizontal movement & animations —
 	if wall_jump_lock_timer <= 0.0:
 		if dir != 0:
-			velocity.x                = dir * SPEED
+			velocity.x = dir * SPEED
 			$AnimatedSprite2D.flip_h  = dir < 0
 			if on_floor:
 				$AnimatedSprite2D.play("walk")
 		else:
+			impulse_vector = Vector2.ZERO
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			if on_floor:
 				$AnimatedSprite2D.play("idle")
@@ -208,7 +232,7 @@ func _physics_process(delta):
 
 	# Handle wall rotation and sprite position
 	if on_wall and velocity.y > 0:
-		$AnimatedSprite2D.rotation_degrees = 90 * wall_dir
+		$AnimatedSprite2D.rotation_degrees = (90 - (180 * rotation / PI)) * wall_dir
 		particles.emitting = true
 		# Offset sprite in the direction of the wall
 		if wall_dir == -1:
@@ -229,22 +253,37 @@ func _physics_process(delta):
 		$AnimatedSprite2D.position = Vector2.ZERO
 
 	if not on_floor:
+		if normals_enabled:
+			if not jumping and not on_wall and not is_on_ceiling():
+				apply_floor_snap()
 		if slow_falling and not is_jump_just_pressed:
 			$AnimatedSprite2D.play("fly")
 		else:
 			$AnimatedSprite2D.play("jump")
 
 	if normals_enabled:
-		if is_on_floor() and rotate_timer == 0.0 and (dir != 0 or not was_on_floor):
+		if is_on_floor() and (player_has_input):
+			var angle = get_floor_angle()
 			var normal = get_floor_normal()
-			print(normal)
-			rotate_timer = ROTATE_TIME
+
+			print(angle)
 			# For a flat floor, normal is usually (0, -1)
 			# You can use this to rotate your sprite:
-			rotation = normal.angle() + PI/2
-		elif rotate_timer == 0.0 and dir != 0:
-			rotate_timer = ROTATE_TIME
-			rotation = 0
+			if angle < PI / 5:
+				target_angle = 0
+
+
+			if normal.x > 0:
+				angle = angle
+			else:
+				angle = -angle
+			
+			target_angle = angle
+
+		elif is_jump_pressed:
+			target_angle = 0
+		
+		rotation = move_toward(rotation, target_angle, .2)
 
 	was_on_floor = is_on_floor()
 
@@ -262,27 +301,29 @@ func _physics_process(delta):
 		var collider = col.get_collider()
 		if collider is RigidBody2D:
 			var rb = collider as RigidBody2D
-			
+
 			# Calculate direction from player to rigidbody
 			var push_direction = (rb.global_position - global_position).normalized()
-			
+
 			# Get player's speed, with a minimum value to ensure pushing works even when stationary
 			var speed = max(abs(velocity.x), MIN_PUSH_SPEED)
-			
+
 			# Create push vector with primarily horizontal force but some vertical component
 			# This makes the pushing more natural and helps objects move up slopes
 			var push_vector = Vector2(
 				push_direction.x * speed * PUSH_FACTOR * rb.mass,
 				push_direction.y * speed * 0.5 * rb.mass
 			)
-			
+
 			# Apply impulse at contact point for more natural physics
 			var contact_point = col.get_position() - rb.global_position
 			rb.apply_impulse(push_vector, contact_point)
-			
+
 			# For very lightweight objects, add a central impulse as well
 			if rb.mass < 1.0:
 				rb.apply_central_impulse(push_vector * 0.5)
+
+	queue_redraw() # Ensure _draw is called every frame
 
 func _handle_input():
 	if disable_player_input:
@@ -327,3 +368,42 @@ func _on_dialog_started(_npc_id):
 
 func _on_dialog_finished(_npc_id):
 	can_move = true
+
+func _draw():
+	if show_velocity_arrow and impulse_vector.length() > 1.0:
+		var arrow_color = Color(0.2, 0.4, 1.0, 0.8)
+		var start = Vector2.ZERO
+		var scale = 0.4 # Adjust for visual size
+		var end = (impulse_vector.rotated(-rotation)) * scale
+		# Draw main line
+		draw_line(start, end, arrow_color, 3.0)
+		# Draw arrowhead
+		var arrow_len = 18.0
+		var arrow_angle = 0.5
+		var dir = (end - start).normalized()
+		var left = end - dir.rotated(arrow_angle) * arrow_len
+		var right = end - dir.rotated(-arrow_angle) * arrow_len
+		draw_polygon([end, left, right], [arrow_color])
+
+	if show_collider_shape:
+		var collider = $CollisionShape2D if has_node("CollisionShape2D") else null
+		if collider and collider.shape:
+			var shape = collider.shape
+			var col_pos = collider.position
+			var col_rot = collider.rotation
+			var col_color = Color(0.2, 1.0, 0.2, 0.4)
+
+			# Approximate with two circles and a rect
+			var r = shape.radius
+			var h = shape.height - (2 * r)
+			var up = Vector2.UP.rotated(col_rot)
+			var down = Vector2.DOWN.rotated(col_rot)
+			var center = col_pos
+			var top = center + up * h/2
+			var bottom = center + down * h/2
+			draw_circle(top, r, col_color)
+			draw_circle(bottom, r, col_color)
+			# Draw the body as a rect
+			var rect_center = center
+			var rect_size = Vector2(h, r*2)
+			draw_rect(Rect2(rect_center - Vector2(r, h/2), rect_size), col_color, true, col_rot)
