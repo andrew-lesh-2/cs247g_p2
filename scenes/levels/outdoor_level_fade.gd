@@ -7,13 +7,25 @@ extends Node2D
 @export var initial_hold_time: float = 0.5  # Time to stay black before starting fade
 @export var fade_in_duration: float = 1.5   # How long the actual fade takes
 
+# Music settings
+@export_group("Music Settings")
+@export_file("*.mp3") var music_path: String = "res://audio/music/Lvl2-3Music.mp3"
+@export_range(0.0, 1.0) var music_volume: float = 0.4
+@export var music_loop: bool = true
+
 # Fade overlay
 var fade_overlay: ColorRect
 var fade_tween: Tween
 
+# Music player
+var music_player: AudioStreamPlayer
+
 func _ready() -> void:
 	# Create and set up the fade overlay
 	_setup_fade_overlay()
+	
+	# Set up music player
+	setup_music()
 	
 	# Start the fade-in effect immediately
 	_start_fade_in()
@@ -35,6 +47,31 @@ func _setup_fade_overlay() -> void:
 	
 	# Add to scene
 	add_child(overlay_layer)
+
+# Set up music player
+func setup_music() -> void:
+	# Create a new AudioStreamPlayer
+	music_player = AudioStreamPlayer.new()
+	add_child(music_player)
+	
+	# Load the music file
+	if music_path.is_empty():
+		push_warning("No music file specified in level script")
+		return
+		
+	var music_resource = load(music_path)
+	if music_resource is AudioStream:
+		music_player.stream = music_resource
+		music_player.volume_db = linear_to_db(music_volume)
+		
+		# Set loop property if it's an MP3
+		if music_resource is AudioStreamMP3:
+			music_resource.loop = music_loop
+			
+		# Start playing the music
+		music_player.play()
+	else:
+		push_error("Could not load music file: " + music_path)
 
 # Start the fade-in animation with initial hold time
 func _start_fade_in() -> void:
@@ -87,3 +124,20 @@ func fade_out(duration: float = 1.5, hold_time: float = 0.5, callback: Callable 
 	# Execute the callback when the fade completes
 	if callback.is_valid():
 		fade_tween.tween_callback(callback)
+
+# Methods to control music during gameplay
+func pause_music() -> void:
+	if music_player:
+		music_player.stream_paused = true
+
+func resume_music() -> void:
+	if music_player:
+		music_player.stream_paused = false
+
+func stop_music() -> void:
+	if music_player:
+		music_player.stop()
+
+func set_music_volume(volume: float) -> void:
+	if music_player:
+		music_player.volume_db = linear_to_db(clamp(volume, 0.0, 1.0))
