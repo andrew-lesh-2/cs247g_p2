@@ -13,6 +13,9 @@ extends Node2D
 		for callback in callbacks["mite_mission_active"].values():
 			callback.call(value)
 
+# caterpillar mission
+@export var met_caterpillar = false
+
 
 @export var can_enter_anthill: bool = false
 

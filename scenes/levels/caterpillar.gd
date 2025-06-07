@@ -41,17 +41,43 @@ func start_dialog():
 		push_error("Cannot start dialog: DialogSystem not found!")
 		return
 
-	# if story_manager.<your_story_variable>:
-	# 	dialog with you specific lines for that scenario
-
-	# else:
-
-	DialogSystem.start_dialog({
-		"name": npc_name,
-		"lines": ["Hi I'm a caterpillar", "Write my lines here"],
-		"name_color": name_color,
-		"voice_sound_path": voice_sound_path
-	}, npc_id)
+	if story_manager.met_caterpillar:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["You can get to the anthill by traveling down the tree.", "Please deliver my love letter to the queen! I'll be eating away these leaves while I await your return. Hehe."],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		
+	if story_manager.met_caterpillar and story_manager.met_queen:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["SO?! What did she think?!", "...", "YOU DID IT LITTLE LADYBUG! YOU ARE A HERO!", "...",
+			 "She wants to meet me? Well... I guess I better start forming my chrysalis. Good thing I ate all these leaves!",
+			"Well little ladybug... I must get big and strong for the lady so that she doesn't realize you totally lied to her!",
+			"Now, just crawl up on top of the tree, and you should be able to find your path back home.",
+			"Best of luck on your journey. I hope we run into each other again very soon -- maybe you won't recognize me at first,
+			but I promise I'll never forget you!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		
+	else:
+		DialogSystem.start_dialog({
+			"name": npc_name,
+			"lines": ["A LADYBUG?!", "My my you must be very far away from home, how did you get all the way up here?", "...",
+			"Ah. It sounds like the child abducted you. It happens to all of us -- that's how I ended up here. Glad you could escape from the box!",
+			"So, are you on your way back home?", "...", "I see. You don't know how to get back home.",
+			 "How about this! I'll make you a deal.", "You see, I'm in love... but this woman.. she's such a... woman.",
+			"And look at me! I'm just a little caterpillar!", "I wrote this love letter... but every time I try to enter the anthill I get lost.",
+			"If you deliver this love letter to the Queen Ant, I'll eat the leaves above us to clear a path, and then you'll be able to see a route back home!", 
+			"How about it little ladybug, you up for the challenge?", "...", "GREAT! Come back once you've delivered it, and tell me what she thinks!", 
+			"Maybe... don't mention my size. Just tell her the letter is from someone BIG and STRONG and SMART. Soon enough I'll be a butterfly, so it'll be true!"],
+			"name_color": name_color,
+			"voice_sound_path": voice_sound_path
+		}, npc_id)
+		story_manager.met_caterpillar = true
+	
 
 func _on_interaction_area_body_entered(body):
 	if body is Player:
