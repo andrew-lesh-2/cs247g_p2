@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://bo20mc5ib1ose"]
+
+[ext_resource type="Script" uid="uid://355bjycxr8fx" path="res://scenes/ui/chat_panel.gd" id="1_pewee"]
+[ext_resource type="Texture2D" uid="uid://cijl7jf2su73n" path="res://assets/sprites/ui/ui-panel.png" id="1_tj62s"]
+[ext_resource type="FontFile" uid="uid://blekrn7pygh7m" path="res://fonts/pixel_operator (1)/PixelOperator8-Bold.ttf" id="3_dd1gj"]
+[ext_resource type="FontFile" uid="uid://oxjmlxh16kcp" path="res://fonts/pixel_operator (1)/PixelOperatorMono.ttf" id="4_00fe4"]
+[ext_resource type="Texture2D" uid="uid://pbvvwkanbf8v" path="res://assets/sprites/characters/caterpillar-portrait.png" id="5_6vf85"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pewee"]
+texture = ExtResource("1_tj62s")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="UiPanel" type="Control"]
+process_mode = 3
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 156.0
+script = ExtResource("1_pewee")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 156.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_pewee")
+
+[node name="Name" type="RichTextLabel" parent="Panel"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 110.0
+offset_right = 130.06
+offset_bottom = 150.0
+scale = Vector2(0.81, 0.81)
+theme_override_fonts/normal_font = ExtResource("3_dd1gj")
+theme_override_font_sizes/normal_font_size = 8
+text = "Name"
+fit_content = true
+
+[node name="dialog" type="RichTextLabel" parent="Panel"]
+clip_contents = false
+layout_mode = 0
+offset_left = 116.0
+offset_top = 35.0
+offset_right = 346.0
+offset_bottom = 135.0
+scale = Vector2(0.71, 0.71)
+theme_override_fonts/normal_font = ExtResource("4_00fe4")
+theme_override_font_sizes/normal_font_size = 16
+text = "Name"
+
+[node name="hint" type="RichTextLabel" parent="Panel"]
+clip_contents = false
+layout_mode = 0
+offset_left = 135.0
+offset_top = 113.0
+offset_right = 365.0
+offset_bottom = 213.0
+scale = Vector2(0.71, 0.71)
+theme_override_fonts/normal_font = ExtResource("4_00fe4")
+theme_override_font_sizes/normal_font_size = 16
+text = "Press 'E' to Continue"
+
+[node name="Caterpillar" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("5_6vf85")
