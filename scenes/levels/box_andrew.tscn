@@ -257,7 +257,7 @@ sources/0 = SubResource("TileSetAtlasSource_dpy1m")
 radius = 21.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kjx4e"]
-size = Vector2(512, 32)
+size = Vector2(512, 23)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nrm5j"]
 texture = ExtResource("30_cbhfm")
@@ -1191,7 +1191,7 @@ texture = ExtResource("26_dpy1m")
 [node name="StaticBody2D" type="StaticBody2D" parent="Window/Sprite2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Window/Sprite2D/StaticBody2D"]
-position = Vector2(0, 240)
+position = Vector2(0, 244.5)
 shape = SubResource("RectangleShape2D_kjx4e")
 
 [node name="Legs" type="TileMapLayer" parent="."]

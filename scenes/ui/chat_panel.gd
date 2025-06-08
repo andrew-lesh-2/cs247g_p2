@@ -42,6 +42,7 @@ var lines = []
 var get_player_input : bool = false
 
 var voice_sound_player = null
+var first_action_ignored = false
 @onready var voice_sound = load('res://audio/voices/voice_Papyrus.wav')
 
 func _ready():
@@ -57,6 +58,7 @@ func reset():
 	word_timer = 0
 	current_char = 0
 	current_line = 0
+	first_action_ignored = false
 	get_player_input = false
 	lines = []
 	dialog.text = ""
@@ -77,14 +79,13 @@ func _process(delta):
 
 
 	var user_action = Input.is_action_just_pressed("interact")
-	var speed_up = Input.is_action_pressed("interact")
+	
+	word_timer += delta
+	sound_timer += delta
 
-	var time_multiplier = 1
-	if speed_up:
-		time_multiplier = 4
-	word_timer += delta * time_multiplier
-	sound_timer += delta * time_multiplier
-
+	if user_action and not first_action_ignored:
+		user_action = false
+		first_action_ignored = true
 
 	if get_player_input and user_action:
 		get_player_input = false
