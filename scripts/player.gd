@@ -266,7 +266,6 @@ func _physics_process(delta):
 			var angle = get_floor_angle()
 			var normal = get_floor_normal()
 
-			print(angle)
 			# For a flat floor, normal is usually (0, -1)
 			# You can use this to rotate your sprite:
 			if angle < PI / 5:
@@ -280,7 +279,7 @@ func _physics_process(delta):
 
 			target_angle = angle
 
-		elif is_jump_pressed:
+		else:
 			target_angle = 0
 
 		rotation = move_toward(rotation, target_angle, .2)

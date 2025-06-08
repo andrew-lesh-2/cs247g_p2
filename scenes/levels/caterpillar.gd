@@ -7,6 +7,7 @@ var timer: Timer
 @onready var mission_icon  = get_node("mission_icon")
 @onready var caterpillar_node  = get_node("caterpillar")
 @onready var interaction_area = $InteractionArea
+@onready var interaction_area2 = $InteractionArea2
 
 @onready var dialog = get_parent().get_parent().get_node("Dialog")
 
@@ -15,18 +16,60 @@ var player_nearby: bool = false
 var player: Player = null
 
 var final_dialog_completed: bool = false  # Track if the final dialog completed
+var have_spoken = false
+var in_dialog = false
+
+var player_body = null
+var original_camera_pos = null
 
 func _ready():
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
+	interaction_area2.body_entered.connect(_on_leaving_tree)
 
+
+	print(interaction_area2)
 	interact_icon.visible = false
 
 	# set true if you add a mission,
 	# and its currently available given story_manager state
 	mission_icon.visible = false
 
+func _on_leaving_tree(body):
+	print("leaving tree")
+	if body is Player and not have_spoken:
+		player_body = body
+		print("player")
+		body.disable_player_input = true
+		var camera = body.get_node("Camera2D")
+		var tween = create_tween()
+		original_camera_pos = camera.offset
+		
+			
+		tween.tween_property(camera, "offset:x", camera.offset.x - 40, .5)
+		tween.tween_callback(step2)
+		
+func step2():
+	var tween2 = create_tween()
+	mission_icon.visible = true
+	tween2.tween_property(mission_icon, "position:y", mission_icon.position.y - 6, 1)
+	tween2.tween_callback(step3)
+	
+func step3():
+	var tween = create_tween()
+	
+	var camera = player_body.get_node("Camera2D")
+	tween.tween_property(camera, "offset:x", original_camera_pos.x, .5)
+	tween.tween_callback(func(): mission_icon.visible = false)
+	tween.tween_callback(func(): player_body.disable_player_input = false)
+	tween.tween_callback(func(): start_dialog())
+	
+	
+	
+	
+		
 func start_dialog():
+	have_spoken = true
 	interact_icon.visible = false
 	mission_icon.visible = false
 	# Call the global dialog system
@@ -55,6 +98,7 @@ func start_dialog():
 		)
 
 	else:
+		print("IM HERE")
 		dialog.display_dialog(
 			'Caterpillar',
 			'caterpillar',
@@ -73,6 +117,7 @@ func start_dialog():
 			"...",
 			"GREAT! Come back once you've delivered it, and tell me what she thinks!",
 			"Maybe... don't mention my size. Just tell her the letter is from someone BIG and STRONG and SMART. Soon enough I'll be a butterfly, so it'll be true!"],
+			false
 		)
 		story_manager.met_caterpillar = true
 
@@ -83,8 +128,22 @@ func _on_interaction_area_body_entered(body):
 	if body is Player:
 		player = body
 		player_nearby = true
-		interact_icon.visible = true
-		mission_icon.visible = false
+		if not have_spoken:
+			player.disable_player_input = true
+			mission_icon.visible = true
+			in_dialog = true
+			# synchronous half second delay
+			# tween mission_icon y position slightly over the same 0.5s
+			var tween = create_tween()
+			tween.tween_property(mission_icon, "position:y", mission_icon.position.y - 6, 1)
+			tween.tween_callback(func(): mission_icon.visible = false)
+			tween.tween_callback(func(): player.disable_player_input = false)
+			tween.tween_callback(func(): start_dialog())
+		elif not in_dialog:
+			print("Section A")
+
+			interact_icon.visible = true
+
 
 func _on_interaction_area_body_exited(body):
 	if body is Player:
@@ -103,9 +162,14 @@ func _process(delta):
 			# Flip sprite based on player position
 			caterpillar_node.scale.x = -1 if direction_to_player < 0 else 1
 
+			if have_spoken:
+				interact_icon.visible = true
+
 		if Input.is_action_just_pressed("interact"):
 			start_dialog()
 	else:
+
+		interact_icon.visible = false
 		# Return to default orientation
 		caterpillar_node.scale.x = 1
 
@@ -131,6 +195,7 @@ func start_level_transition():
 
 func _on_dialog_finished():
 	mission_icon.visible = false
+	in_dialog = false
 
 	# Check if this was the final dialog that should trigger level transition
 	if final_dialog_completed and story_manager.met_caterpillar and story_manager.met_queen:
@@ -139,8 +204,5 @@ func _on_dialog_finished():
 		timer.timeout.connect(func(): start_level_transition())
 	else:
 		# Normal dialog end behavior
-		if player_nearby:
-			interact_icon.visible = true
-		else:
-			interact_icon.visible = false
+
 		in_cutscene = false
