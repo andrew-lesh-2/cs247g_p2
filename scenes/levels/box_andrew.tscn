@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=91 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -41,13 +41,22 @@
 [ext_resource type="Texture2D" uid="uid://d2lved3ccqdmm" path="res://assets/sprites/environment/block_c.png" id="39_nj4uo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
-size = Vector2(640, 66.5)
+size = Vector2(639, 54)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ersg3"]
 size = Vector2(7, 76.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2q7q8"]
 size = Vector2(140, 94)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5ke0d"]
+size = Vector2(7, 271)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iomvd"]
+size = Vector2(8, 271)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8wh5t"]
+size = Vector2(34, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xet31"]
 texture = ExtResource("9_aykq1")
@@ -302,17 +311,19 @@ size = Vector2(38, 48)
 position = Vector2(-544, 0)
 
 [node name="Box" type="Node2D" parent="."]
-position = Vector2(0, -277)
+z_index = 2
+position = Vector2(0, -271)
 
 [node name="box back" type="Sprite2D" parent="Box"]
 z_index = 2
 texture = ExtResource("2_aykq1")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Box/box back"]
+position = Vector2(0, 6)
 collision_layer = 2
 
 [node name="CollisionShape2D_table" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
-position = Vector2(32, 78.75)
+position = Vector2(32.5, 72)
 shape = SubResource("RectangleShape2D_woaog")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
@@ -330,9 +341,9 @@ texture = ExtResource("3_xet31")
 [node name="Leaf" parent="Box" instance=ExtResource("4_skcgy")]
 modulate = Color(0.282353, 1, 0.368627, 1)
 z_index = 2
-position = Vector2(-22, 14)
+position = Vector2(-18, 14)
 
-[node name="Leaf2" parent="Box" instance=ExtResource("4_skcgy")]
+[node name="two" parent="Box" instance=ExtResource("4_skcgy")]
 modulate = Color(0.282353, 1, 0.368627, 1)
 z_index = 2
 position = Vector2(9, -16)
@@ -348,11 +359,41 @@ texture = ExtResource("7_eici0")
 script = ExtResource("8_2khhf")
 
 [node name="Area2D" type="Area2D" parent="Box/box-front"]
+position = Vector2(0, 6)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Box/box-front/Area2D"]
 position = Vector2(1, 15)
 shape = SubResource("RectangleShape2D_2q7q8")
+
+[node name="Intro" type="Node2D" parent="Box"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Box/Intro"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Box/Intro/StaticBody2D"]
+z_index = 2
+position = Vector2(-64.5, -82.5)
+shape = SubResource("RectangleShape2D_5ke0d")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Box/Intro/StaticBody2D"]
+z_index = 2
+position = Vector2(71, -82.5)
+shape = SubResource("RectangleShape2D_iomvd")
+
+[node name="ColorRect" type="ColorRect" parent="Box/Intro"]
+modulate = Color(0, 0, 0, 1)
+z_index = 1
+offset_left = -563.0
+offset_top = -332.0
+offset_right = 472.0
+offset_bottom = 406.0
+
+[node name="Area2D" type="Area2D" parent="Box/Intro"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Box/Intro/Area2D"]
+z_index = 2
+position = Vector2(22, -62)
+shape = SubResource("RectangleShape2D_8wh5t")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 visible = false
@@ -607,8 +648,8 @@ shape = SubResource("RectangleShape2D_nj4uo")
 [node name="Story Manager" type="Node2D" parent="."]
 
 [node name="Grasshopper NPC" type="Node2D" parent="Story Manager"]
-z_index = 2
-position = Vector2(0, -277)
+z_index = 4
+position = Vector2(0, -271)
 script = ExtResource("15_bp465")
 
 [node name="Grasshopper" type="Node2D" parent="Story Manager/Grasshopper NPC"]
@@ -1113,10 +1154,10 @@ tile_set = SubResource("TileSet_oxf2r")
 
 [node name="Toy Balls" type="Node2D" parent="."]
 z_index = 1
-position = Vector2(0, -281)
+position = Vector2(0, -275)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="Toy Balls"]
-position = Vector2(-186, 27)
+position = Vector2(-179, 33)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("25_oxf2r")
@@ -1169,7 +1210,7 @@ tile_set = SubResource("TileSet_yq4wy")
 [node name="Leg Tunnels" type="TileMapLayer" parent="."]
 modulate = Color(0.710047, 0.710047, 0.710047, 1)
 z_index = -1
-position = Vector2(65, -212)
+position = Vector2(65, -206)
 tile_map_data = PackedByteArray("AAAEAAMAAAAJAAEAAAD5////AAAFAAEAAAD3//7/AAABAAYAAAD1/wMAAAAAAAAAAAD3/wMAAAABAAAAAAD2/wMAAAADAAAAAAD2/wQAAAADAAAAAAD3/wQAAAABAAAAAAD1/wQAAAAAAAAAAAD1/wIAAAAAAAEAAAD3/wIAAAABAAEAAAD2/wIAAAADAAEAAAD1/wUAAAAAAAAAAAD3/wUAAAABAAAAAAD2/wUAAAADAAAAAAD1/wgAAAAAAAAAAAD1/wkAAAAAAAAAAAD1/woAAAAAAAAAAAD2/wgAAAADAAAAAAD2/wkAAAADAAAAAAD2/woAAAADAAAAAAD3/wgAAAABAAAAAAD3/wkAAAABAAAAAAD3/woAAAABAAAAAAD1/wYAAAAAAAAAAAD1/wcAAAAAAAAAAAD1/wsAAAAAAAAAAAD1/wwAAAAAAAAAAAD1/w0AAAAAAAAAAAD1/w4AAAAAAAAAAAD1/w8AAAAAAAAAAAD3/wYAAAABAAAAAAD3/wcAAAABAAAAAAD3/wsAAAABAAAAAAD3/wwAAAABAAAAAAD3/w0AAAABAAAAAAD3/w4AAAABAAAAAAD3/w8AAAABAAAAAAD2/wYAAAADAAAAAAD2/wcAAAADAAAAAAD2/wsAAAADAAAAAAD2/wwAAAADAAAAAAD2/w0AAAADAAAAAAD2/w4AAAADAAAAAAD2/w8AAAADAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAGAAoAAAAAAAAAAAAGAAsAAAAAAAAAAAAGAAwAAAAAAAAAAAAGAA0AAAAAAAAAAAAGAA4AAAAAAAAAAAAGAA8AAAAAAAAAAAAHAA8AAAADAAAAAAAHAA4AAAADAAAAAAAHAA0AAAADAAAAAAAHAAwAAAADAAAAAAAHAAsAAAADAAAAAAAHAAoAAAADAAAAAAAHAAkAAAADAAAAAAAHAAgAAAADAAAAAAAHAAcAAAADAAAAAAAHAAYAAAADAAAAAAAHAAUAAAADAAAAAAAHAAQAAAADAAAAAAAHAAMAAAADAAAAAAAHAAIAAAADAAAAAAAIAAIAAAABAAAAAAAIAAMAAAABAAAAAAAIAAQAAAABAAAAAAAIAAUAAAABAAAAAAAIAAcAAAABAAAAAAAIAAgAAAABAAAAAAAIAAkAAAABAAAAAAAIAAYAAAABAAAAAAAIAAoAAAABAAAAAAAIAAsAAAABAAAAAAAIAAwAAAABAAAAAAAIAA0AAAABAAAAAAAIAA4AAAABAAAAAAAIAA8AAAABAAAAAAA=")
 tile_set = SubResource("TileSet_yq4wy")
 collision_enabled = false
