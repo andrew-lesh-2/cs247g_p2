@@ -16,13 +16,13 @@ extends Node2D
 			callback.call(value)
 
 # caterpillar mission
-@export var met_caterpillar = true
+@export var met_caterpillar = false
 
 
-@export var can_enter_anthill: bool = true
+@export var can_enter_anthill: bool = false
 
-@export var spoke_after_tunnels: bool = true
-@export var met_first_bodyguard: bool = true
+@export var spoke_after_tunnels: bool = false
+@export var met_first_bodyguard: bool = false
 
 @export var stick_mission_active: bool = false:
 	set(value):
@@ -47,7 +47,7 @@ extends Node2D
 @export var food_mission_completed: bool = false
 @export var holding_berries: int = 0
 
-@export var doctor_mission_active: bool = true:
+@export var doctor_mission_active: bool = false:
 	set(value):
 		print("setting doctor_mission_active")
 		doctor_mission_active = value
@@ -58,7 +58,7 @@ extends Node2D
 				continue
 			callback.call(value)
 @export var doctor_mission_completed: bool = false
-@export var holding_daisies: int = 3
+@export var holding_daisies: int = 0
 
 @export var gotten_past_queens_guard: bool = false
 @export var spoken_to_queens_guard: bool = false
