@@ -68,7 +68,7 @@ func start_dialog():
 				"But I LOVE to draw!",
 				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!",
 				"I was just getting started on a new piece, though, when my last good stick broke.",
-				"Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
+				"Say, if you're on the surface any time soon, could you keep an eye out for a good stick?"],
 		)
 		story_manager.stick_mission_active = true
 	elif (story_manager.stick_mission_active and
@@ -85,7 +85,7 @@ func start_dialog():
 			'ant_artist',
 			["Wow! What a great stick you've brought me!",
 				"Thank you so much.",
-				"Now I can finally get back to my working on my masterpiece!"],
+				"Now I can finally get back to working on my masterpiece!"],
 		)
 		story_manager.stick_mission_active = false
 		story_manager.is_carrying_stick = false
