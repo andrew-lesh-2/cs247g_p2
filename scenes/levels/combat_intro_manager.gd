@@ -26,7 +26,7 @@ func start_intro_dialog():
 			"Now I can get a good view of the yard, and find my family.",
 			"Oh no! I see a bunch of angry aphids up here",
 			"I'll need to clear them out to get to the vantage point to the right.",
-			"Remember: I can use your GROUND POUND attack to defeat them safely.",
+			"Remember: I can use my GROUND POUND attack to defeat them safely.",
 			"Jump into the air and press DOWN to perform a ground pound.",
 			"The aphids will turn red and disappear when hit.",
 			"If they touch me, I don't need to worry - Aphids can't hurt me",
