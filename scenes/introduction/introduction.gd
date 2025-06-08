@@ -3,6 +3,7 @@ extends Node2D
 @onready var rich_text_label = $Control/RichTextLabel # left page
 @onready var rich_text_label2 = $Control/RichTextLabel2 # right page
 @onready var fade_rect = $Control/Screen_Fade  # screen fade colorrect
+@onready var music_player = $AudioStreamPlayer2D  # direct reference to the AudioStreamPlayer2D
 
 var typing_speed := 0.06
 var fast_typing_speed := 0.01
@@ -85,9 +86,20 @@ func start_fade_to_black() -> void:
 	fade_tween = create_tween()
 	fade_tween.set_ease(Tween.EASE_IN)
 	fade_tween.set_trans(Tween.TRANS_SINE)
+	fade_tween.set_parallel(true) # Allow multiple properties to animate at once
 	
 	# Animate from transparent to black
 	fade_tween.tween_property(fade_rect, "modulate:a", 1.0, fade_out_duration)
+	
+	# Fade out the music if it exists and is playing
+	if music_player and music_player.playing:
+		var original_volume = music_player.volume_db
+		
+		# Fade out music during the transition
+		fade_tween.tween_property(music_player, "volume_db", -80, fade_out_duration)
+	
+	# Create a sequential tween for the scene transition
+	fade_tween.chain()
 	
 	# Add a small hold time at black
 	fade_tween.tween_interval(0.3)
@@ -95,5 +107,6 @@ func start_fade_to_black() -> void:
 	# Then change scene
 	fade_tween.tween_callback(Callable(self, "go_to_next_scene"))
 
+# Simpler approach without creating singletons
 func go_to_next_scene() -> void:
 	get_tree().change_scene_to_file("res://scenes/levels/test2_sidescroll.tscn")
