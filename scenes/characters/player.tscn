@@ -187,6 +187,8 @@ hue_variation_max = -2.23517e-08
 
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 3
+floor_constant_speed = true
+floor_snap_length = 10.0
 script = ExtResource("1_xofr2")
 normals_enabled = false
 
