@@ -2,7 +2,6 @@ extends Control
 
 var parent = null
 
-
 var offset = Vector2.ZERO
 var player_position = Vector2.ZERO
 var active = false
@@ -46,6 +45,9 @@ var first_action_ignored = false
 @onready var voice_sound = load('res://audio/voices/voice_Papyrus.wav')
 var do_ignore_first_action = true
 
+# Store music players to ensure they continue during dialog
+var music_players = []
+
 func _ready():
 	parent = get_parent()
 	if parent:
@@ -68,17 +70,16 @@ func reset():
 		current_portrait.visible = false
 		current_portrait = null
 
+
 func _process(delta):
 	if parent and follow_player:
 		position = parent.get_node("Player").position + offset
 
-		# if space is pressed, display the next line
+	# if space is pressed, display the next line
 	if not active:
 		return
 
-
 	hint_label.visible = get_player_input
-
 
 	var user_action = Input.is_action_just_pressed("interact")
 	
@@ -106,8 +107,6 @@ func _process(delta):
 		get_player_input = true
 		return
 		
-		
-
 	if word_timer > PER_WORD_DELAY and not get_player_input:
 		word_timer = 0
 
@@ -117,7 +116,6 @@ func _process(delta):
 		if sound_timer > character_sound_cooldown:
 			if play_character_sound(line[current_char]):
 				sound_timer = 0
-
 
 		current_char += 1
 		if current_char >= lines[current_line].length():
@@ -139,6 +137,12 @@ func play_character_sound(character):
 		return false
 
 func display_dialog(character, id, input_lines, ignore_action = true):
+	# Find and store music players before pausing
+	find_active_music_players()
+	
+	# Configure music players to continue during pause
+	set_music_players_process_mode(Node.PROCESS_MODE_ALWAYS)
+	
 	get_tree().paused = true
 	do_ignore_first_action = ignore_action
 	visible = true
@@ -191,3 +195,44 @@ func setup_voice_player():
 	voice_sound_player.pitch_scale = voice_pitch
 	voice_sound_player.stream = voice_sound
 	add_child(voice_sound_player)
+
+# New function to find all active music players in the scene
+func find_active_music_players():
+	# Clear previous list
+	music_players.clear()
+	
+	# Look for audio players in music groups
+	var potential_players = []
+	potential_players.append_array(get_tree().get_nodes_in_group("music_players"))
+	potential_players.append_array(get_tree().get_nodes_in_group("MusicPlayers"))
+	potential_players.append_array(get_tree().get_nodes_in_group("Audio"))
+	
+	# Filter for those that are actually playing
+	for player in potential_players:
+		if (player is AudioStreamPlayer or player is AudioStreamPlayer2D) and player.playing:
+			music_players.append(player)
+	
+	# If no players found in groups, search the entire scene
+	if music_players.size() == 0:
+		_find_active_audio_nodes(get_tree().root)
+	
+	print("Found ", music_players.size(), " active music players")
+
+# Recursive helper to find active audio players
+func _find_active_audio_nodes(node: Node):
+	if (node is AudioStreamPlayer or node is AudioStreamPlayer2D) and node.playing:
+		if not music_players.has(node):
+			music_players.append(node)
+	
+	for child in node.get_children():
+		_find_active_audio_nodes(child)
+
+# Set process mode for all found music players
+func set_music_players_process_mode(mode: int):
+	for player in music_players:
+		# Store original process mode if we haven't already
+		if not player.has_meta("original_process_mode"):
+			player.set_meta("original_process_mode", player.process_mode)
+		
+		# Set to always process
+		player.process_mode = mode
