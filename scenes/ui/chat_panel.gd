@@ -17,6 +17,13 @@ var active = false
 @onready var hint_label = $Panel/hint
 
 @onready var caterpillar_portrait = $Caterpillar
+@onready var ant_bodyguard_1_portrait = $ant_bodyguard_1
+@onready var ant_bodyguard_2_portrait = $ant_bodyguard_2
+@onready var ant_bodyguard_3_portrait = $ant_bodyguard_3
+@onready var ant_forager_portrait = $ant_forager
+@onready var ant_doctor_portrait = $ant_doctor
+@onready var ant_artist_portrait = $ant_artist
+@onready var ant_queen_portrait = $ant_queen
 
 var current_portrait = null
 
@@ -48,6 +55,7 @@ func reset():
 	current_line = 0
 	get_player_input = false
 	lines = []
+	dialog.text = ""
 	if current_portrait:
 		current_portrait.visible = false
 		current_portrait = null
@@ -116,17 +124,37 @@ func play_character_sound(character):
 	else:
 		return false
 
-func display_dialog(character, input_lines):
+func display_dialog(character, id, input_lines):
 	get_tree().paused = true
 	visible = true
 	name_label.text = character
 	active = true
 	lines = input_lines
 
-	if character.to_lower() == "caterpillar":
+	if id.to_lower() == "caterpillar":
 		caterpillar_portrait.visible = true
 		current_portrait = caterpillar_portrait
-
+	if id.to_lower() == 'ant_bodyguard_1':
+		ant_bodyguard_1_portrait.visible = true
+		current_portrait = ant_bodyguard_1_portrait
+	if id.to_lower() == 'ant_bodyguard_2':
+		ant_bodyguard_2_portrait.visible = true
+		current_portrait = ant_bodyguard_2_portrait
+	if id.to_lower() == 'ant_bodyguard_3':
+		ant_bodyguard_3_portrait.visible = true
+		current_portrait = ant_bodyguard_3_portrait
+	if id.to_lower() == 'ant_forager':
+		ant_forager_portrait.visible = true
+		current_portrait = ant_forager_portrait
+	if id.to_lower() == 'ant_doctor':
+		ant_doctor_portrait.visible = true
+		current_portrait = ant_doctor_portrait
+	if id.to_lower() == 'ant_artist':
+		ant_artist_portrait.visible = true
+		current_portrait = ant_artist_portrait
+	if id.to_lower() == 'ant_queen':
+		ant_queen_portrait.visible = true
+		current_portrait = ant_queen_portrait
 
 func setup_voice_player():
 	# Create audio player for voice sounds

@@ -2,11 +2,6 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_bodyguard"
-var npc_name = "Ant Bodyguard"
-var name_color = Color(1, 0.8, 0.1)
-var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
-
 var last_exited_body: Player = null
 
 @onready var story_manager = StoryManager
@@ -14,6 +9,8 @@ var last_exited_body: Player = null
 @onready var interact_icon  = get_node("interact_icon")
 @onready var area = $Area2D
 @onready var interaction_area = $InteractionArea
+@onready var dialog = get_parent().get_parent().get_node("Dialog")
+
 
 var in_cutscene: bool = false
 var player_nearby: bool = false
@@ -37,76 +34,36 @@ func _ready():
 
 	interact_icon.visible = false
 
-	_ensure_dialog_connection()
-
-
-func _ensure_dialog_connection():
-	# Check if DialogSystem exists
-	if not has_node("/root/DialogSystem"):
-		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
-		return
-
-	# Check if we're already connected to avoid duplicate connections
-	var connections = []
-
-	if DialogSystem.has_signal("dialog_finished"):
-		connections = DialogSystem.get_signal_connection_list("dialog_finished")
+func _on_dialog_finished():
+	if in_cutscene:
+		last_exited_body.disable_player_input = false
+		in_cutscene = false
+	is_in_dialog = false
+	if player_nearby:
+		interact_icon.visible = true
 	else:
-		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
-		return
-
-	var already_connected = false
-
-	for connection in connections:
-		if connection.callable.get_object() == self and connection.callable.get_method() == "_on_dialog_finished":
-			already_connected = true
-			break
-
-	if not already_connected:
-		print("Connecting ant bodyguard to dialog system...")
-		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
-	else:
-		print("Ant bodyguard already connected to dialog system")
-
-func _on_dialog_finished(finished_npc_id):
-	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
-	# Check if this dialog was for this NPC
-	if finished_npc_id == npc_id:
-		if in_cutscene:
-			last_exited_body.disable_player_input = false
-			in_cutscene = false
-		is_in_dialog = false
-		if player_nearby:
-			interact_icon.visible = true
-		else:
-			interact_icon.visible = false
+		interact_icon.visible = false
 
 
 func start_dialog():
-	print("Grasshopper: Starting dialog")
 	is_in_dialog = true
 	interact_icon.visible = false
-	# Call the global dialog system
-	if not has_node("/root/DialogSystem"):
-		push_error("Cannot start dialog: DialogSystem not found!")
-		return
-	
-	DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": ["Is that... it couldn't be... a ladybug?", "My my... how unexpected. You are far from your home, young traveler.
+
+	dialog.display_dialog(
+		'Queen',
+		'ant_queen',
+		["Is that... it couldn't be... a ladybug?", "My my... how unexpected. You are far from your home, young traveler.
 			It must have taken no small measure of wit and strength to have reached my chambers.", "...", "What have we here? A letter?
 			How curious... Let's see...", "To Her Majesty, Queen of the Endless Tunnels, From beyond your earthen halls, a humble creature sends their heart.
 			I have seen many wonders beneath leaf and sky, but none so radiant as you. Your voice commands armies, yet it silences mine with awe.
 			Your grace turns soil to silk and duty into art.", "I am no king, no soldier, only a wanderer with growing wings, which I hope will carry me to you.
-			If your heart holds space for one who is not of your kind, then let me wait at your gates and dream until you call.", 
+			If your heart holds space for one who is not of your kind, then let me wait at your gates and dream until you call.",
 			"— Yours, if you'll have me A Devoted Stranger", "...", "Little ladybug... will you please convey to this stranger that I would like to meet them
 			in seven days time. I shall be awaiting their presence at the top of the anthill.",  "Thank you for traveling all the way
 			here little ladybug. Now, make haste. I wish you luck on your journey."],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+	)
 	story_manager.met_queen = true
-
+	_on_dialog_finished()
 
 func _on_interaction_area_body_entered(body):
 	if body is Player:
@@ -123,7 +80,7 @@ func _process(delta):
 	if player_nearby:
 		# Get player node
 		if player:
-			if Input.is_action_just_pressed("interact") and !is_in_dialog:
+			if Input.is_action_just_pressed("interact"):
 				start_dialog()
 
 func _on_body_entered(body):
@@ -131,7 +88,6 @@ func _on_body_entered(body):
 		in_cutscene = true
 		interact_icon.visible = false
 		body.disable_player_input = true
-		print("disabling player input")
 		timer.start(1)
 		await timer.timeout
 		body.input_virtual_dir(Vector2.LEFT)

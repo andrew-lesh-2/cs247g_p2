@@ -37,6 +37,7 @@ func start_dialog():
 	if story_manager.met_caterpillar and story_manager.met_queen:
 		dialog.display_dialog(
 			'Caterpillar',
+			'caterpillar',
 			["SO?! What did she think?!",
 			"...",
 			"YOU DID IT LITTLE LADYBUG! YOU ARE A HERO!",
@@ -53,12 +54,14 @@ func start_dialog():
 	elif story_manager.met_caterpillar:
 		dialog.display_dialog(
 			'Caterpillar',
+			'caterpillar',
 			["You can get to the anthill by traveling down the tree.", "Please deliver my love letter to the queen! I'll be eating away these leaves while I await your return. Hehe."]
 		)
 
 	else:
 		dialog.display_dialog(
 			'Caterpillar',
+			'caterpillar',
 			["A LADYBUG?!", "My my you must be very far away from home, how did you get all the way up here?",
 			"...",
 			"Ah. It sounds like the child abducted you. It happens to all of us -- that's how I ended up here. Glad you could escape from the box!",

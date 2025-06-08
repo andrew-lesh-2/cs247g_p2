@@ -2,11 +2,6 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_artist"
-var npc_name = "Ant Artist"
-var name_color = Color(1, 0.8, 0.1)
-var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
-
 var last_exited_body: Player = null
 
 @onready var story_manager = StoryManager
@@ -14,6 +9,8 @@ var last_exited_body: Player = null
 @onready var mission_icon  = get_node("mission_icon")
 @onready var ant_node  = get_node("Ant")
 @onready var interaction_area = $InteractionArea
+
+@onready var dialog = get_parent().get_parent().get_node("Dialog")
 
 var in_cutscene: bool = false
 var player_nearby: bool = false
@@ -28,114 +25,73 @@ func _ready():
 	interact_icon.visible = false
 	mission_icon.visible = not have_spoken()
 
-	_ensure_dialog_connection()
-
-
-func _ensure_dialog_connection():
-	# Check if DialogSystem exists
-	if not has_node("/root/DialogSystem"):
-		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
-		return
-
-	# Check if we're already connected to avoid duplicate connections
-	var connections = []
-
-	if DialogSystem.has_signal("dialog_finished"):
-		connections = DialogSystem.get_signal_connection_list("dialog_finished")
+func _on_dialog_finished():
+	is_in_dialog = false
+	mission_icon.visible = false
+	if player_nearby:
+		interact_icon.visible = true
 	else:
-		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
-		return
-
-	var already_connected = false
-
-	for connection in connections:
-		if connection.callable.get_object() == self and connection.callable.get_method() == "_on_dialog_finished":
-			already_connected = true
-			break
-
-	if not already_connected:
-		print("Connecting ant bodyguard to dialog system...")
-		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
-	else:
-		print("Ant bodyguard already connected to dialog system")
-
-func _on_dialog_finished(finished_npc_id):
-	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
-	if finished_npc_id == npc_id:
-		is_in_dialog = false
-		mission_icon.visible = false
-		if player_nearby:
-			interact_icon.visible = true
-		else:
-			interact_icon.visible = false
-		in_cutscene = false
+		interact_icon.visible = false
+	in_cutscene = false
 
 func have_spoken():
-	return (story_manager.stick_mission_active or 
+	return (story_manager.stick_mission_active or
 		story_manager.stick_mission_completed)
 
 func start_dialog():
 	is_in_dialog = true
 	interact_icon.visible = false
 	mission_icon.visible = false
-	# Call the global dialog system
-	if not has_node("/root/DialogSystem"):
-		push_error("Cannot start dialog: DialogSystem not found!")
-		return
+
 	if not have_spoken() and story_manager.food_mission_active:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"I like your vibe, ladybug.", 
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			["I like your vibe, ladybug.",
+				"I like your vibe, ladybug.",
 				"Come talk to me when you're done helping collect food"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 	elif not have_spoken() and story_manager.doctor_mission_active:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"I like your vibe, ladybug.", 
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			["I like your vibe, ladybug.",
+				"I like your vibe, ladybug.",
 				"Come talk to me when you're done helping the doctor.",
 				"That seems important."],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 	elif (not have_spoken()):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"Oh. hey", 
-				"Hows it going?", 
-				"Me? I'm not like most ants. I'm no good at foraging or fighting.", 
-				"But I LOVE to draw!", 
-				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!", 
-				"I was just getting started on a new piece, though, when my last good stick broke.", 
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			["Oh. hey",
+				"Oh. hey",
+				"Hows it going?",
+				"Me? I'm not like most ants. I'm no good at foraging or fighting.",
+				"But I LOVE to draw!",
+				"I've made it work for me, I had the idea to carve direction signs into the anthill walls. It's been a real hit!",
+				"I was just getting started on a new piece, though, when my last good stick broke.",
 				"Say, if you're on the surface any time soon, could you keep an eye out for a good sitck?"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.stick_mission_active = true
-	elif (story_manager.stick_mission_active and 
+	elif (story_manager.stick_mission_active and
 		not story_manager.is_carrying_stick):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"Still looking for a good stick?", 
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			["Still looking for a good stick?",
+				"Still looking for a good stick?",
 				"There are usually good ones under the tree"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 	elif story_manager.stick_mission_active:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			["Wow! What a great stick you've brought me!",
 				"Wow! What a great stick you've brought me!",
 				"Thank you so much.",
 				"Now I can finally get back to my working on my masterpiece!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.stick_mission_active = false
 		story_manager.is_carrying_stick = false
 		story_manager.stick_mission_completed = true
@@ -163,12 +119,12 @@ func start_dialog():
 			["Welcome back. The anthill’s always better with you in it."]
 		]
 		var lines = line_options[randi() % line_options.size()]
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": lines,
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		dialog.display_dialog(
+			'Ant Artist',
+			'ant_artist',
+			lines
+		)
+	_on_dialog_finished()
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
@@ -188,8 +144,8 @@ func _on_interaction_area_body_exited(body):
 	if body is Player and story_manager.can_enter_anthill:
 		player_nearby = false
 		interact_icon.visible = false
-		mission_icon.visible = (not story_manager.stick_mission_active 
-								and 
+		mission_icon.visible = (not story_manager.stick_mission_active
+								and
 								not have_spoken())
 
 func _process(delta):
@@ -201,7 +157,7 @@ func _process(delta):
 			# Flip sprite based on player position
 			ant_node.scale.x = -1 if direction_to_player < 0 else 1
 
-		if Input.is_action_just_pressed("interact") and !is_in_dialog:
+		if Input.is_action_just_pressed("interact"):
 			start_dialog()
 	else:
 		# Return to default orientation

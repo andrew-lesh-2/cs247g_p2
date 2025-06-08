@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://bo20mc5ib1ose"]
+[gd_scene load_steps=10 format=3 uid="uid://bo20mc5ib1ose"]
 
 [ext_resource type="Script" uid="uid://355bjycxr8fx" path="res://scenes/ui/chat_panel.gd" id="1_pewee"]
 [ext_resource type="Texture2D" uid="uid://cijl7jf2su73n" path="res://assets/sprites/ui/ui-panel.png" id="1_tj62s"]
 [ext_resource type="FontFile" uid="uid://blekrn7pygh7m" path="res://fonts/pixel_operator (1)/PixelOperator8-Bold.ttf" id="3_dd1gj"]
 [ext_resource type="FontFile" uid="uid://oxjmlxh16kcp" path="res://fonts/pixel_operator (1)/PixelOperatorMono.ttf" id="4_00fe4"]
 [ext_resource type="Texture2D" uid="uid://pbvvwkanbf8v" path="res://assets/sprites/characters/caterpillar-portrait.png" id="5_6vf85"]
+[ext_resource type="Texture2D" uid="uid://d2r7b475upp88" path="res://assets/sprites/characters/portrait.png" id="6_00fe4"]
+[ext_resource type="Texture2D" uid="uid://g4ystcbuftrf" path="res://assets/sprites/characters/ant-queen-portrait.png" id="6_84n3h"]
+[ext_resource type="Texture2D" uid="uid://cya7164m722m" path="res://assets/sprites/characters/ant-portrait.png" id="7_vectr"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pewee"]
 texture = ExtResource("1_tj62s")
@@ -71,3 +74,98 @@ visible = false
 position = Vector2(70, 70)
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("5_6vf85")
+
+[node name="ant_queen" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(70, 70)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_84n3h")
+
+[node name="ant_bodyguard_1" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_bodyguard_1"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_bodyguard_1"]
+modulate = Color(0.494118, 0.568627, 1, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")
+
+[node name="ant_bodyguard_2" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_bodyguard_2"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_bodyguard_2"]
+modulate = Color(0, 0.858824, 0.862745, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")
+
+[node name="ant_bodyguard_3" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_bodyguard_3"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_bodyguard_3"]
+modulate = Color(0.301961, 0.301961, 0.301961, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")
+
+[node name="ant_doctor" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_doctor"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_doctor"]
+modulate = Color(0.113725, 0.501961, 0.701961, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")
+
+[node name="ant_artist" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_artist"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_artist"]
+modulate = Color(1, 0.286275, 0.345098, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")
+
+[node name="ant_forager" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ant_forager"]
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("6_00fe4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ant_forager"]
+modulate = Color(1, 0.286275, 0.345098, 1)
+z_index = 5
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_vectr")

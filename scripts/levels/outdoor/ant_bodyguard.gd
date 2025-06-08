@@ -2,11 +2,6 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "ant_bodyguard"
-var npc_name = "Ant Bodyguard"
-var name_color = Color(1, 0.8, 0.1)
-var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
-
 var last_exited_body: Player = null
 
 @onready var story_manager = StoryManager
@@ -14,6 +9,8 @@ var last_exited_body: Player = null
 @onready var interact_icon  = get_node("interact_icon")
 @onready var area = $Area2D
 @onready var interaction_area = $InteractionArea
+
+@onready var dialog = get_parent().get_parent().get_node("Dialog")
 
 var in_cutscene: bool = false
 var player_nearby: bool = false
@@ -37,49 +34,16 @@ func _ready():
 
 	interact_icon.visible = false
 
-	_ensure_dialog_connection()
 
-
-func _ensure_dialog_connection():
-	# Check if DialogSystem exists
-	if not has_node("/root/DialogSystem"):
-		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
-		return
-
-	# Check if we're already connected to avoid duplicate connections
-	var connections = []
-
-	if DialogSystem.has_signal("dialog_finished"):
-		connections = DialogSystem.get_signal_connection_list("dialog_finished")
+func _on_dialog_finished():
+	if in_cutscene:
+		last_exited_body.disable_player_input = false
+		in_cutscene = false
+	is_in_dialog = false
+	if player_nearby:
+		interact_icon.visible = true
 	else:
-		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
-		return
-
-	var already_connected = false
-
-	for connection in connections:
-		if connection.callable.get_object() == self and connection.callable.get_method() == "_on_dialog_finished":
-			already_connected = true
-			break
-
-	if not already_connected:
-		print("Connecting ant bodyguard to dialog system...")
-		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
-	else:
-		print("Ant bodyguard already connected to dialog system")
-
-func _on_dialog_finished(finished_npc_id):
-	print("Ant bodyguard received dialog_finished signal for npc_id:", finished_npc_id)
-	# Check if this dialog was for this NPC
-	if finished_npc_id == npc_id:
-		if in_cutscene:
-			last_exited_body.disable_player_input = false
-			in_cutscene = false
-		is_in_dialog = false
-		if player_nearby:
-			interact_icon.visible = true
-		else:
-			interact_icon.visible = false
+		interact_icon.visible = false
 
 
 func start_dialog():
@@ -92,28 +56,25 @@ func start_dialog():
 		return
 
 	if not story_manager.can_enter_anthill:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": ["Hey, this way's for ants and approved guests only!", "You're not allowed to go this way.", "Go the other way for our guest check ins"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		dialog.display_dialog(
+			'Ant Bodyguard',
+			'ant_bodyguard_1',
+			["Hey, this way's for ants and approved guests only!", "You're not allowed to go this way.", "Go the other way for our guest check ins"]
+		)
 		story_manager.met_first_bodyguard = true
 	elif (not story_manager.met_first_bodyguard and not story_manager.spoke_after_tunnels):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": ["Hey, nice to meet you!", "I heard you made it through the collapsed tunnels?", "That makes you an honorary ant in my eyes!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		dialog.display_dialog(
+			'Ant Bodyguard',
+			'ant_bodyguard_1',
+			["Hey, nice to meet you!", "I heard you made it through the collapsed tunnels?", "That makes you an honorary ant in my eyes!"]
+		)
 		story_manager.spoke_after_tunnels = true
 	elif (story_manager.met_first_bodyguard and not story_manager.spoke_after_tunnels):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": ["I sent you into the abandoned tunnels, and you made it out in one piece!", "That makes you an honorary ant in my eyes!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		dialog.display_dialog(
+			'Ant Bodyguard',
+			'ant_bodyguard_1',
+			["I sent you into the abandoned tunnels, and you made it out in one piece!", "That makes you an honorary ant in my eyes!"]
+		)
 		story_manager.spoke_after_tunnels = true
 	else:
 		var line_options = [
@@ -138,12 +99,12 @@ func start_dialog():
 			["It’s not easy to be trusted here. You’ve done just that."]
 		]
 		var lines = line_options[randi() % line_options.size()]
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": lines,
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		dialog.display_dialog(
+			'Ant Bodyguard',
+			'ant_bodyguard_1',
+			lines
+		)
+	_on_dialog_finished()
 
 
 func _on_interaction_area_body_entered(body):
