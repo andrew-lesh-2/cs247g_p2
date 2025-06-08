@@ -48,15 +48,13 @@ func start_dialog():
 			'Ant Artist',
 			'ant_artist',
 			["I like your vibe, ladybug.",
-				"I like your vibe, ladybug.",
-				"Come talk to me when you're done helping collect food"],
+			"Come talk to me when you're done helping collect food"],
 		)
 	elif not have_spoken() and story_manager.doctor_mission_active:
 		dialog.display_dialog(
 			'Ant Artist',
 			'ant_artist',
 			["I like your vibe, ladybug.",
-				"I like your vibe, ladybug.",
 				"Come talk to me when you're done helping the doctor.",
 				"That seems important."],
 		)
@@ -65,7 +63,6 @@ func start_dialog():
 			'Ant Artist',
 			'ant_artist',
 			["Oh. hey",
-				"Oh. hey",
 				"Hows it going?",
 				"Me? I'm not like most ants. I'm no good at foraging or fighting.",
 				"But I LOVE to draw!",
@@ -80,7 +77,6 @@ func start_dialog():
 			'Ant Artist',
 			'ant_artist',
 			["Still looking for a good stick?",
-				"Still looking for a good stick?",
 				"There are usually good ones under the tree"],
 		)
 	elif story_manager.stick_mission_active:
@@ -88,7 +84,6 @@ func start_dialog():
 			'Ant Artist',
 			'ant_artist',
 			["Wow! What a great stick you've brought me!",
-				"Wow! What a great stick you've brought me!",
 				"Thank you so much.",
 				"Now I can finally get back to my working on my masterpiece!"],
 		)

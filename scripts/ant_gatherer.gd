@@ -61,7 +61,6 @@ func start_dialog():
 			'Ant Forager',
 			'ant_forager',
 			["Hey there sweetie.",
-				"Hey there sweetie.",
 				"Rumor has it that you're a good jumper and climber.",
 				"Some people are even saying that you can fly...",
 				"Anyways, we went foraging for berries earlier, but there were a few berries left on the bush that we weren't able to reach!",
@@ -72,8 +71,8 @@ func start_dialog():
 	elif story_manager.food_mission_active and story_manager.holding_berries == 0:
 		dialog.display_dialog(
 			'Ant Forager',
+			'ant_forager',
 			["Still haven't found the berries?",
-				"Still haven't found the berries?",
 				"No worries, you're still new around here.",
 				"The bush is to the right of the anthill on the surface!"]
 		)
@@ -85,8 +84,8 @@ func start_dialog():
 			count_str = "three"
 		dialog.display_dialog(
 			'Ant Forager',
+			'ant_forager',
 			["Nice job dear, you found the berries",
-				"Nice job dear, you found the berries",
 				"Weren't there four berries though? You only brought " + count_str + ".",
 				"Go check if you can find some more."]
 		)
@@ -95,8 +94,8 @@ func start_dialog():
 		story_manager.food_mission_active = false
 		dialog.display_dialog(
 			'Ant Forager',
+			'ant_forager',
 			["I knew you could reach those berries!",
-				"I knew you could reach those berries!",
 				"Thank you so much, this will really help the colony.",
 				"You know, its not too bad having someone thats a little different around."]
 		)

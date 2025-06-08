@@ -73,7 +73,6 @@ func start_dialog():
 			'Ant Doctor',
 			'ant_doctor',
 			["Well, what are you waiting for?",
-				"Well, what are you waiting for?",
 				"Daisies grow on the surface!",
 				"I'd get them myself but I have to stay with my patients"]
 		)
@@ -83,7 +82,6 @@ func start_dialog():
 			'Ant Doctor',
 			'ant_doctor',
 			["Great! You found a daisy.",
-				"Great! You found a daisy.",
 				"I'll need two more to produce the treatment I'm working on.",
 				"Thanks!"]
 		)
@@ -93,7 +91,6 @@ func start_dialog():
 			'Ant Doctor',
 			'ant_doctor',
 			["Two Daisies, that's wonderful!",
-				"Two Daisies, that's wonderful!",
 				"One more and I'll be able to cure our hurt friend."]
 		)
 	elif (story_manager.doctor_mission_active and

@@ -51,11 +51,11 @@ extends Node2D
 	set(value):
 		print("setting doctor_mission_active")
 		doctor_mission_active = value
+		if not value:
+			return
 		if "doctor_mission_active" not in callbacks:
 			return
 		for callback in callbacks["doctor_mission_active"].values():
-			if not callback:
-				continue
 			callback.call(value)
 @export var doctor_mission_completed: bool = false
 @export var holding_daisies: int = 0
