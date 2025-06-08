@@ -94,6 +94,16 @@ func _process(delta):
 			visible = false
 			get_tree().paused = false
 			return
+		user_action = false
+	
+	if user_action:
+		dialog.text = lines[current_line]
+		current_line += 1
+		current_char = 0
+		get_player_input = true
+		return
+		
+		
 
 	if word_timer > PER_WORD_DELAY and not get_player_input:
 		word_timer = 0
