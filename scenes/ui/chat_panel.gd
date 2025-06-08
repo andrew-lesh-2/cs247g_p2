@@ -24,10 +24,14 @@ var active = false
 @onready var ant_doctor_portrait = $ant_doctor
 @onready var ant_artist_portrait = $ant_artist
 @onready var ant_queen_portrait = $ant_queen
+@onready var grasshopper_portrait = $grasshopper
+@onready var ladybug_portrait = $ladybug
+@onready var dust_mite_portrait = $dust_mite
+@onready var controller_portrait = $controller
 
 var current_portrait = null
 
-
+@export var follow_player : bool = true
 
 const PER_WORD_DELAY = 0.05
 var word_timer = 0.0
@@ -61,7 +65,7 @@ func reset():
 		current_portrait = null
 
 func _process(delta):
-	if parent:
+	if parent and follow_player:
 		position = parent.get_node("Player").position + offset
 
 		# if space is pressed, display the next line
@@ -109,9 +113,6 @@ func _process(delta):
 			get_player_input = true
 
 func play_character_sound(character):
-	print("voice_sound_player: ", voice_sound_player)
-	print("voice_sound: ", voice_sound)
-	print("character: ", character)
 	if voice_sound_player and voice_sound and character not in [" ", "\n", ".", ",", "!", "?"]:
 		print("Playing sound")
 		# Stop any currently playing sound
@@ -125,6 +126,7 @@ func play_character_sound(character):
 		return false
 
 func display_dialog(character, id, input_lines):
+	print("DISPLAY DIALOG CALLED")
 	get_tree().paused = true
 	visible = true
 	name_label.text = character
@@ -155,6 +157,18 @@ func display_dialog(character, id, input_lines):
 	if id.to_lower() == 'ant_queen':
 		ant_queen_portrait.visible = true
 		current_portrait = ant_queen_portrait
+	if id.to_lower() == 'grasshopper':
+		grasshopper_portrait.visible = true
+		current_portrait = grasshopper_portrait
+	if id.to_lower() == 'ladybug':
+		ladybug_portrait.visible = true
+		current_portrait = ladybug_portrait
+	if id.to_lower() == 'dust_mite':
+		dust_mite_portrait.visible = true
+		current_portrait = dust_mite_portrait
+	if id.to_lower() == 'controller':
+		controller_portrait.visible = true
+		current_portrait = controller_portrait
 
 func setup_voice_player():
 	# Create audio player for voice sounds

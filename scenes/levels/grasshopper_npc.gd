@@ -2,11 +2,6 @@ extends Node2D
 
 var timer: Timer
 
-var npc_id = "grasshopper"
-var npc_name = "Grasshopper"
-var name_color = Color(1, 0.8, 0.1)
-var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
-
 var last_exited_body: Player = null
 
 @onready var story_manager = StoryManager
@@ -15,11 +10,15 @@ var last_exited_body: Player = null
 @onready var grasshopper_node  = get_node("Grasshopper")
 @onready var interaction_area = $InteractionArea
 
+@onready var dialog = get_parent().get_parent().get_parent().get_node('Dialog')
+
 var in_cutscene: bool = false
 var player_nearby: bool = false
 var player: Player = null
 
 var is_in_dialog: bool = false
+
+var just_dialoged: bool = false
 
 func _ready():
 	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
@@ -28,48 +27,17 @@ func _ready():
 	interact_icon.visible = false
 	# mission_icon.visible = not have_spoken()
 
-	_ensure_dialog_connection()
-	
+	print("grasshopper parent", get_parent().get_parent())
 
 
-func _ensure_dialog_connection():
-	# Check if DialogSystem exists
-	if not has_node("/root/DialogSystem"):
-		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
-		return
-
-	# Check if we're already connected to avoid duplicate connections
-	var connections = []
-
-	if DialogSystem.has_signal("dialog_finished"):
-		connections = DialogSystem.get_signal_connection_list("dialog_finished")
+func _on_dialog_finished():
+	# mission_icon.visible = false
+	if player_nearby:
+		interact_icon.visible = true
 	else:
-		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
-		return
-
-	var already_connected = false
-
-	for connection in connections:
-		if connection.callable.get_object() == self and connection.callable.get_method() == "_on_dialog_finished":
-			already_connected = true
-			break
-
-	if not already_connected:
-		print("Connecting grasshopper to dialog system...")
-		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
-	else:
-		print("Grasshopper already connected to dialog system")
-
-func _on_dialog_finished(finished_npc_id):
-	print("Grasshopper received dialog_finished signal for npc_id:", finished_npc_id)
-	if finished_npc_id == npc_id:
-		is_in_dialog = false
-		# mission_icon.visible = false
-		if player_nearby:
-			interact_icon.visible = true
-		else:
-			interact_icon.visible = false
-		in_cutscene = false
+		interact_icon.visible = false
+	in_cutscene = false
+	is_in_dialog = false
 
 func have_spoken():
 	return (story_manager.spoke_grasshopper)
@@ -78,48 +46,42 @@ func start_dialog():
 	is_in_dialog = true
 	interact_icon.visible = false
 	# mission_icon.visible = false
-	# Call the global dialog system
-	if not has_node("/root/DialogSystem"):
-		push_error("Cannot start dialog: DialogSystem not found!")
-		return
 	if not have_spoken():
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Grasshopper',
+			'grasshopper',
+			[
 				"Hello there, subject. You were unconscious for quite some time.",
 				"Welcome to my castle.  The giant one brought you here to entertain me, I presume.",
 				"I've earned the giant one's favor, you see.  It bestowed me with this miraculous fortress.",
 				"It also provides me with the finest of leaves, truly fit for a nobleman like myself.",
 				"Oh, you want to leave?  Why?  This is a paradise!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.spoke_grasshopper = true
 	elif (have_spoken() and story_manager.spoke_bedmite and not story_manager.insulted_bedmite):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Grasshopper',
+			'grasshopper',
+			[
 				"Oh, so you've met that notorious dust mite, have you?",
 				"Well I don't mean to be rude, but are you not aware that dust mites eat dust?",
 				"Absolutely uncivilized!  I mean can you imagine?!  Dust instead of leaves?!",
 				"You really ought to think more carefully about the company you keep."],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.insulted_bedmite = true
 	elif (have_spoken()):
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
-				"Have you come to your senses?  Stay, stay!"],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
-	
+		dialog.display_dialog(
+			'Grasshopper',
+			'grasshopper',
+			["Have you come to your senses?  Stay, stay!"]
+		)
+
+	_on_dialog_finished()
 
 func _on_body_entered(body):
 	if body is Player and not story_manager.can_enter_anthill:
-		start_dialog()
+		pass
+		#start_dialog()
 
 func _on_body_exited(body):
 	pass
@@ -135,8 +97,8 @@ func _on_interaction_area_body_exited(body):
 	if body is Player:
 		player_nearby = false
 		interact_icon.visible = false
-		# mission_icon.visible = (not story_manager.stick_mission_active 
-		#						and 
+		# mission_icon.visible = (not story_manager.stick_mission_active
+		#						and
 		#						not have_spoken())
 
 func _process(delta):
@@ -147,9 +109,15 @@ func _process(delta):
 		#	var direction_to_player = player.global_position.x - grasshopper_node.global_position.x
 			# Flip sprite based on player position
 		#	grasshopper_node.scale.x = -1 if direction_to_player < 0 else 1
-
-		if Input.is_action_just_pressed("interact") and !is_in_dialog:
+		print("just_dialoged", just_dialoged)
+		if Input.is_action_just_pressed("interact") and not just_dialoged:
+			print("INTERACT CALLED")
 			start_dialog()
+			just_dialoged = true
+			print("just_dialoged set", just_dialoged)
+			return
+
+		just_dialoged = false
 	#else:
 		# Return to default orientation
 	#	grasshopper_node.scale.x = 1

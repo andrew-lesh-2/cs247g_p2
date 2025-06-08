@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bo20mc5ib1ose"]
+[gd_scene load_steps=14 format=3 uid="uid://bo20mc5ib1ose"]
 
 [ext_resource type="Script" uid="uid://355bjycxr8fx" path="res://scenes/ui/chat_panel.gd" id="1_pewee"]
 [ext_resource type="Texture2D" uid="uid://cijl7jf2su73n" path="res://assets/sprites/ui/ui-panel.png" id="1_tj62s"]
@@ -8,7 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://d2r7b475upp88" path="res://assets/sprites/characters/portrait.png" id="6_00fe4"]
 [ext_resource type="Texture2D" uid="uid://g4ystcbuftrf" path="res://assets/sprites/characters/ant-queen-portrait.png" id="6_84n3h"]
 [ext_resource type="Texture2D" uid="uid://dkfhvxsfcqbxs" path="res://assets/sprites/characters/grasshopper-portrait.png" id="6_fp2uw"]
+[ext_resource type="Texture2D" uid="uid://dxvtwgyiy6shi" path="res://assets/sprites/characters/dust-mite-portrait.png" id="7_oqujw"]
 [ext_resource type="Texture2D" uid="uid://cya7164m722m" path="res://assets/sprites/characters/ant-portrait.png" id="7_vectr"]
+[ext_resource type="Texture2D" uid="uid://cqty3lgryno2n" path="res://assets/sprites/characters/ladybug-portrait.png" id="8_jtllg"]
+[ext_resource type="Texture2D" uid="uid://xnjdyxf8vpp1" path="res://assets/sprites/characters/controller-portrait.png" id="9_4ocap"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pewee"]
 texture = ExtResource("1_tj62s")
@@ -81,6 +84,24 @@ visible = false
 position = Vector2(70, 70)
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("6_fp2uw")
+
+[node name="dust_mite" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("7_oqujw")
+
+[node name="ladybug" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("8_jtllg")
+
+[node name="controller" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(70, 70)
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("9_4ocap")
 
 [node name="ant_queen" type="Sprite2D" parent="."]
 visible = false

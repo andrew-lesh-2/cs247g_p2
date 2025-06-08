@@ -1,12 +1,7 @@
 extends Node2D
 
-# — NPC IDENTIFIERS & DIALOG TUNING — 
+# — NPC IDENTIFIERS & DIALOG TUNING —
 var timer: Timer
-
-var npc_id       = "controller"
-var npc_name     = ""
-var name_color   = Color(1, 0.8, 0.1)
-var voice_sound_path: String = "res://audio/voices/voice_Papyrus.wav"
 
 var last_exited_body: Player = null
 
@@ -36,6 +31,8 @@ var _original_camera_offset: Vector2  # Store the camera's original offset from 
 @onready var interaction_area    = $InteractionArea                                             # unchanged
 @onready var left_button_area    = get_node(left_button_area_path)  as Area2D
 @onready var right_button_area   = get_node(right_button_area_path) as Area2D
+@onready var dialog = get_parent().get_parent().get_parent().get_node('Dialog')
+
 var _buttons_enabled: bool = false
 
 # Physical button state tracking
@@ -60,10 +57,11 @@ const POSITION_HISTORY_LENGTH: int = 3
 var _player_movement_disabled: bool = false
 var _need_to_restore_player_movement: bool = false
 
-# — FIRETRUCK REFERENCE & POSITION CLAMPING — 
+# — FIRETRUCK REFERENCE & POSITION CLAMPING —
 @export var firetruck_path : NodePath = "../../firetruck"
 @onready var firetruck_node  = get_node(firetruck_path) as Node2D
 
+var just_dialoged = false
 var _firetruck_start_x: float = 0.0
 
 const SHIFT_AMOUNT     := 20.0
@@ -83,7 +81,7 @@ var _move_direction: int = 0  # -1 for left, 1 for right
 @export var wheel_radius: float = 8.0  # Estimated radius of your wheel sprites in pixels
 @onready var wheel_nodes = []  # Will store references to wheel sprites
 
-# — PRELOADED TEXTURES — 
+# — PRELOADED TEXTURES —
 @export var clean_texture       : Texture2D = preload("res://assets/sprites/environment/controller.png")
 @export var dusty_texture       : Texture2D = preload("res://assets/sprites/environment/controller_dirty.png")
 @export var press_left_texture  : Texture2D = preload("res://assets/sprites/environment/controller_up.png")
@@ -92,14 +90,14 @@ var _move_direction: int = 0  # -1 for left, 1 for right
 # A Timer we'll use to revert the sprite back after 0.6 s
 var _press_timer: Timer
 
-# — OTHER FLAGS — 
+# — OTHER FLAGS —
 var in_cutscene: bool    = false
 var player_nearby: bool = false
 var player: Player      = null
 
 var is_in_dialog: bool  = false
 
-# — INTERNAL FLAG TO ENSURE "DUSTY→CLEAN" ONLY RUNS ONCE — 
+# — INTERNAL FLAG TO ENSURE "DUSTY→CLEAN" ONLY RUNS ONCE —
 var _has_unlocked_buttons: bool = false
 
 # Active button tracking
@@ -110,7 +108,7 @@ func _ready():
 	# 1) Record the starting X of the firetruck so we can clamp its movement later
 	if firetruck_node:
 		_firetruck_start_x = firetruck_node.position.x
-		
+
 		# Get references to the wheel sprites
 		if firetruck_node.has_node("Wheels"):
 			var wheels_node = firetruck_node.get_node("Wheels")
@@ -120,16 +118,16 @@ func _ready():
 					wheel_nodes.append(child)
 	else:
 		push_error("⚠️ controller_npc.gd: firetruck_node is null (check firetruck_path).")
-	
+
 	# Get references to the physical button nodes
 	_left_button_node = get_node(left_button_collider_path)
 	_right_button_node = get_node(right_button_collider_path)
-	
+
 	if _left_button_node:
 		_left_button_original_position = _left_button_node.position
 	else:
 		push_error("Left button collider not found at path: " + str(left_button_collider_path))
-		
+
 	if _right_button_node:
 		_right_button_original_position = _right_button_node.position
 	else:
@@ -153,8 +151,6 @@ func _ready():
 
 	interact_icon.visible = false
 
-	# 5) Hook up DialogSystem
-	_ensure_dialog_connection()
 
 	# 6) Connect the button‐area "body_entered" callbacks
 	left_button_area.body_entered.connect(_on_left_button_area_body_entered)
@@ -167,42 +163,9 @@ func _ready():
 	_press_timer.autostart = false
 	add_child(_press_timer)
 	_press_timer.connect("timeout", Callable(self, "_on_press_timer_timeout"))
-	
-	
 
 
-func _ensure_dialog_connection():
-	if not has_node("/root/DialogSystem"):
-		push_error("DialogSystem autoload not found! Make sure it's added in Project Settings.")
-		return
-
-	if not DialogSystem.has_signal("dialog_finished"):
-		push_error("DialogSystem doesn't have a 'dialog_finished' signal!")
-		return
-
-	# Avoid double‐connecting
-	var already_connected = false
-	for conn in DialogSystem.get_signal_connection_list("dialog_finished"):
-		if conn.callable.get_object() == self and conn.callable.get_method() == "_on_dialog_finished":
-			already_connected = true
-			break
-
-	if not already_connected:
-		print("Connecting firetruck controller to dialog system...")
-		DialogSystem.connect("dialog_finished", Callable(self, "_on_dialog_finished"))
-	else:
-		print("Firetruck controller already connected to dialog system")
-
-
-func _on_dialog_finished(finished_npc_id):
-	# Called whenever ANY NPC finishes dialog.
-	# We no longer do "dusty→clean" here; that happens in _process().
-	if finished_npc_id != npc_id:
-		return
-
-	print("Firetruck controller received dialog_finished signal for npc_id:", finished_npc_id)
-	is_in_dialog = false
-
+func _on_dialog_finished():
 	if player_nearby:
 		interact_icon.visible = true
 	else:
@@ -222,80 +185,62 @@ func start_dialog():
 	is_in_dialog = true
 	interact_icon.visible = false
 
-	if not has_node("/root/DialogSystem"):
-		push_error("Cannot start dialog: DialogSystem not found!")
-		return
-
 	# Choose which set of lines based on story flags:
 	if not have_spoken() and not story_manager.spoke_bedmite:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Firetruck Controller',
+			'controller',
+			[
 				"Something about this object calls to you.",
 				"Unfortunately, it is absolutely caked with dust.",
 				"It's a shame you don't like eating dust."
 			],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.found_controller = true
 
 	elif not have_spoken() and story_manager.spoke_bedmite:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Firetruck Controller',
+			'controller',
+			[
 				"Something about this object calls to you.",
 				"Unfortunately, it is absolutely caked with dust.",
 				"Perhaps the dust mite would enjoy eating this."
 			],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.found_controller = true
 
 	elif have_spoken() and not story_manager.spoke_bedmite:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Firetruck Controller',
+			'controller',
+			[
 				"Yup, it's still covered in dust.  Nasty."
 			],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.found_controller = true
 
 	elif have_spoken() and story_manager.spoke_bedmite and not story_manager.fed_bedmite:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Firetruck Controller',
+			'controller',
+			[
 				"It's still covered in dust.",
 				"Maybe the dust mite would like to clean it off?"
 			],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+		)
 		story_manager.found_controller = true
 
 	elif have_spoken() and story_manager.fed_bedmite:
-		DialogSystem.start_dialog({
-			"name": npc_name,
-			"lines": [
+		dialog.display_dialog(
+			'Firetruck Controller',
+			'controller',
+			[
 				"Squeaky clean!",
 				"You feel a strange compulsion to jump on it now."
-			],
-			"name_color": name_color,
-			"voice_sound_path": voice_sound_path
-		}, npc_id)
+			])
 		story_manager.found_controller = true
-
-
-func _on_body_entered(body):
-	if body is Player and not story_manager.can_enter_anthill:
-		start_dialog()
-
-
-func _on_body_exited(body):
-	pass
+	_on_dialog_finished()
 
 
 func _on_interaction_area_body_entered(body):
@@ -315,10 +260,10 @@ func _on_interaction_area_body_exited(body):
 func _on_left_button_area_body_entered(body: Node) -> void:
 	if not _buttons_enabled or _is_moving:
 		return
-		
+
 	if body is Player and _left_button_cooldown <= 0:
 		var player_body = body as Player
-		
+
 		# Store velocity.y to make this consistent with right button
 		if player_body.velocity.y > 0:
 			_trigger_left_button(player_body)
@@ -333,20 +278,20 @@ func _physics_process(delta):
 	# Update the left button cooldown
 	if _left_button_cooldown > 0:
 		_left_button_cooldown -= delta
-	
+
 	# Track player position history for fast falls
 	if player and _buttons_enabled and not _is_moving:
 		# Check if player is in left button area but moving too fast
 		var bodies = left_button_area.get_overlapping_bodies()
 		if bodies.has(player) and _left_button_cooldown <= 0:
 			var current_vel_y = player.velocity.y
-			
+
 			# If player is falling (even fast) through the button
 			if current_vel_y > 50:  # Minimum downward speed threshold
 				# Record that we triggered the button
 				_trigger_left_button(player)
 				_left_button_cooldown = LEFT_BUTTON_COOLDOWN_DURATION
-	
+
 	# Check if we need to restore player movement when firetruck stops
 	if _player_movement_disabled and not _is_moving:
 		_restore_player_movement()
@@ -354,8 +299,11 @@ func _physics_process(delta):
 
 func _process(delta):
 	# 1) If player is nearby and presses "interact" (E or Space), start dialog
-	if player_nearby and Input.is_action_just_pressed("interact") and not is_in_dialog:
+	if player_nearby and Input.is_action_just_pressed("interact") and not just_dialoged:
 		start_dialog()
+		just_dialoged = true
+	else:
+		just_dialoged = false
 
 	# 2) Once bedmite is fed, swap "dusty → clean" exactly once, then enable buttons.
 	if story_manager.fed_bedmite and not _has_unlocked_buttons:
@@ -368,77 +316,77 @@ func _process(delta):
 			push_error("⚠️ controller_sprite is null in _process() swap.")
 
 		_enable_button_areas()
-	
+
 	# 3) Handle smooth firetruck movement if it's currently in motion
 	if _is_moving and firetruck_node:
 		# Store previous position before updating
 		var previous_position = firetruck_node.position
-		
+
 		# Update time and calculate progress
 		_move_time += delta
 		var progress = min(_move_time / movement_duration, 1.0)
-		
+
 		# Use ease_in_out for smooth acceleration and deceleration
 		var ease_progress = smoothstep(0.0, 1.0, progress)
-		
+
 		# Update firetruck position
 		firetruck_node.position = _move_start_position.lerp(_move_target_position, ease_progress)
-		
+
 		# Calculate actual distance moved this frame
 		var distance_moved = firetruck_node.position.x - previous_position.x
-		
+
 		# Only rotate wheels if the truck actually moved this frame
 		if abs(distance_moved) > 0.001:  # Small threshold to avoid tiny movements
 			# Calculate wheel rotation based on distance moved
 			var rotation_amount = distance_moved / wheel_radius
 			for wheel in wheel_nodes:
 				wheel.rotation += rotation_amount
-		
+
 		# Check if movement is complete
 		if progress >= 1.0:
 			_is_moving = false
-			
+
 			# When truck stops moving, release the buttons
 			if _active_button == "left":
 				_release_left_button()
 			elif _active_button == "right":
 				_release_right_button()
-				
+
 			_active_button = ""
-			
+
 			# If camera is still focused on the truck after movement completes
 			# and this was a first-time press demonstration, pan back to player
 			if _first_button_press == false and in_cutscene:
 				_pan_camera_to_player()
-	
+
 	# 4) Handle left button animation - only if manually animating release
 	if _left_button_pressing and _left_button_node and _active_button != "left":
 		_left_button_press_timer += delta
 		var progress = min(_left_button_press_timer / button_press_duration, 1.0)
-		
+
 		if progress < 0.4:  # Press down phase (40% of total time)
 			var press_progress = progress / 0.4
 			_left_button_node.position = _left_button_original_position + Vector2(0, button_press_depth * press_progress)
 		else:  # Release phase (60% of total time)
 			var release_progress = (progress - 0.4) / 0.6
 			_left_button_node.position = _left_button_original_position + Vector2(0, button_press_depth * (1.0 - release_progress))
-		
+
 		if progress >= 1.0:
 			_left_button_pressing = false
 			_left_button_node.position = _left_button_original_position
-	
+
 	# 5) Handle right button animation - only if manually animating release
 	if _right_button_pressing and _right_button_node and _active_button != "right":
 		_right_button_press_timer += delta
 		var progress = min(_right_button_press_timer / button_press_duration, 1.0)
-		
+
 		if progress < 0.4:  # Press down phase
 			var press_progress = progress / 0.4
 			_right_button_node.position = _right_button_original_position + Vector2(0, button_press_depth * press_progress)
 		else:  # Release phase
 			var release_progress = (progress - 0.4) / 0.6
 			_right_button_node.position = _right_button_original_position + Vector2(0, button_press_depth * (1.0 - release_progress))
-		
+
 		if progress >= 1.0:
 			_right_button_pressing = false
 			_right_button_node.position = _right_button_original_position
@@ -481,25 +429,25 @@ func _on_right_button_pressed(body: Node) -> void:
 			if !is_equal_approx(desired_x, firetruck_node.position.x):
 				# Disable player movement during button press
 				_disable_player_movement()
-				
+
 				# Remember which button is active
 				_active_button = "right"
-				
+
 				# Set up smooth movement
 				_move_start_position = firetruck_node.position
 				_move_target_position = Vector2(desired_x, firetruck_node.position.y)
 				_move_time = 0.0
 				_is_moving = true
 				_move_direction = 1  # Moving right
-				
+
 				# Press the button down immediately
 				_press_right_button()
-				
+
 				# For the first button press, pan the camera to show the firetruck
 				if _first_button_press:
 					_first_button_press = false
 					_pan_camera_to_firetruck()
-				
+
 				print("Player fell into RIGHT button → Firetruck shifting right to X=", desired_x)
 
 				# Change sprite to the right-press image:
@@ -521,35 +469,35 @@ func _on_right_button_pressed(body: Node) -> void:
 func _trigger_left_button(body: Player) -> void:
 	if not _buttons_enabled or _is_moving:
 		return
-		
+
 	# Only apply if it actually changed
 	var desired_x = firetruck_node.position.x + (-SHIFT_AMOUNT)
 	var min_x = _firetruck_start_x + MAX_LEFT_OFFSET
 	var max_x = _firetruck_start_x + MAX_RIGHT_OFFSET
 	desired_x = clamp(desired_x, min_x, max_x)
-	
+
 	if !is_equal_approx(desired_x, firetruck_node.position.x):
 		# Disable player movement during button press
 		_disable_player_movement()
-		
+
 		# Remember which button is active
 		_active_button = "left"
-		
+
 		# Set up smooth movement
 		_move_start_position = firetruck_node.position
 		_move_target_position = Vector2(desired_x, firetruck_node.position.y)
 		_move_time = 0.0
 		_is_moving = true
 		_move_direction = -1  # Moving left
-		
+
 		# Press the button down immediately
 		_press_left_button()
-		
+
 		# For the first button press, pan the camera to show the firetruck
 		if _first_button_press:
 			_first_button_press = false
 			_pan_camera_to_firetruck()
-		
+
 		print("Player triggered LEFT button → Firetruck shifting left to X=", desired_x)
 
 		# Change sprite to the left-press image:
@@ -584,17 +532,17 @@ func _release_left_button() -> void:
 		var button_tween = create_tween()
 		button_tween.set_ease(Tween.EASE_OUT)
 		button_tween.set_trans(Tween.TRANS_SINE)
-		
+
 		# Tween button back to original position
-		button_tween.tween_property(_left_button_node, "position", 
+		button_tween.tween_property(_left_button_node, "position",
 			_left_button_original_position, 0.3)
-		
+
 		_left_button_pressing = false
-		
+
 		# Reset controller sprite
 		if controller_sprite:
 			controller_sprite.texture = clean_texture
-		
+
 		# Start the press timer to ensure controller resets
 		_press_timer.start()
 
@@ -606,17 +554,17 @@ func _release_right_button() -> void:
 		var button_tween = create_tween()
 		button_tween.set_ease(Tween.EASE_OUT)
 		button_tween.set_trans(Tween.TRANS_SINE)
-		
+
 		# Tween button back to original position
-		button_tween.tween_property(_right_button_node, "position", 
+		button_tween.tween_property(_right_button_node, "position",
 			_right_button_original_position, 0.3)
-		
+
 		_right_button_pressing = false
-		
+
 		# Reset controller sprite
 		if controller_sprite:
 			controller_sprite.texture = clean_texture
-		
+
 		# Start the press timer to ensure controller resets
 		_press_timer.start()
 
@@ -646,31 +594,31 @@ func _pan_camera_to_firetruck() -> void:
 	var camera = get_viewport().get_camera_2d()
 	if not camera or not player:
 		return
-		
+
 	# Store the original camera offset from player for later restoration
 	_original_camera_offset = camera.global_position - player.global_position
-	
+
 	# Set cutscene flag
 	in_cutscene = true
-	
+
 	# Temporarily disable player input
 	if player and player.has_method("disable_input"):
 		player.disable_input(true)
 	elif player:
 		player.disable_player_input = true
-	
+
 	# Create a tween to move the camera
 	_camera_tween = create_tween()
 	_camera_tween.set_ease(Tween.EASE_IN_OUT)
 	_camera_tween.set_trans(Tween.TRANS_SINE)
-	
+
 	# Pan to the firetruck
-	_camera_tween.tween_property(camera, "global_position", 
+	_camera_tween.tween_property(camera, "global_position",
 		firetruck_node.global_position, camera_pan_duration)
-	
+
 	# Add a pause to watch the truck move
 	_camera_tween.tween_interval(pause_on_truck_duration)
-	
+
 	# The camera will pan back to the player after the truck finishes moving
 	# This happens in the _process function when _is_moving becomes false
 
@@ -682,16 +630,16 @@ func _pan_camera_to_player() -> void:
 	if not camera or not player:
 		in_cutscene = false
 		return
-	
+
 	# Create a tween to move back to the player with the original offset
 	_camera_tween = create_tween()
 	_camera_tween.set_ease(Tween.EASE_IN_OUT)
 	_camera_tween.set_trans(Tween.TRANS_SINE)
-	
+
 	# Pan back to the player's position plus the original offset
-	_camera_tween.tween_property(camera, "global_position", 
+	_camera_tween.tween_property(camera, "global_position",
 		player.global_position + _original_camera_offset, camera_pan_duration)
-	
+
 	# Re-enable player input when done
 	_camera_tween.tween_callback(func():
 		in_cutscene = false

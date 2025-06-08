@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=4 uid="uid://c2uhr21ctuksa"]
 
-[ext_resource type="Texture2D" uid="uid://dfxv8yooeyw1i" path="res://assets/sprites/environment/bed.png" id="1_raxto"]
-[ext_resource type="Texture2D" uid="uid://kqlcefaigyim" path="res://assets/sprites/environment/pillow.png" id="2_853xm"]
-[ext_resource type="Texture2D" uid="uid://b583ubrtxfjao" path="res://assets/sprites/environment/pillow-shadow.png" id="3_x7btf"]
+[ext_resource type="Texture2D" uid="uid://jfiicnfrt86m" path="res://assets/sprites/environment/bed.png" id="1_raxto"]
+[ext_resource type="Texture2D" uid="uid://bo4qnujwwgm7o" path="res://assets/sprites/environment/pillow.png" id="2_853xm"]
+[ext_resource type="Texture2D" uid="uid://dj7yfds23vivk" path="res://assets/sprites/environment/pillow-shadow.png" id="3_x7btf"]
 [ext_resource type="Texture2D" uid="uid://bxaydsfab7crj" path="res://assets/sprites/environment/inside-tiles.png" id="5_x7btf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exsg2"]

@@ -30,10 +30,6 @@ func start_dialog():
 	interact_icon.visible = false
 	mission_icon.visible = false
 	# Call the global dialog system
-	if not has_node("/root/DialogSystem"):
-		push_error("Cannot start dialog: DialogSystem not found!")
-		return
-
 	if story_manager.met_caterpillar and story_manager.met_queen:
 		dialog.display_dialog(
 			'Caterpillar',

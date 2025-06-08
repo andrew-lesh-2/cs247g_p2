@@ -21,8 +21,8 @@ var active_color_rects: Array = []
 
 # Intro effect settings
 @export_group("Intro Effect Settings")
-@export var initial_zoom: float = 6.0  # Starting zoom level
-@export var final_zoom: float = 3.0  # Final zoom level after intro
+@export var initial_zoom: float = 5.0  # Starting zoom level
+@export var final_zoom: float = 4.0  # Final zoom level after intro
 @export var intro_effect_duration: float = 2.0  # How long the intro effect takes
 
 # internal

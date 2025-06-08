@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://bl1bdhfkflob1"]
 
 [ext_resource type="Script" uid="uid://06c6hrgu4n5h" path="res://scenes/outro/outro.gd" id="1_6ls5a"]
-[ext_resource type="Texture2D" uid="uid://0r15l3mcisf3" path="res://scenes/introduction/introduction.png" id="2_lglfs"]
-[ext_resource type="FontFile" uid="uid://bsy21f2kixk2i" path="res://scenes/introduction/CalligraphyFLF.ttf" id="3_uikrw"]
+[ext_resource type="Texture2D" uid="uid://cbxcyg1neb46w" path="res://scenes/introduction/introduction.png" id="2_lglfs"]
+[ext_resource type="FontFile" uid="uid://bn1n5geasoyow" path="res://scenes/introduction/CalligraphyFLF.ttf" id="3_uikrw"]
 [ext_resource type="AudioStream" uid="uid://u2wj0pxw5ltu" path="res://audio/music/Lvl0Music.mp3" id="4_imvwe"]
 
 [node name="Outro" type="Node2D"]

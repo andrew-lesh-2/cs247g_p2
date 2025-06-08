@@ -1782,7 +1782,7 @@ position = Vector2(1920, -719)
 texture = ExtResource("16_pw41a")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(-184, 1016)
+position = Vector2(-872, -1153)
 god_mode = true
 normals_enabled = true
 
@@ -5246,7 +5246,7 @@ scroll_offset = Vector2(-942, -887)
 
 [node name="Dialog" parent="." instance=ExtResource("47_lm6ek")]
 z_index = 100
-offset_left = -341.0
-offset_top = 971.0
-offset_right = -21.0
-offset_bottom = 1127.0
+offset_left = -1032.0
+offset_top = -1203.0
+offset_right = -712.0
+offset_bottom = -1047.0

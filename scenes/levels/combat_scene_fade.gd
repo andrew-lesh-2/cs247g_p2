@@ -7,6 +7,7 @@ extends Node2D
 @export var initial_hold_time: float = 0.5  # Time to stay black before starting fade
 @export var fade_in_duration: float = 1.5   # How long the actual fade takes
 
+@onready var combat_intro_manager = $CombatIntroManager
 # Fade overlay
 var fade_overlay: ColorRect
 var fade_tween: Tween
@@ -59,6 +60,7 @@ func _start_fade_in() -> void:
 	# Hide the overlay when the fade completes
 	fade_tween.tween_callback(func():
 		fade_overlay.visible = false
+		combat_intro_manager.start_intro_dialog()
 	)
 
 # Optional: Public method to fade out (for transitions to other levels)
