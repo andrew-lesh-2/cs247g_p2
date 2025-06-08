@@ -22,16 +22,15 @@ func start_intro_dialog():
 		'Ladybug\'s Inner Voice',
 		'ladybug',
 		[
-			"Maybe we will get a better view from the tops of the trees",
-			"And then we can find your way back home!",
-			"Oh no! I see a bunch of dust mites up here",
-			"You'll need to clear them out to continue your journey.",
-			"Remember: you can use your GROUND POUND attack to defeat them safely.",
+			"Finally, I'm at the top of the tree!",
+			"Now I can get a good view of the yard, and find my family.",
+			"Oh no! I see a bunch of angry aphids up here",
+			"I'll need to clear them out to get to the vantage point to the right.",
+			"Remember: I can use my GROUND POUND attack to defeat them safely.",
 			"Jump into the air and press DOWN to perform a ground pound.",
-			"The dust mites will turn red and disappear when hit.",
-			"If they touch you, don't worry - you'll just bounce back harmlessly.",
-			"Clear out all the dust mites to make the trees safe again!",
-			"Be brave, little ladybug!"
+			"The aphids will turn red and disappear when hit.",
+			"If they touch me, I don't need to worry - Aphids can't hurt me",
+			"I'm almost home! Here I come!"
 		],
 	)
 
