@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=4 uid="uid://bgk1yn8gx65m1"]
+[gd_scene load_steps=92 format=4 uid="uid://bgk1yn8gx65m1"]
 
 [ext_resource type="Texture2D" uid="uid://dqvu2tmftk37p" path="res://assets/sprites/environment/bug-box-back.png" id="2_aykq1"]
 [ext_resource type="Texture2D" uid="uid://v5685oxdi14u" path="res://assets/sprites/environment/branch.png" id="3_xet31"]
@@ -41,7 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://bivc5javcpg0q" path="res://assets/sprites/environment/block_c.png" id="39_nj4uo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_woaog"]
-size = Vector2(639, 54)
+size = Vector2(704, 55)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ersg3"]
 size = Vector2(7, 76.5)
@@ -259,6 +259,9 @@ radius = 21.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kjx4e"]
 size = Vector2(512, 23)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pt5n4"]
+size = Vector2(16, 358)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nrm5j"]
 texture = ExtResource("30_cbhfm")
 texture_region_size = Vector2i(64, 64)
@@ -323,7 +326,7 @@ position = Vector2(0, 6)
 collision_layer = 2
 
 [node name="CollisionShape2D_table" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
-position = Vector2(32.5, 72)
+position = Vector2(33, 72.5)
 shape = SubResource("RectangleShape2D_woaog")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Box/box back/StaticBody2D"]
@@ -1194,6 +1197,10 @@ texture = ExtResource("26_dpy1m")
 position = Vector2(0, 244.5)
 shape = SubResource("RectangleShape2D_kjx4e")
 
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Window/Sprite2D/StaticBody2D"]
+position = Vector2(-248, 77)
+shape = SubResource("RectangleShape2D_pt5n4")
+
 [node name="Legs" type="TileMapLayer" parent="."]
 position = Vector2(65, -133)
 tile_map_data = PackedByteArray("AAD5////AAAFAAEAAAD3//7/AAABAAEAAAD1//7/AAAAAAEAAAD1////AAAAAAAAAAD1/wAAAAAAAAAAAAD2//7/AAADAAEAAAD2////AAADAAAAAAD3////AAABAAAAAAD3/wAAAAABAAAAAAD2/wAAAAADAAAAAAAHAAMAAAADAAAAAAD1/wEAAAAAAAAAAAD3/wEAAAABAAAAAAD2/wEAAAADAAAAAAD1/wMAAAAAAAAAAAD2/wMAAAADAAAAAAD3/wMAAAABAAAAAAD1/woAAAAAAAAAAAD1/wsAAAAAAAAAAAD1/wwAAAAAAAAAAAD1/w0AAAAHAAAAAAD2/w0AAAAFAAAAAAD3/wwAAAABAAAAAAD3/wsAAAABAAAAAAD2/wsAAAADAAAAAAD2/wwAAAADAAAAAAD2/woAAAADAAAAAAD1/wcAAAAAAAAAAAD2/wcAAAADAAAAAAD3/wcAAAABAAAAAAD3/woAAAABAAAAAAD3/w0AAAAGAAAAAAD2/wIAAAADAAAAAAD1/wIAAAAAAAAAAAD3/wIAAAABAAAAAAD1/wYAAAAAAAAAAAD3/wYAAAABAAAAAAD2/wYAAAADAAAAAAD1/wUAAAAAAAEAAAD2/wUAAAADAAEAAAD3/wUAAAABAAEAAAD1/wkAAAAAAAEAAAD3/wkAAAABAAEAAAD2/wkAAAADAAEAAAAGAP//AAAAAAAAAAAGAAAAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAsAAAAAAAAAAAAGAAwAAAAAAAAAAAAGAA0AAAAAAAAAAAAHAA0AAAADAAAAAAAHAAwAAAADAAAAAAAHAAsAAAADAAAAAAAHAAgAAAADAAAAAAAHAAcAAAADAAAAAAAHAAQAAAADAAAAAAAHAAIAAAADAAAAAAAHAAEAAAADAAAAAAAHAAAAAAADAAAAAAAHAP//AAADAAAAAAAIAA0AAAABAAAAAAAIAAwAAAABAAAAAAAIAAsAAAABAAAAAAAIAAgAAAABAAAAAAAIAAcAAAABAAAAAAAIAAQAAAABAAAAAAAIAAMAAAABAAAAAAAIAAIAAAABAAAAAAAIAAEAAAABAAAAAAAIAAAAAAABAAAAAAAIAP//AAABAAAAAAAGAAYAAAAAAAEAAAAGAAoAAAAAAAEAAAAIAAoAAAABAAEAAAAIAAYAAAABAAEAAAAHAAoAAAADAAEAAAAHAAYAAAADAAEAAAA=")
@@ -1442,7 +1449,7 @@ position = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_r4hln")
 
 [node name="Sprite2D2" type="Sprite2D" parent="blocks"]
-position = Vector2(-884, 277)
+position = Vector2(-872, 277)
 texture = ExtResource("37_7f8rb")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="blocks/Sprite2D2"]
