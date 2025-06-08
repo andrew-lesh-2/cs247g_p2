@@ -44,6 +44,7 @@ var get_player_input : bool = false
 var voice_sound_player = null
 var first_action_ignored = false
 @onready var voice_sound = load('res://audio/voices/voice_Papyrus.wav')
+var do_ignore_first_action = true
 
 func _ready():
 	parent = get_parent()
@@ -62,6 +63,7 @@ func reset():
 	get_player_input = false
 	lines = []
 	dialog.text = ""
+	do_ignore_first_action = true
 	if current_portrait:
 		current_portrait.visible = false
 		current_portrait = null
@@ -82,8 +84,8 @@ func _process(delta):
 	
 	word_timer += delta
 	sound_timer += delta
-
-	if user_action and not first_action_ignored:
+	if user_action and (not first_action_ignored and do_ignore_first_action):
+		print("first action ignored")
 		user_action = false
 		first_action_ignored = true
 
@@ -136,9 +138,9 @@ func play_character_sound(character):
 	else:
 		return false
 
-func display_dialog(character, id, input_lines):
-	print("DISPLAY DIALOG CALLED")
+func display_dialog(character, id, input_lines, ignore_action = true):
 	get_tree().paused = true
+	do_ignore_first_action = ignore_action
 	visible = true
 	name_label.text = character
 	active = true

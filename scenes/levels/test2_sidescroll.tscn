@@ -9,6 +9,7 @@
 script = ExtResource("1_g4h7w")
 
 [node name="Box" parent="." instance=ExtResource("2_g4h7w")]
+position = Vector2(-559, -254)
 
 [node name="Player" parent="." instance=ExtResource("3_y4hwr")]
 z_index = 10

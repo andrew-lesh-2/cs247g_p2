@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=4 uid="uid://c20x4nwwi06vb"]
+[gd_scene load_steps=82 format=4 uid="uid://c20x4nwwi06vb"]
 
 [ext_resource type="Script" uid="uid://kepsap7ybfx2" path="res://scenes/levels/outdoor_level_fade.gd" id="1_80bfn"]
 [ext_resource type="PackedScene" uid="uid://djxp3h3xu5d1l" path="res://scenes/environment/Outdoor Scene Background.tscn" id="1_c1p5v"]
@@ -1012,7 +1012,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ss6g"]
-size = Vector2(113, 87)
+size = Vector2(167.25, 120.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0q8v5"]
+size = Vector2(63.5, 116)
 
 [node name="OutdoorLevel" type="Node2D"]
 script = ExtResource("1_80bfn")
@@ -5108,6 +5111,7 @@ texture = ExtResource("11_lsp5i")
 script = ExtResource("15_6so22")
 
 [node name="Caterpillar" type="Node2D" parent="StoryManager"]
+position = Vector2(-213, -31)
 script = ExtResource("42_oi410")
 
 [node name="caterpillar" type="AnimatedSprite2D" parent="StoryManager/Caterpillar"]
@@ -5120,16 +5124,23 @@ frame_progress = 0.738711
 [node name="InteractionArea" type="Area2D" parent="StoryManager/Caterpillar"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryManager/Caterpillar/InteractionArea"]
-position = Vector2(-794.5, -1176.5)
+position = Vector2(-786.625, -1167)
 shape = SubResource("RectangleShape2D_8ss6g")
 
+[node name="InteractionArea2" type="Area2D" parent="StoryManager/Caterpillar"]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StoryManager/Caterpillar/InteractionArea2"]
+position = Vector2(-560.75, -1165)
+shape = SubResource("RectangleShape2D_0q8v5")
+
 [node name="interact_icon" type="Sprite2D" parent="StoryManager/Caterpillar"]
+visible = false
 position = Vector2(-790, -1204)
 texture = ExtResource("11_lsp5i")
 script = ExtResource("15_6so22")
 
 [node name="mission_icon" type="Sprite2D" parent="StoryManager/Caterpillar"]
-position = Vector2(0, -24)
+position = Vector2(-786, -1204)
 texture = ExtResource("14_bvc21")
 script = ExtResource("15_6so22")
 
@@ -5244,6 +5255,7 @@ rotation = 0.126766
 scroll_offset = Vector2(-942, -887)
 
 [node name="Dialog" parent="." instance=ExtResource("47_lm6ek")]
+visible = false
 z_index = 100
 offset_left = -1034.0
 offset_top = -1202.0
