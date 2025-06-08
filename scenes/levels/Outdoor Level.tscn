@@ -1782,7 +1782,7 @@ position = Vector2(1920, -719)
 texture = ExtResource("16_pw41a")
 
 [node name="Player" parent="." instance=ExtResource("3_py4n2")]
-position = Vector2(-872, -1153)
+position = Vector2(-1083, 635)
 god_mode = true
 normals_enabled = true
 

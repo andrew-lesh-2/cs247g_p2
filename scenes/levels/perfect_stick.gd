@@ -19,6 +19,7 @@ func _ready() -> void:
 	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 	
 	interact_icon.visible = false
+	move_to_final_placement()
 	if story_manager.stick_mission_active:
 		glow_effect.enabled = true
 	if story_manager.stick_mission_completed:
@@ -38,7 +39,7 @@ func _process(delta):
 			story_manager.is_carrying_stick = true
 
 func move_to_final_placement():
-	self.position = Vector2(-1302.0, 601.0)
+	self.position = Vector2(-1302.0, 621.0)
 	self.rotation_degrees = -59
 
 func _on_stick_mission_active(active: bool):
