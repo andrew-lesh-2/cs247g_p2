@@ -12,6 +12,8 @@ extends Node2D
 @export var music_loop: bool = true
 
 # Enhanced fade settings
+var active_color_rect: ColorRect = null
+var active_color_rects: Array = []
 @export_group("Fade Settings")
 @export var fade_color: Color = Color(0, 0, 0, 1)  # Black
 @export var initial_hold_time: float = 0.5  # Time to stay black before starting fade
@@ -45,9 +47,15 @@ var intro_tween: Tween
 var area_to_segment = {}
 var trigger_setup_complete = false
 
+# Black overlay for zoom transition
+var black_overlay: ColorRect
+
 func _ready():
 	# Create fade overlay (covers the whole screen)
 	_setup_fade_overlay()
+	
+	# Create black overlay for zoom transition (present from start)
+	_setup_black_overlay()
 	
 	# 0) remove the editor-placed template so you don't get a double in the center
 	var template = $Box
@@ -97,13 +105,31 @@ func _ready():
 	# Set up the leaf3 trigger
 	_setup_leaf3_triggers()
 	
-	# Start intro music with fade-in
+	# Setup initial music (Lvl0Music) and preload main music (Lvl1Music)
 	setup_intro_music()
-	
-	# Preload main music (but don't play yet)
 	preload_main_music()
 
-# Set up intro music with fade-in
+# Set up the black overlay for zoom transition (created at scene start)
+func _setup_black_overlay():
+	# Create a large black overlay that will fade during zoom
+	black_overlay = ColorRect.new()
+	black_overlay.color = Color(0, 0, 0, 1)  # Black
+	
+	# Make it larger than the viewport to ensure it covers everything
+	var viewport_size = get_viewport().get_visible_rect().size
+	black_overlay.custom_minimum_size = viewport_size * 3
+	black_overlay.size = viewport_size * 3
+	
+	# Center it
+	black_overlay.position = -black_overlay.size / 2
+	
+	# Set Z index to be above normal content but below UI
+	black_overlay.z_index = 3
+	
+	# Add it to the scene
+	add_child(black_overlay)
+
+# Setup intro music with fade in
 func setup_intro_music():
 	# Create player for intro music
 	intro_music_player = AudioStreamPlayer.new()
@@ -113,17 +139,17 @@ func setup_intro_music():
 	if intro_music_path.is_empty():
 		push_warning("No intro music file specified")
 		return
-		
+	
 	var music_resource = load(intro_music_path)
 	if music_resource is AudioStream:
+		# Set loop property correctly on the stream itself
+		if music_resource is AudioStreamMP3 and music_loop:
+			music_resource.loop = true
+			
 		intro_music_player.stream = music_resource
 		intro_music_player.volume_db = -80  # Start silent
 		
-		# Set loop property if it's an MP3
-		if music_resource is AudioStreamMP3:
-			music_resource.loop = music_loop
-		
-		# Play the music
+		# Start playing
 		intro_music_player.play()
 		
 		# Fade in
@@ -132,7 +158,7 @@ func setup_intro_music():
 	else:
 		push_error("Could not load intro music file: " + intro_music_path)
 
-# Preload main music but don't play it yet
+# Preload main music (Lvl1Music) but don't play it yet
 func preload_main_music():
 	# Create player for main music
 	main_music_player = AudioStreamPlayer.new()
@@ -142,15 +168,15 @@ func preload_main_music():
 	if main_music_path.is_empty():
 		push_warning("No main music file specified")
 		return
-		
+	
 	var music_resource = load(main_music_path)
 	if music_resource is AudioStream:
+		# Set loop property correctly on the stream itself
+		if music_resource is AudioStreamMP3 and music_loop:
+			music_resource.loop = true
+			
 		main_music_player.stream = music_resource
 		main_music_player.volume_db = -80  # Start silent
-		
-		# Set loop property if it's an MP3
-		if music_resource is AudioStreamMP3:
-			music_resource.loop = music_loop
 	else:
 		push_error("Could not load main music file: " + main_music_path)
 
@@ -228,7 +254,7 @@ func _on_leaf3_area_entered(body: Node) -> void:
 			_start_intro_effect(color_rect)
 
 # Start the intro effect (zoom out and fade overlay)
-func _start_intro_effect(color_rect: ColorRect) -> void:
+func _start_intro_effect(original_color_rect: ColorRect) -> void:
 	print("Starting intro effect...")
 	
 	# Disable player input
@@ -242,13 +268,13 @@ func _start_intro_effect(color_rect: ColorRect) -> void:
 	
 	# Create a new tween for the effect
 	intro_tween = create_tween()
-	intro_tween.set_parallel(true)  # Make all tweens run simultaneously
+	intro_tween.set_parallel(true)
 	intro_tween.set_ease(Tween.EASE_IN_OUT)
 	intro_tween.set_trans(Tween.TRANS_SINE)
 	
 	# 1. Tween the camera zoom
-	var camera = get_viewport().get_camera_2d()
-	if camera:
+	var viewport_camera = get_viewport().get_camera_2d()
+	if viewport_camera:
 		print("Tweening camera zoom from", initial_zoom, "to", final_zoom)
 		intro_tween.tween_method(
 			_set_camera_zoom,
@@ -257,24 +283,13 @@ func _start_intro_effect(color_rect: ColorRect) -> void:
 			intro_effect_duration
 		)
 	
-	# 2. Tween the ColorRect's modulate to fade it out
-	if color_rect:
-		print("Tweening ColorRect modulate to transparent")
-		# Make sure it's fully visible at the start
-		color_rect.modulate = Color(1, 1, 1, 1)
-		
-		# Ensure the color rect is visible during the tween
-		color_rect.visible = true
-		
-		# Tween the alpha value over the same duration as the zoom
-		intro_tween.tween_property(
-			color_rect,
-			"modulate",
-			Color(1, 1, 1, 0),  # Fully transparent
-			intro_effect_duration
-		)
-	else:
-		print("Warning: ColorRect not found in intro node")
+	# 2. Tween the black overlay to fade out
+	intro_tween.tween_property(
+		black_overlay,
+		"color:a", # Just the alpha component
+		0.0,
+		intro_effect_duration
+	)
 	
 	# 3. Handle music crossfade
 	_crossfade_music(intro_effect_duration)
@@ -282,11 +297,12 @@ func _start_intro_effect(color_rect: ColorRect) -> void:
 	# After the effect completes
 	intro_tween.chain().tween_callback(func():
 		print("Intro effect completed, re-enabling player input")
+		
 		# Re-enable player input
 		if player:
 			player.disable_player_input = false
 		
-		# Only now remove all intro nodes from all segments
+		# Remove all intro nodes
 		for seg in segments:
 			if seg.has_node("Box/Intro"):
 				print("Removing Intro node from segment")
@@ -303,44 +319,33 @@ func _crossfade_music(duration: float) -> void:
 	
 	# Fade out intro music
 	if intro_music_player and intro_music_player.playing:
-		print("Fading out intro music from volume:", intro_music_player.volume_db)
+		print("Fading out intro music")
 		
-		# Important: Tween the volume WITHOUT stopping the music
+		# Ensure it doesn't stop immediately
+		var from_volume = intro_music_player.volume_db
+		
+		# Gradually fade out
 		music_tween.tween_property(intro_music_player, "volume_db", -80, duration)
 		
-		# After the fade completes, then stop the music
+		# Create a separate tween to stop the music after the fade completes
 		var stop_tween = create_tween()
-		stop_tween.tween_interval(duration)  # Wait for fade to complete
+		stop_tween.tween_interval(duration + 0.1)  # Add a slight delay
 		stop_tween.tween_callback(func(): 
-			print("Stopping intro music after fade")
-			intro_music_player.stop()
+			if intro_music_player:
+				intro_music_player.stop()
 		)
-	else:
-		print("Intro music not playing, skipping fade out")
 	
-	# Wait a moment before starting main music
+	# Fade in main music
 	if main_music_player:
-		# Set initial volume to silent
+		# Start at silent volume
 		main_music_player.volume_db = -80
 		
-		# Start with a slight delay
-		var delay = duration * 0.3  # 30% of the fade duration
+		# Start playing
+		main_music_player.play()
 		
-		var main_music_tween = create_tween()
-		main_music_tween.tween_interval(delay)
-		main_music_tween.tween_callback(func():
-			print("Starting main music (delayed)")
-			main_music_player.play()
-			
-			# Create a separate tween for fading in
-			var fade_in_tween = create_tween()
-			fade_in_tween.tween_property(main_music_player, "volume_db", 
-				linear_to_db(music_volume), duration - delay)
-			print("Fading in main music to volume:", linear_to_db(music_volume))
-		)
-	else:
-		print("Main music player not initialized")
-
+		# Fade in to the desired volume
+		music_tween.tween_property(main_music_player, "volume_db", linear_to_db(music_volume), duration)
+		print("Fading in main music")
 
 # Helper to set camera zoom
 func _set_camera_zoom(zoom_level: float) -> void:
@@ -390,6 +395,10 @@ func _start_fade_in():
 	fade_tween.tween_callback(func():
 		fade_overlay.visible = false
 	)
+
+# Set up music player - kept for compatibility, not used
+func setup_music():
+	pass
 
 func _physics_process(_delta):
 	# Setup the leaf3 trigger if not already done (ensure it's set up after all segments are created)
@@ -453,9 +462,9 @@ func fade_out(duration: float = 1.0, hold_time: float = 0.0, callback: Callable 
 
 # Optional: Methods to control music during gameplay
 func pause_music():
-	if intro_music_player and intro_music_player.playing:
+	if intro_music_player:
 		intro_music_player.stream_paused = true
-	if main_music_player and main_music_player.playing:
+	if main_music_player:
 		main_music_player.stream_paused = true
 
 func resume_music():
@@ -472,6 +481,7 @@ func stop_music():
 
 func set_music_volume(volume: float):
 	var db_volume = linear_to_db(clamp(volume, 0.0, 1.0))
+	
 	if intro_music_player and intro_music_player.playing:
 		intro_music_player.volume_db = db_volume
 	if main_music_player and main_music_player.playing:
