@@ -95,12 +95,12 @@ func _physics_process(delta):
 		sprite.play("Walk")
 	
 	velocity.x = speed * direction
-	velocity.y = 0  # Force y velocity to zero to prevent flying
+	velocity.y += delta * 98  # Force y velocity to zero to prevent flying
 	move_and_slide()
 	traveled_distance += abs(velocity.x) * delta
 	
 	# Floor correction - prevent getting stuck underground
-	correct_floor_position()
+	#correct_floor_position()
 	
 	# Anti-stuck detection
 	check_if_stuck(delta)

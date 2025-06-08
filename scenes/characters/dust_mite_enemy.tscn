@@ -1,29 +1,54 @@
-[gd_scene load_steps=13 format=3 uid="uid://bxnpu78qiif23"]
+[gd_scene load_steps=14 format=3 uid="uid://bxnpu78qiif23"]
 
 [ext_resource type="Script" uid="uid://d1klncc4s3eni" path="res://scenes/levels/dust_mite_enemy.gd" id="1_l3k77"]
-[ext_resource type="Texture2D" uid="uid://csqk08lfq4jph" path="res://assets/sprites/characters/mites/dustmite000.png" id="2_nxgl3"]
-[ext_resource type="Texture2D" uid="uid://b4bj2g8rpnnl1" path="res://assets/sprites/characters/mites/dustmite001.png" id="3_35mot"]
-[ext_resource type="Texture2D" uid="uid://cxa03u574flu" path="res://assets/sprites/characters/mites/dustmite002.png" id="4_fbha5"]
-[ext_resource type="Texture2D" uid="uid://c0ex2l1x0loem" path="res://assets/sprites/characters/mites/dustmite003.png" id="5_fyvfw"]
-[ext_resource type="Texture2D" uid="uid://c4cmg8iy40740" path="res://assets/sprites/characters/mites/dustmite004.png" id="6_y3dct"]
-[ext_resource type="Texture2D" uid="uid://bwxum2mnn737u" path="res://assets/sprites/characters/mites/dustmite005.png" id="7_8kqvw"]
-[ext_resource type="Texture2D" uid="uid://cw8hyvnf33hdj" path="res://assets/sprites/characters/mites/dustmite006.png" id="8_oshkd"]
-[ext_resource type="Texture2D" uid="uid://d3fs4jcla6gvm" path="res://assets/sprites/characters/mites/dustmite007.png" id="9_njbpb"]
+[ext_resource type="Texture2D" uid="uid://dthfpx82qltaa" path="res://assets/sprites/characters/aphid.png" id="2_npipq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjn85"]
+atlas = ExtResource("2_npipq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1y1ve"]
+atlas = ExtResource("2_npipq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qcwj"]
+atlas = ExtResource("2_npipq")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqu6w"]
+atlas = ExtResource("2_npipq")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5ubk"]
+atlas = ExtResource("2_npipq")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gk2xt"]
+atlas = ExtResource("2_npipq")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3k77"]
+atlas = ExtResource("2_npipq")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxgl3"]
+atlas = ExtResource("2_npipq")
+region = Rect2(96, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_iadgw"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_nxgl3")
+"texture": SubResource("AtlasTexture_hjn85")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_35mot")
+"texture": SubResource("AtlasTexture_1y1ve")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_fbha5")
+"texture": SubResource("AtlasTexture_5qcwj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_fyvfw")
+"texture": SubResource("AtlasTexture_hqu6w")
 }],
 "loop": true,
 "name": &"Idle",
@@ -31,16 +56,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_y3dct")
+"texture": SubResource("AtlasTexture_h5ubk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_8kqvw")
+"texture": SubResource("AtlasTexture_gk2xt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_oshkd")
+"texture": SubResource("AtlasTexture_l3k77")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_njbpb")
+"texture": SubResource("AtlasTexture_nxgl3")
 }],
 "loop": true,
 "name": &"Walk",
@@ -48,7 +73,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tai2j"]
-size = Vector2(18, 15.5)
+size = Vector2(18, 14.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3k77"]
 size = Vector2(20.625, 15.5)
@@ -59,10 +84,9 @@ script = ExtResource("1_l3k77")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_iadgw")
 animation = &"Walk"
-frame_progress = 0.417533
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1.25)
+position = Vector2(0, 0.75)
 shape = SubResource("RectangleShape2D_tai2j")
 
 [node name="Area2D" type="Area2D" parent="."]
